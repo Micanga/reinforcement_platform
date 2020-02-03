@@ -38,21 +38,22 @@ class Menu:
 		# b. Settings Button
 		self.settings_button = \
 			self.create_button('CONFIGURAR',self.settings_button_click,\
-				2*self.sw/3,self.sh/3,'#37EE2B')
+				2*self.sw/3,self.sh/3,'#2BA1EE')
 
 		# c. Exit Button
 		self.exit_button = \
 			self.create_button('SAIR',self.exit_button_click,\
-				self.sw/2,2*self.sh/3,'#2BA1EE')
+				self.sw/2,2*self.sh/3,'#37EE2B')
 
 	def create_button(self,text,func,x,y,color='#1E1E1E'):
-		button = Button(self.master, text = text,\
-			font = Font(family='Helvetica', size=36, weight='bold'),\
-			fg = 'white', bg = color, \
+		button = Button(self.master, text = text,
+			font = Font(family='Helvetica', size=36, weight='bold'),
+			fg = 'white', bg = color, 
 			anchor = 'center', compound = 'center', 
-			command = func, highlightbackground='#1E1E1E',
+			command = func,
+			highlightbackground='#1E1E1E',
 			highlightthickness = 0, 
-			bd = 2, padx=0, pady=0, height=2, width=13)
+			bd = 5, padx=0, pady=0, height=2, width=13)
 		button.place(x = x, y = y, anchor= 'center')
 		return button
 
