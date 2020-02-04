@@ -27,6 +27,22 @@ def set_bg(master,main_bg,path):
 	main_bg.image= bg_img
 	main_bg.place(x=sw/2,y=sh/2,relwidth=1,relheight=1,anchor='center')
 
+
+def ableButtons(buttons):
+	print("| -- enabling the buttons       |")
+	for b in buttons:
+		b.configure(state="normal")
+
+def disableButtons(buttons):
+	print("| -- disabing the buttons       |")
+	for b in buttons:
+		b.configure(state="disabled")
+
+def destroyWidgets(widgets):
+	print("| -- destroying  the widgets    |")
+	for w in widgets:
+		w.destroy()
+
 # RESULT
 def write_rheader(nickname,start_time):
 	result_file = open('results/'+nickname+'_'+\

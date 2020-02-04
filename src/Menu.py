@@ -7,6 +7,7 @@ from tkinter import messagebox, filedialog, StringVar
 from tkinter.font import Font
 
 from utils import *
+from MyCommons import *
 
 class Menu:
 
@@ -30,37 +31,30 @@ class Menu:
 		set_bg(self.master,self.main_bg,'bg/main.png')
 
 		# 2. Setting Functions
+		self.widgets = []
+
 		# a. Start Button
 		self.start_button = \
-			self.create_button('JOGAR',self.start_button_click,\
+			create_button(self.master,'JOGAR',self.start_button_click,\
 				self.sw/3,self.sh/3,'#f01515')
+		self.widgets.append(self.start_button)
 
 		# b. Settings Button
 		self.settings_button = \
-			self.create_button('CONFIGURAR',self.settings_button_click,\
+			create_button(self.master,'CONFIGURAR',self.settings_button_click,\
 				2*self.sw/3,self.sh/3,'#2BA1EE')
+		self.widgets.append(self.settings_button)
 
 		# c. Exit Button
 		self.exit_button = \
-			self.create_button('SAIR',self.exit_button_click,\
+			create_button(self.master,'SAIR',self.exit_button_click,\
 				self.sw/2,2*self.sh/3,'#37EE2B')
-
-	def create_button(self,text,func,x,y,color='#1E1E1E'):
-		button = Button(self.master, text = text,
-			font = Font(family='Helvetica', size=36, weight='bold'),
-			fg = 'white', bg = color, 
-			anchor = 'center', compound = 'center', 
-			command = func,
-			highlightbackground='#1E1E1E',
-			highlightthickness = 0, 
-			bd = 5, padx=0, pady=0, height=2, width=13)
-		button.place(x = x, y = y, anchor= 'center')
-		return button
+		self.widgets.append(self.exit_button)
 
 	def start_button_click(self):
 		print(self.start_txt)
 
-		self.destroyWidgets()
+		destroyWidgets(self.widgets)
 
 		from ChooseExperiment import ChooseExperiment
 		ChooseExperiment(self.master,self,self.main_bg)
@@ -68,7 +62,7 @@ class Menu:
 	def settings_button_click(self):
 		print(self.settings_txt)
 
-		self.destroyWidgets()
+		destroyWidgets(self.widgets)
 
 		from Settings import Settings
 		Settings(self.master,self,self.main_bg)
@@ -76,11 +70,6 @@ class Menu:
 	def exit_button_click(self):
 		print(self.exit_txt)
 
-		self.destroyWidgets()
+		destroyWidgets(self.widgets)
 
 		self.master.destroy()
-
-	def destroyWidgets(self):
-		self.start_button.destroy()
-		self.settings_button.destroy()
-		self.exit_button.destroy()

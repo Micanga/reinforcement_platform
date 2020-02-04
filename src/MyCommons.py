@@ -18,6 +18,19 @@ def multFunc(*funcs):
 def disable_event():
 	pass
 
+def create_button(master,text,func,x,y,color='#1E1E1E',size=36):
+	print("| -- creating button            |")
+	button = Button(master, text = text,
+		font = Font(family='Helvetica', size=size, weight='bold'),
+		fg = 'white', bg = color, 
+		anchor = 'center', compound = 'center', 
+		command = func,
+		highlightbackground='#1E1E1E',
+		highlightthickness = 0, 
+		bd = 5, padx=0, pady=0, height=2, width=13)
+	button.place(x = x, y = y, anchor= 'center')
+	return button
+
 class myPopUp:
 
 	def __init__(self,cur_screen,text):
