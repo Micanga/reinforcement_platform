@@ -72,49 +72,57 @@ class Stage1:
 
 	def createButtons(self, center_h, center_w,radius):
 		print(self.createb_txt)
-		self.button_1 = CircularButton(self.master,100,100,(255,0,0))
+		self.button_1 = CircularButton(self.master,100,100,(255,0,0),
+			command=self.button1_click)
 		self.button_1.place(x=center_w-radius,
 							y=center_h,
 							anchor='center')
 		self.buttons.append(self.button_1)
 
-		self.button_2 = CircularButton(self.master,100,100,(255,0,0))
+		self.button_2 = CircularButton(self.master,100,100,(255,0,0),
+			command=self.button2_click)
 		self.button_2.place(x=center_w-radius*cos(pi/7),
 					 		y=center_h-radius*sin(pi/7),
 					 		anchor='center')
 		self.buttons.append(self.button_2)
 
-		self.button_3 = CircularButton(self.master,100,100,(255,0,0))
+		self.button_3 = CircularButton(self.master,100,100,(255,0,0),
+			command=self.button3_click)
 		self.button_3.place(x=center_w-radius*cos(2*pi/7),
 					 		y=center_h-radius*sin(2*pi/7),
 					 		anchor='center')
 		self.buttons.append(self.button_3)
 
-		self.button_4 = CircularButton(self.master,100,100,(255,0,0))
+		self.button_4 = CircularButton(self.master,100,100,(255,0,0),
+			command=self.button4_click)
 		self.button_4.place(x=center_w-radius*cos(3*pi/7),
 					 		y=center_h-radius*sin(3*pi/7),
 					 		anchor='center')
 		self.buttons.append(self.button_4)
 
-		self.button_5 = CircularButton(self.master,100,100,(255,0,0))
+		self.button_5 = CircularButton(self.master,100,100,(255,0,0),
+			command=self.button5_click)
 		self.button_5.place(x=center_w-radius*cos(4*pi/7),
 					 		y=center_h-radius*sin(4*pi/7),
 					 		anchor='center')
 		self.buttons.append(self.button_5)
 
-		self.button_6 = CircularButton(self.master,100,100,(255,0,0))
+		self.button_6 = CircularButton(self.master,100,100,(255,0,0),
+			command=self.button6_click)
 		self.button_6.place(x=center_w-radius*cos(5*pi/7),
 					 		y=center_h-radius*sin(5*pi/7),
 					 		anchor='center')
 		self.buttons.append(self.button_6)
 
-		self.button_7 = CircularButton(self.master,100,100,(255,0,0))
+		self.button_7 = CircularButton(self.master,100,100,(255,0,0),
+			command=self.button7_click)
 		self.button_7.place(x=center_w-radius*cos(6*pi/7),
 					 		y=center_h-radius*sin(6*pi/7),
 					 		anchor='center')
 		self.buttons.append(self.button_7)
 
-		self.button_8 = CircularButton(self.master,100,100,(255,0,0))
+		self.button_8 = CircularButton(self.master,100,100,(255,0,0),
+			command=self.button8_click)
 		self.button_8.place(x=center_w-radius*cos(pi),
 					 		y=center_h-radius*sin(pi),
 					 		anchor='center')
@@ -122,3 +130,26 @@ class Stage1:
 
 
 	# THE GAME METHODS
+	def button1_click(self):
+		print("|--- button 1 click             |")
+
+	def button2_click(self):
+		print("|--- button 2 click             |")
+
+	def button3_click(self):
+		print("|--- button 3 click             |")
+
+	def button4_click(self):
+		print("|--- button 4 click             |")
+
+	def button5_click(self):
+		print("|--- button 5 click             |")
+
+	def button6_click(self):
+		print("|--- button 6 click             |")
+
+	def button7_click(self):
+		print("|--- button 7 click             |")
+
+	def button8_click(self):
+		print("|--- button 8 click             |")
