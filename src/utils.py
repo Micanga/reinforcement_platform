@@ -27,6 +27,10 @@ def set_bg(master,main_bg,path):
 	main_bg.image= bg_img
 	main_bg.place(x=sw/2,y=sh/2,relwidth=1,relheight=1,anchor='center')
 
+def update_screen(cur_sc):
+	cur_sc.main_bg.destroy()
+	cur_sc.main_bg = tkinter.Label(cur_sc.master, bg= "#%02x%02x%02x" % (255,255,255))
+	cur_sc.main_bg.place(x=0,y=0,relwidth=1,relheight=1)
 
 def ableButtons(buttons):
 	print("| -- enabling the buttons       |")
@@ -37,6 +41,22 @@ def disableButtons(buttons):
 	print("| -- disabing the buttons       |")
 	for b in buttons:
 		b.configure(state="disabled")
+
+def ableButtonsAndMouse(cur_sc):
+	ableButtons(cur_sc.buttons)
+	cur_sc.master.configure(cursor='')
+
+def disableButtonsAndMouse(cur_sc):
+	disableButtons(cur_sc.buttons)
+	cur_sc.master.configure(cursor='none')
+
+def reset_mouse_position(cur_sc):
+	cur_sc.master.event_generate('<Motion>', warp=True,\
+	 x=cur_sc.sw/2, y=cur_sc.sh/2)
+
+def removeButtons(buttons):
+	for b in buttons:
+		b.destroy()
 
 def destroyWidgets(widgets):
 	print("| -- destroying  the widgets    |")
