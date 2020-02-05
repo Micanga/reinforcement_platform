@@ -21,6 +21,7 @@ class ChooseExperiment:
 	def __init__(self, master, prev_sc, main_bg):
 		# 1. Initilising GUI Components
 		# a. screen and log components
+		
 		self.master = master
 		self.main_bg = main_bg
 		self.main_bg.destroy()
@@ -29,7 +30,8 @@ class ChooseExperiment:
 		# b. log components
 		self.start_log = 		"---------------------------------\n" + \
 								"| LOG CHOOSE EXP SCREEN         |\n" + \
-								"---------------------------------"
+								"---------------------------------\n"+\
+								"| Nickname Received "+prev_sc.nickname+"|\n"
 		self.back_txt = 		"| Back Button Pressed           |"
 		print(self.start_log)
 
@@ -107,5 +109,11 @@ class ChooseExperiment:
 
 		destroyWidgets(self.widgets)
 
+		#Menu Screen
+		'''
 		from Menu import Menu
 		Menu(self.master,self,self.main_bg)
+		'''
+
+		from NickName import NickName
+		NickName(self.master,self,self.main_bg)

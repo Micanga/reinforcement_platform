@@ -56,8 +56,16 @@ class Menu:
 
 		destroyWidgets(self.widgets)
 
+		#Choose Experiment Screen
+		'''
 		from ChooseExperiment import ChooseExperiment
 		ChooseExperiment(self.master,self,self.main_bg)
+		'''
+
+		#Nickname Screen
+		from NickName import NickName
+		NickName(self.master,self,self.main_bg)
+
 
 	def settings_button_click(self):
 		print(self.settings_txt)
