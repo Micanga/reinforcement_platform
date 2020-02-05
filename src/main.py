@@ -31,7 +31,6 @@ if __name__ == "__main__":
 	root.grid_rowconfigure(0,pad=0)
 	root.grid_columnconfigure(0,pad=0)
 	root.grid_rowconfigure(1,pad=0)
-
 	root.grid_columnconfigure(1,pad=0)
 	main_bg = None
 
