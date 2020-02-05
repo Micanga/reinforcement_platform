@@ -108,6 +108,7 @@ class ChooseExperiment:
 		print(self.back_txt)
 
 		destroyWidgets(self.widgets)
+		removeButtons(self.buttons)
 
 		#Menu Screen
 		'''

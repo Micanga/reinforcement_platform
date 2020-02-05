@@ -9,7 +9,7 @@ class NickName:
 
         self.master = master
         self.main_bg = main_bg
-		#self.main_bg.destroy()
+        self.main_bg.destroy()
         self.sw, self.sh = self.master.winfo_screenwidth(), self.master.winfo_screenheight()
 
         self.start_log = "---------------------------------\n" + \
@@ -22,17 +22,30 @@ class NickName:
 
         self.back_txt = 		"| Back Button Pressed |"
 
+        # b. setting background
+        set_bg(self.master,self.main_bg,'bg/main.png')
+
         # 2. Buttons Functions
         self.widgets = []
         self.buttons = []
         self.experiment = "teste 44 "
 
+        #label and text inout
         self.nickname_label, self.nickname_entry = \
 			self.create_label_entry('Digite seu apelido para o experimento '+\
 				str(self.experiment)+':',self.sw/2,self.sh/3)
 
         self.widgets.append(self.nickname_label)
 
+        #start button
+        self.start_button = \
+			create_button(self.master,'Go',self.start_button_click,\
+				self.sw/2,5*self.sh/6,size=18)
+        
+        self.widgets.append(self.start_button)
+        self.buttons.append(self.start_button)
+
+        #back button
         self.back_button = \
 			create_button(self.master,'VOLTAR',self.back_button_click,\
 				self.sw/10,5*self.sh/6,size=18)
@@ -40,15 +53,7 @@ class NickName:
         self.widgets.append(self.back_button)
         self.buttons.append(self.back_button)
 
-        self.start_button = \
-			create_button(self.master,'Go',self.start_button_click,\
-				self.sw/2,5*self.sh/6,size=18)
         
-        self.widgets.append(self.start_button)
-        self.buttons.append(self.start_button)
-        
-
-
     def back_button_click(self):
         print(self.back_txt)
         destroyWidgets(self.widgets)
@@ -57,6 +62,8 @@ class NickName:
         Menu(self.master,self,self.main_bg)      
 
     def start_button_click(self):
+        if not self.nicknameCheck():
+            return None
 
         self.nickname = self.nickname_entry.get()
         print("| Sending Nickname: " + self.nickname + "       |")
@@ -82,3 +89,19 @@ class NickName:
 
 		# 3. Returning
         return label,entry
+
+    def nicknameCheck(self):
+        if re.match("^$",self.nickname_entry.get()) is not None:
+            disableButtons(self.buttons)
+            myPopUp(self,'Você precisa de um Apelido!\nPor favor, digite um apelido para você!')
+            return False
+        if re.match("^[a-zA-Z0-9]+$",self.nickname_entry.get()) is None:
+            disableButtons(self.buttons)
+            myPopUp(self,'Seu Apelido não pode conter espaços\nou caracteres especiais!\nPor favor, digite um apelido válido!')
+            return False
+        return True
+
+    def ableButtons(self):
+        print("| -- enabling the buttons       |")
+        for b in self.buttons:
+            b.configure(state="normal")
