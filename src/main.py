@@ -58,8 +58,8 @@ if __name__ == "__main__":
 	background.configure(image = bg_image)
 
 	# b. running the menu screen
-	from Menu import Menu
-	Menu(root,None,background)
+	from Stage1 import Stage1
+	Stage1(root,None,background)
 	root.mainloop()
 
 	# 5. That's all folks :) ... 

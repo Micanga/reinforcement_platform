@@ -10,16 +10,16 @@ import datetime
 import os
 	
 def multFunc(*funcs):
-    def multFunc(*args, **kwargs):
-        for f in funcs:
-            f(*args, **kwargs)
-    return multFunc
+	def multFunc(*args, **kwargs):
+		for f in funcs:
+			f(*args, **kwargs)
+	return multFunc
 
 def disable_event():
 	pass
 
 def create_button(master,text,func,x,y,color='#1E1E1E',size=36):
-	print("| -- creating button            |")
+	print("| -- creating button			|")
 	button = Button(master, text = text,
 		font = Font(family='Helvetica', size=size, weight='bold'),
 		fg = 'white', bg = color, 
@@ -30,6 +30,61 @@ def create_button(master,text,func,x,y,color='#1E1E1E',size=36):
 		bd = 5, padx=0, pady=0, height=2, width=13)
 	button.place(x = x, y = y, anchor= 'center')
 	return button
+
+class CircularButton(tkinter.Canvas):
+
+	def __init__(self, parent, width, height,
+		 color=(100,100,100), bg =(255,255,255), command=None):
+
+		self.color, self.bg = color, bg
+		self.width, self.height = width, height
+		self.padding = 4
+		# 1. Initialising the canvas
+		tkinter.Canvas.__init__(self, parent, borderwidth=0, 
+			highlightbackground= "#%02x%02x%02x" % bg,\
+			 highlightthickness=0, highlightcolor= "#%02x%02x%02x" % bg)
+
+		# 2. Setting button command
+		self.command = command
+
+		# 3. Making it circular/oval
+		self.id = self.create_oval((self.padding,self.padding,
+			self.width, self.height),
+			outline= "#%02x%02x%02x" % color, 
+			fill= "#%02x%02x%02x" % color)
+
+		# 4. Creating the button
+		(x0,y0,x1,y1)  = self.bbox("all")
+		self.width = (x1-x0) + self.padding
+		self.height = (y1-y0) + self.padding
+		self.configure(width=width, height=height, bg= "#%02x%02x%02x" % bg,\
+			highlightcolor= "#%02x%02x%02x" % bg,relief="solid")
+
+		self.bind("<ButtonPress-1>", self._on_press)
+		self.bind("<ButtonRelease-1>", self._on_release)
+
+	def _on_press(self, event):
+		self.id = self.create_oval((self.padding,self.padding,
+			self.width-self.padding, self.height-self.padding),
+			outline= "#%02x%02x%02x" % (int(0.7*self.color[0]),
+										int(0.7*self.color[1]),
+										int(0.7*self.color[2])),
+			fill= "#%02x%02x%02x" % (int(0.7*self.color[0]),
+										int(0.7*self.color[1]),
+										int(0.7*self.color[2])))
+
+	def _on_release(self, event):
+		self.id = self.create_oval((self.padding,self.padding,
+			self.width-self.padding, self.height-self.padding),
+			outline= "#%02x%02x%02x" % (self.color[0],
+										self.color[1],
+										self.color[2]),
+			fill= "#%02x%02x%02x" % (self.color[0],
+									 self.color[1],
+									 self.color[2]))
+
+		if self.command is not None:
+			self.command()
 
 class myPopUp:
 
