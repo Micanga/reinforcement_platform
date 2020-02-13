@@ -55,6 +55,7 @@ def reset_mouse_position(cur_sc):
 	 x=cur_sc.sw/2, y=cur_sc.sh/2)
 
 def removeButtons(buttons):
+	print("| -- destroying  the buttons    |")
 	for b in buttons:
 		b.destroy()
 
@@ -62,6 +63,11 @@ def destroyWidgets(widgets):
 	print("| -- destroying  the widgets    |")
 	for w in widgets:
 		w.destroy()
+
+'''
+def getPage(master, prev_sc, main_bg, pathNextPage):
+	from 
+'''
 
 # RESULT
 def write_rheader(nickname,start_time):

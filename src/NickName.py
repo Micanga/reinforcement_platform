@@ -2,33 +2,14 @@ import tkinter
 from tkinter import *
 from MyCommons import *
 from utils import *
+from Screen import Screen
 
-class NickName:
+class NickName(Screen):
 
     def __init__(self, master, prev_sc, main_bg):
 
-        self.master = master
-        self.main_bg = main_bg
-        self.main_bg.destroy()
-        self.sw, self.sh = self.master.winfo_screenwidth(), self.master.winfo_screenheight()
-
-        self.start_log = "---------------------------------\n" + \
-						 "| NickName Register Screen      |\n" + \
-						 "---------------------------------"
-
-        self.start_txt = "| Choose Experiment Screen   |"
-
-        print(self.start_log)   
-
-        self.back_txt = 		"| Back Button Pressed |"
-
-        # b. setting background
-        set_bg(self.master,self.main_bg,'bg/main.png')
-
-        # 2. Buttons Functions
-        self.widgets = []
-        self.buttons = []
-        self.experiment = "teste 44 "
+        super().__init__(master, prev_sc, main_bg)
+        self.experiment = "Teste 2"
 
         #label and text inout
         self.nickname_label, self.nickname_entry = \
@@ -41,26 +22,12 @@ class NickName:
         self.start_button = \
 			create_button(self.master,'Go',self.start_button_click,\
 				self.sw/2,5*self.sh/6,size=18)
-        
-        self.widgets.append(self.start_button)
-        self.buttons.append(self.start_button)
 
         #back button
         self.back_button = \
-			create_button(self.master,'VOLTAR',self.back_button_click,\
+			create_button(self.master,'VOLTAR',self.goToMenu,\
 				self.sw/10,5*self.sh/6,size=18)
         
-        self.widgets.append(self.back_button)
-        self.buttons.append(self.back_button)
-
-        
-    def back_button_click(self):
-        print(self.back_txt)
-        destroyWidgets(self.widgets)
-
-        from Menu import Menu
-        Menu(self.master,self,self.main_bg)      
-
     def start_button_click(self):
         if not self.nicknameCheck():
             return None
