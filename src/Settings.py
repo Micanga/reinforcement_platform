@@ -17,6 +17,8 @@ import utils
 class Settings:
 
 	def __init__(self, master, prev_sc, main_bg):
+		self.buttons, self.widgets = [], []
+
 		# 1. Initilising GUI Components
 		# a. screen and log components
 		self.master = master
@@ -47,7 +49,7 @@ class Settings:
 									 font=Font(family='Helvetica', size=24, weight='bold'))
 		self.settings_label.place(x=sw/10,y=sh/10)
 
-		# e. Back Button
+		# . Back Button
 		self.back_button = Button(master, anchor = 'center', compound = 'center', 
 									text = 'VOLTAR',font = Font(family='Helvetica', size=18, weight='bold'),
 									bg = "#%02x%02x%02x" % (30, 30, 30), fg = 'white',
@@ -55,8 +57,10 @@ class Settings:
 									highlightthickness = 0, 
 									bd = 0, padx=0,pady=0,height=2,width=13)
 		self.back_button.place(x = sw/10, y = 8*sh/10)
+		self.buttons.append(self.back_button)
+		self.widgets.append(self.back_button)
 
-		# f. Save Button
+		# . Save Button
 		self.save_button = Button(master, anchor = 'center', compound = 'center', 
 									text = 'SALVAR',font = Font(family='Helvetica', size=18, weight='bold'),
 									bg = "#%02x%02x%02x" % (30, 30, 30), fg = 'white',
@@ -64,6 +68,8 @@ class Settings:
 									highlightthickness = 0, 
 									bd = 0, padx=0,pady=0,height=2,width=13)
 		self.save_button.place(x = 9*sw/10, y = 8*sh/10,anchor='ne')
+		self.buttons.append(self.save_button)
+		self.widgets.append(self.save_button)
 
 		# 3. Loading the previous settings and images
 

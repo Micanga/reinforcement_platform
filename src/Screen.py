@@ -11,9 +11,8 @@ class Screen:
 
         print(start)
 
-        if prev_sc is not None: #this is not working       
-            prev_sc.destroyAll()
-
+        if prev_sc is not None:   
+            self.destroyAll(prev_sc)
 
         self.master = master
         self.main_bg = main_bg
@@ -24,14 +23,12 @@ class Screen:
         self.widgets = []
         self.buttons = []
 
-    def destroyAll(self):
-        clean_log = "| Cleaning Last Screen           |\n"
-        print(clean_log)
+    def destroyAll(self,prev_sc):
+        print("| Cleaning Last Screen           |")
         
         #destroying everything from the previous screen
-        destroyWidgets(self.widgets)
-        removeButtons(self.buttons)
-
+        destroyWidgets(prev_sc.widgets)
+        removeButtons(prev_sc.buttons)
 
     def goToNickName(self):
         settings_txt = 	"| Going to Settings Screen      |"	
