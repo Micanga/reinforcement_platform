@@ -8,7 +8,6 @@ class Screen:
         start = "---------------------------------\n" + \
 				"| New Screen                     |\n" + \
 				"---------------------------------" 
-
         print(start)
 
         if prev_sc is not None:   
@@ -24,7 +23,8 @@ class Screen:
         self.buttons = []
 
     def destroyAll(self,prev_sc):
-        print("| Cleaning Last Screen           |")
+        clean_log = "| Cleaning Last Screen           |\n"
+        print(clean_log)
         
         #destroying everything from the previous screen
         destroyWidgets(prev_sc.widgets)
@@ -33,6 +33,7 @@ class Screen:
     def goToNickName(self):
         settings_txt = 	"| Going to Settings Screen      |"	
         print(settings_txt)
+
         #Nickname Screen
         from NickName import NickName
         NickName(self.master, self, self.main_bg)
@@ -40,18 +41,22 @@ class Screen:
     def goToSettings(self):
         settings_txt = 	"| Going to Settings Screen      |"	
         print(settings_txt)
+
         from Settings import Settings
         Settings(self.master, self, self.main_bg)
+
         settings_txt = 	"| Settings Button pressed       |"	
         print(settings_txt)
 
     def goToMenu(self):
         settings_txt = 	"| Going to Menu Screen          |"	
         print(settings_txt)
+
         from Menu import Menu
         Menu(self.master, self, self.main_bg)
         
     def goToExit(self):
         self.master.destroy()
+        
         exit_log = "| Exit Button Pressed           |"
-        print(start_log)
+        print(exit_log)

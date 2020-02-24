@@ -34,15 +34,17 @@ def create_button(master,text,func,x,y,color='#1E1E1E',size=36):
 class CircularButton(tkinter.Canvas):
 
 	def __init__(self, parent, width, height,
-		 color=(100,100,100), bg =(255,255,255), command=None):
+		 color=[100,100,100], bg =[255,255,255], command=None):
 
 		self.color, self.bg = color, bg
 		self.width, self.height = width, height
 		self.padding = 4
 		# 1. Initialising the canvas
 		tkinter.Canvas.__init__(self, parent, borderwidth=0, 
-			highlightbackground= "#%02x%02x%02x" % bg,\
-			 highlightthickness=0, highlightcolor= "#%02x%02x%02x" % bg)
+			highlightbackground= "#%02x%02x%02x" %\
+			 (int(bg[0]),int(bg[1]),int(bg[2])),\
+			highlightthickness=0, highlightcolor= "#%02x%02x%02x" %
+			 (int(bg[0]),int(bg[1]),int(bg[2])))
 
 		# 2. Setting button command
 		self.command = command
@@ -50,15 +52,20 @@ class CircularButton(tkinter.Canvas):
 		# 3. Making it circular/oval
 		self.id = self.create_oval((self.padding,self.padding,
 			self.width, self.height),
-			outline= "#%02x%02x%02x" % color, 
-			fill= "#%02x%02x%02x" % color)
+			outline= "#%02x%02x%02x" % (int(color[0]),int(color[1]),int(color[2])), 
+			fill= "#%02x%02x%02x" % (int(color[0]),int(color[1]),int(color[2])))
 
 		# 4. Creating the button
 		(x0,y0,x1,y1)  = self.bbox("all")
 		self.width = (x1-x0) + self.padding
 		self.height = (y1-y0) + self.padding
-		self.configure(width=width, height=height, bg= "#%02x%02x%02x" % bg,\
-			highlightcolor= "#%02x%02x%02x" % bg,relief="solid")
+		self.configure(
+			width=width, height=height,\
+			bg= "#%02x%02x%02x" %\
+				 (int(bg[0]),int(bg[1]),int(bg[2])),\
+			highlightcolor= "#%02x%02x%02x" %\
+				 (int(bg[0]),int(bg[1]),int(bg[2])),\
+			relief="solid")
 
 		self.bind("<ButtonPress-1>", self._on_press)
 		self.bind("<ButtonRelease-1>", self._on_release)
@@ -76,12 +83,12 @@ class CircularButton(tkinter.Canvas):
 	def _on_release(self, event):
 		self.id = self.create_oval((self.padding,self.padding,
 			self.width-self.padding, self.height-self.padding),
-			outline= "#%02x%02x%02x" % (self.color[0],
-										self.color[1],
-										self.color[2]),
-			fill= "#%02x%02x%02x" % (self.color[0],
-									 self.color[1],
-									 self.color[2]))
+			outline= "#%02x%02x%02x" % (int(self.color[0]),
+										int(self.color[1]),
+										int(self.color[2])),
+			fill= "#%02x%02x%02x" % (int(self.color[0]),
+									 int(self.color[1]),
+									 int(self.color[2])))
 
 		if self.command is not None:
 			self.command()

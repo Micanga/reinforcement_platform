@@ -27,9 +27,10 @@ def set_bg(master,main_bg,path):
 	main_bg.image= bg_img
 	main_bg.place(x=sw/2,y=sh/2,relwidth=1,relheight=1,anchor='center')
 
-def update_screen(cur_sc):
+def update_screen(cur_sc,bg_color=[255.0,255.0,255.0]):
 	cur_sc.main_bg.destroy()
-	cur_sc.main_bg = tkinter.Label(cur_sc.master, bg= "#%02x%02x%02x" % (255,255,255))
+	cur_sc.main_bg = tkinter.Label(cur_sc.master, \
+	 bg= "#%02x%02x%02x" % (int(bg_color[0]),int(bg_color[1]),int(bg_color[2])))
 	cur_sc.main_bg.place(x=0,y=0,relwidth=1,relheight=1)
 
 def ableButtons(buttons):
@@ -58,11 +59,13 @@ def removeButtons(buttons):
 	print("| -- destroying  the buttons    |")
 	for b in buttons:
 		b.destroy()
+	buttons = []
 
 def destroyWidgets(widgets):
 	print("| -- destroying  the widgets    |")
 	for w in widgets:
 		w.destroy()
+	widgets = []
 
 '''
 def getPage(master, prev_sc, main_bg, pathNextPage):
