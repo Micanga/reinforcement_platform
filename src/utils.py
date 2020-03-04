@@ -80,6 +80,24 @@ def destroyWidgets(widgets):
 def getPage(master, prev_sc, main_bg, pathNextPage):
 	from 
 '''
+# LOAD
+def load_text(stage):
+	print("| -- loading text...            |")
+	text = ""
+	saved_texts = [name for name in os.listdir('local/texts/stage'+str(stage)+'/')]
+	saved_texts.sort()
+	if len(saved_texts) > 0:
+		with open('local/texts/stage'+str(stage)+'/'+saved_texts[-1],encoding='latin-1') as prev_file:
+			for line in prev_file:
+				text += line[:-1]
+		print("| -- custom text loaded.        |")
+	else:
+		with open('local/default/stage'+str(stage)+'.txt',encoding='latin-1') as default_text:
+			for line in default_text:
+				text += line[:-1]
+		print("| -- default text loaded.       |")
+
+	return text
 
 # MATH
 from math import log2, fabs

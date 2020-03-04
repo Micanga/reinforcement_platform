@@ -1,6 +1,10 @@
-def write_header(nickname,start_time):
-	result_file = open('results/'+nickname+'_'+\
-		start_time.strftime("%Y%m%d_%H%M%S")+".csv","w")
+def create_file(nickname,start_time):
+	filename = nickname+'_'+\
+		start_time.strftime("%Y%m%d_%H%M%S")
+	write_header(filename)
+
+def write_header(filename):
+	result_file = open('results/'+filename+".csv","w")
 	result_file.write(\
 	 	'# Grupo'+\
 		'# Fase;'+\
@@ -18,7 +22,9 @@ def write_header(nickname,start_time):
 	 	'\n')
 	result_file.close()
 
-def write_round(game,filename):
+def write_round(game,nickname,start_time):
+	filename = nickname+'_'+\
+		start_time.strftime("%Y%m%d_%H%M%S")
 	result_file = open('results/'+filename+".csv","a")
 
 	result_file.write(\

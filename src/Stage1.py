@@ -45,7 +45,6 @@ class Stage1:
 		self.sw, self.sh = master.winfo_screenwidth(), master.winfo_screenheight()
 
 		# b. log text
-		self.full_game = prev_sc.full_game
 		self.start_log = 		"---------------------------------\n" + \
 								"| LOG STAGE 1 PLAY SCREEN       |\n" + \
 								"---------------------------------"
@@ -256,7 +255,7 @@ class Stage1:
 
 	def replay(self):
 		# 1. Writing results in log file
-		log.write_round(self.game)
+		log.write_round(self.game,self.nickname,self.start_time)
 
 		# 2. Checking replay conditions
 		# a. checking the end of the block (8 actions)

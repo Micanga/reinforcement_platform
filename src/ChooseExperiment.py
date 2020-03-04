@@ -43,9 +43,9 @@ class ChooseExperiment(Screen):
 		self.widgets.append(self.group_label)
 
 		group_list = ['1','2','3']
-		group_var = StringVar(self.master)
-		group_var.set(group_list[0])
-		self.group_option = OptionMenu(self.master, group_var, *group_list)
+		self.group_var = StringVar(self.master)
+		self.group_var.set(group_list[0])
+		self.group_option = OptionMenu(self.master, self.group_var, *group_list)
 		self.group_option.config(width = 5, 
 			font = Font(family='Helvetica', size=18, weight='bold'),
 			bd=3, relief="solid")
@@ -61,9 +61,9 @@ class ChooseExperiment(Screen):
 		self.widgets.append(self.stage_label)
 
 		stage_list = ['1','2','3','4','5','6','7']
-		stage_var = StringVar(self.master)
-		stage_var.set(stage_list[0])
-		self.stage_option = OptionMenu(self.master, stage_var, *stage_list)
+		self.stage_var = StringVar(self.master)
+		self.stage_var.set(stage_list[0])
+		self.stage_option = OptionMenu(self.master, self.stage_var, *stage_list)
 		self.stage_option.config(width = 5, 
 			font = Font(family='Helvetica', size=18, weight='bold'),
 			bd=3, relief="solid")
@@ -109,5 +109,9 @@ class ChooseExperiment(Screen):
 		return label,entry
 
 	def start_button_click(self):
+		self.group = int(self.group_var.get())
+		self.stage = int(self.stage_var.get())
+		self.start_time = datetime.datetime.now()
+
 		from IntroStage import IntroStage
 		IntroStage(self.master,self,self.main_bg)

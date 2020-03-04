@@ -42,6 +42,20 @@ if __name__ == "__main__":
 	# 3. Verifying the not default directories integrity
 	if not os.path.isdir('./results'):
 		os.mkdir('./results')
+	if not os.path.isdir('./local/texts'):
+		os.mkdir('./local/texts')
+	if not os.path.isdir('./local/texts/stage1'):
+		os.mkdir('./local/texts/stage1')
+	if not os.path.isdir('./local/texts/stage2'):
+		os.mkdir('./local/texts/stage2')
+	if not os.path.isdir('./local/texts/stage3'):
+		os.mkdir('./local/texts/stage3')
+	if not os.path.isdir('./local/texts/stage4'):
+		os.mkdir('./local/texts/stage4')
+	if not os.path.isdir('./local/texts/stage5'):
+		os.mkdir('./local/texts/stage5')
+	if not os.path.isdir('./local/texts/stage6'):
+		os.mkdir('./local/texts/stage6')
 
 	# 4. Starting app
 	from Menu import Menu
