@@ -18,6 +18,7 @@ import time
 from pygame import mixer
 #import winsound
 
+import log
 from MyCommons import *
 import utils
 
@@ -29,6 +30,8 @@ RED = [255.0,0.0,0.0]
 BABY_BLUE = [137.0,207.0,240.0]
 
 BG_COLOR = BABY_BLUE
+
+AUTO = True
 
 class Stage1:
 
@@ -42,6 +45,7 @@ class Stage1:
 		self.sw, self.sh = master.winfo_screenwidth(), master.winfo_screenheight()
 
 		# b. log text
+		self.full_game = prev_sc.full_game
 		self.start_log = 		"---------------------------------\n" + \
 								"| LOG STAGE 1 PLAY SCREEN       |\n" + \
 								"---------------------------------"
@@ -69,25 +73,54 @@ class Stage1:
 		self.points_label.place(x=self.center_w,y=self.center_h,anchor='center')
 
 		# c. loading sound and reset mouse position
-		#mixer.init()
-		#mixer.music.load('local/default/sfx.wav')
+		mixer.init()
+		mixer.music.load('local/default/sfx.wav')
 		utils.reset_mouse_position(self)
+
+		if AUTO:
+			self.auto_play()
+
+	def auto_play(self):
+		coin = int(random.uniform(0,8))
+		if coin <= 1:
+			self.button1_click()
+		elif coin <= 2:
+			self.button2_click()
+		elif coin <= 3:
+			self.button3_click()
+		elif coin <= 4:
+			self.button4_click()
+		elif coin <= 5:
+			self.button5_click()
+		elif coin <= 6:
+			self.button6_click()
+		elif coin <= 7:
+			self.button7_click()
+		else:
+			self.button8_click()
 
 	def update_variables(self,prev_sc):
 		# a. screen var
 		self.points = tkinter.StringVar()
 		self.points.set(0)
 
+		self.game = []
+		self.game.append({})
+
+		self.game[0]['group'] = prev_sc.group
+		self.game[0]['stage'] = 1
+
 		# b. round var
-		self.game = {}
-		self.game['answer'] = []
-		self.game['reinforced'] = []
-		self.game['time2answer'] = []
-		self.game['frequency'] = {1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0}
+		self.game[0]['answer'] = []
+		self.game[0]['time2answer'] = []
+		self.game[0]['reinforced'] = []
+		self.game[0]['frequency'] = {1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0}
 		self.round_start_time = datetime.datetime.now()
 
+		self.game[0]['points'] = []
+
 		# c. block var
-		self.game['block_time'] = []
+		self.game[0]['block_time'] = 0
 		self.block_start_time = datetime.datetime.now()
 
 	def createButtons(self, center_h, center_w,radius):
@@ -184,18 +217,24 @@ class Stage1:
 
 	def check_action(self,clicked_button):
 		# a. updating game log
-		self.game['answer'].append(clicked_button)
-		self.game['reinforced'].append(True)
-		self.game['time2answer'].append(datetime.datetime.now() - self.round_start_time)
-		self.game['frequency'][clicked_button] += 1
+		self.game[-1]['answer'].append(clicked_button)
+		self.game[-1]['reinforced'].append(True)
+		self.game[-1]['time2answer'].append(datetime.datetime.now() - self.round_start_time)
+		self.game[-1]['frequency'][clicked_button] += 1
 
 		# b.reinforcing the action
+		# - removing buttons and disabling the mouse
 		utils.removeButtons(self.buttons)
+		utils.disableMouse(self)
+
+		# - checking if the action was reinforced
 		self.cur_color = np.array(BG_COLOR)
 		self.ref_color = np.array(BG_COLOR) - np.array(GREEN)
-		self.reinforce_action()
 
-	def reinforce_action(self):
+		mixer.music.play() 
+		self.positive_reinforce_action()
+
+	def positive_reinforce_action(self):
 		# a. calculating the color fade (to green)
 		self.cur_color -= (0.1*self.ref_color)
 		
@@ -206,33 +245,49 @@ class Stage1:
 		# c. checking the fade stop
 		if (self.ref_color[1] >= 0 and int(self.cur_color[1]) > 200)\
 		 or (self.ref_color[1] < 0 and int(self.cur_color[1]) < 200):
-			self.master.after(50,self.reinforce_action)
+			self.master.after(50,self.positive_reinforce_action)
 		else:
 			# - setting green bg
 			self.main_bg.configure(bg="#%02x%02x%02x" % (0,200,0))
+			#self.points.set(int(self.points.get())+int(self.settings['points']))
 			#self.master.after(int(float(self.settings['iti'])*1000),self.replay)
+			self.points.set(int(self.points.get())+10)
 			self.master.after(1*1000,self.replay)
 
 	def replay(self):
 		# 1. Writing results in log file
+		log.write_round(self.game)
 
 		# 2. Checking replay conditions
-		# a. end stage
-		if self.check_stage_conditions():
+		# a. checking the end of the block (8 actions)
+		if len(self.game[-1]['reinforced']) == 8:
+			print("|--- starting new block         |")
+			self.game[-1]['block_time'].append(datetime.datetime.now() - self.block_start_time)
+			self.block_start_time = datetime.datetime.now()
+			self.game.append({})
+
+		# b. end stage
+		if self.check_stage_end_conditions():
 			self.rgb = np.array([0.0,200.0,0.0])
 			self.win_txt = tkinter.Label(self.master, bg= "#%02x%02x%02x" % (0, 200, 0), fg = "#%02x%02x%02x" % (0, 200, 0),\
 				 text='ATÉ O MOMENTO VOCÊ ACUMULOU '+str(int(self.points.get())+int(self.prev_sc.points.get()))+\
 				 ' PONTOS!', font=Font(family='Helvetica', size=16, weight='bold'))
 			self.master.after(20,self.fadeResetText)
-		# b. keep playing
+		# c. keep playing
 		else:
 			# - setting the round start variable
 			self.round_start_time = datetime.datetime.now()
 			self.main_bg.configure(bg="#%02x%02x%02x" %\
 			 	(int(BG_COLOR[0]),int(BG_COLOR[1]),int(BG_COLOR[2])))
 
-			# - creating the buttons
+			# - creating the buttons and enabling the mouse
 			self.createButtons(self.center_h, self.center_w, self.radius)
+			utils.reset_mouse_position(self)
+			utils.ableMouse(self)
 
-	def check_stage_conditions(self):
+	def check_stage_end_conditions(self):
+		# if the number of blocks is greather than 16, finish the stage
+		if len(self.game) > 16:
+			return True
+		# else keep playing
 		return False
