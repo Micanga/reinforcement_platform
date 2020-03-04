@@ -9,31 +9,33 @@ class NickName(Screen):
     def __init__(self, master, prev_sc, main_bg):
 
         super().__init__(master, prev_sc, main_bg)
-        self.experiment = "Teste 2"
 
         #label and text inout
         self.nickname_label, self.nickname_entry = \
-			self.create_label_entry('Digite seu apelido para o experimento '+\
-				str(self.experiment)+':',self.sw/2,self.sh/3)
-
+			self.create_label_entry(\
+                'Digite seu apelido para o experimento:',\
+                self.sw/2,self.sh/3)
         self.widgets.append(self.nickname_label)
+        self.buttons.append(self.nickname_entry)
 
         #start button
         self.start_button = \
-			create_button(self.master,'Go',self.start_button_click,\
-				self.sw/2,5*self.sh/6,size=18)
+			create_button(self.master,'AVANÇAR',self.start_button_click,\
+				8*self.sw/10,5*self.sh/6,size=18)
+        self.buttons.append(self.start_button)
 
         #back button
         self.back_button = \
 			create_button(self.master,'VOLTAR',self.goToMenu,\
-				self.sw/10,5*self.sh/6,size=18)
+				2*self.sw/10,5*self.sh/6,size=18)
+        self.buttons.append(self.back_button)
         
     def start_button_click(self):
         if not self.nicknameCheck():
             return None
 
         self.nickname = self.nickname_entry.get()
-        print("| Sending Nickname: " + self.nickname + "       |")
+        print("| Sending Nickname: " + self.nickname)
         print("| Start Button clicked           |")
         destroyWidgets(self.widgets)
 
@@ -42,7 +44,7 @@ class NickName(Screen):
 
     def create_label_entry(self,label_text,x,y):
         # 1. Creating Entry Label
-        print("| -- creating labels nickname   |")
+        print("| -- creating labels nickname    |")
         label = tkinter.Label(self.master, bg="#%02x%02x%02x" % (255, 255, 255),justify='left',\
             fg = 'black', text=label_text, font=Font(family='Helvetica', size=20))
         label.place(x=x,y=y,anchor='center')

@@ -15,39 +15,32 @@ import utils
 
 from MyCommons import *
 from utils import *
+from Screen import Screen
 
-class ChooseExperiment:
+class ChooseExperiment(Screen):
 
 	def __init__(self, master, prev_sc, main_bg):
 		# 1. Initilising GUI Components
 		# a. screen and log components
 		
-		self.master = master
-		self.main_bg = main_bg
-		self.main_bg.destroy()
-		self.sw, self.sh = self.master.winfo_screenwidth(), self.master.winfo_screenheight()
+		super().__init__(master, prev_sc, main_bg,'bg/choose.png')
+		self.nickname = self.prev_sc.nickname
 
 		# b. log components
 		self.start_log = 		"---------------------------------\n" + \
 								"| LOG CHOOSE EXP SCREEN         |\n" + \
 								"---------------------------------\n"+\
-								"| Nickname Received "+prev_sc.nickname+"|\n"
+								"| Nickname Received "+prev_sc.nickname+"\n"
 		self.back_txt = 		"| Back Button Pressed           |"
 		print(self.start_log)
 
-		# b. setting background
-		from utils import set_bg
-		set_bg(self.master,self.main_bg,'bg/choose.png')
-
 		# 2. Buttons Functions
-		self.widgets = []
-		self.buttons = []
-
 		# a. Group Menu
-		group_label = tkinter.Label(self.master, bg="#%02x%02x%02x" % (255, 255, 255),justify='left',\
+		self.group_label = tkinter.Label(self.master, bg="#%02x%02x%02x" % (255, 255, 255),justify='left',\
 			fg = 'black', text='GRUPO', font=Font(family='Helvetica', size=20),
 			padx=10,pady=10,bd=4, relief="solid", width=15)
-		group_label.place(x=self.sw/3,y=self.sh/2-50,anchor='center')
+		self.group_label.place(x=self.sw/3,y=self.sh/2-50,anchor='center')
+		self.widgets.append(self.group_label)
 
 		group_list = ['1','2','3']
 		group_var = StringVar(self.master)
@@ -61,10 +54,11 @@ class ChooseExperiment:
 		self.buttons.append(self.group_option)
 
 		# b. Stage Menu
-		stage_label = tkinter.Label(self.master, bg="#%02x%02x%02x" % (255, 255, 255),justify='left',\
+		self.stage_label = tkinter.Label(self.master, bg="#%02x%02x%02x" % (255, 255, 255),justify='left',\
 			fg = 'black', text='FASE', font=Font(family='Helvetica', size=20),
 			padx=10,pady=10,bd=4, relief="solid", width=15)
-		stage_label.place(x=2*self.sw/3,y=self.sh/2-50,anchor='center')
+		self.stage_label.place(x=2*self.sw/3,y=self.sh/2-50,anchor='center')
+		self.widgets.append(self.stage_label)
 
 		stage_list = ['1','2','3','4','5','6','7']
 		stage_var = StringVar(self.master)
@@ -78,15 +72,25 @@ class ChooseExperiment:
 		self.buttons.append(self.stage_option)
 
 		# c. Main Label
-		main_label = tkinter.Label(self.master, bg="#%02x%02x%02x" % (255, 255, 255),justify='left',\
+		self.main_label = tkinter.Label(self.master, bg="#%02x%02x%02x" % (255, 255, 255),justify='left',\
 			fg = 'black', text='ESCOLHA O GRUPO E A FASE DO EXPERIMENTO', font=Font(family='Helvetica', size=20),
 			padx=10,pady=10)
-		main_label.place(x=self.sw/2,y=self.sh/4,anchor='center')
+		self.main_label.place(x=self.sw/2,y=self.sh/4,anchor='center')
+		self.widgets.append(self.main_label)
 
-		# d. Back Button
+		#start button
+		self.start_button = \
+			create_button(self.master,'AVANÇAR',self.start_button_click,\
+				8*self.sw/10,5*self.sh/6,size=18)
+		self.widgets.append(self.start_button)
+		self.buttons.append(self.start_button)
+
+		#back button
 		self.back_button = \
-			create_button(self.master,'VOLTAR',self.back_button_click,\
-				self.sw/2,5*self.sh/6,size=18)
+			create_button(self.master,'VOLTAR',self.goToNickName,\
+				2*self.sw/10,5*self.sh/6,size=18)
+		self.widgets.append(self.back_button)
+		self.buttons.append(self.back_button)
 			
 	def create_label_entry(self,label_text,x,y):
 		# 1. Creating Entry Label
@@ -104,17 +108,6 @@ class ChooseExperiment:
 		# 3. Returning
 		return label,entry
 
-	def back_button_click(self):
-		print(self.back_txt)
-
-		destroyWidgets(self.widgets)
-		removeButtons(self.buttons)
-
-		#Menu Screen
-		'''
-		from Menu import Menu
-		Menu(self.master,self,self.main_bg)
-		'''
-
-		from NickName import NickName
-		NickName(self.master,self,self.main_bg)
+	def start_button_click(self):
+		from IntroStage import IntroStage
+		IntroStage(self.master,self,self.main_bg)

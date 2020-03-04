@@ -44,28 +44,8 @@ if __name__ == "__main__":
 		os.mkdir('./results')
 
 	# 4. Starting app
-	# a. resizing the background image
-	from PIL import Image, ImageTk
-	image = Image.open('bg/main.png')
-	img_copy = image.copy()
-
-	bg_image = ImageTk.PhotoImage(image)
-	background = tkinter.Label(root, image=bg_image)
-	background.place(x=0,y=0,relwidth=1,relheight=1,anchor='center')
-
-	image = img_copy.resize((sw, sh), Image.ANTIALIAS)
-	bg_image = ImageTk.PhotoImage(image)
-	background.configure(image = bg_image)
-
-	# - stage test
-	from Stage1 import Stage1
-	Stage1(root,None,background)
-
-	'''
-	# b. running the menu screen
 	from Menu import Menu
-	Menu(root,None,background)
-	'''
+	Menu(root,None,None)
 	
 	root.mainloop()
 

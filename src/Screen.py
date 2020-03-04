@@ -4,7 +4,7 @@ from utils import *
 
 class Screen:
 
-    def __init__(self, master, prev_sc, main_bg):
+    def __init__(self, master, prev_sc, main_bg, bg_img=None):
         start = "---------------------------------\n" + \
 				"| New Screen                     |\n" + \
 				"---------------------------------" 
@@ -16,14 +16,19 @@ class Screen:
         self.master = master
         self.main_bg = main_bg
         self.prev_sc = prev_sc
-        self.main_bg.destroy()
         self.sw, self.sh = self.master.winfo_screenwidth(), self.master.winfo_screenheight()
+
+        # b. setting background
+        if bg_img is not None:
+            self.main_bg = set_bg(self.master,self.main_bg,bg_img)
+        elif self.main_bg is not None:
+            self.main_bg.destroy()
 
         self.widgets = []
         self.buttons = []
 
     def destroyAll(self,prev_sc):
-        clean_log = "| Cleaning Last Screen           |\n"
+        clean_log = "| Cleaning Last Screen           |"
         print(clean_log)
         
         #destroying everything from the previous screen
@@ -31,7 +36,7 @@ class Screen:
         removeButtons(prev_sc.buttons)
 
     def goToNickName(self):
-        settings_txt = 	"| Going to Settings Screen      |"	
+        settings_txt = 	"| Going to Nickname Screen       |"	
         print(settings_txt)
 
         #Nickname Screen
@@ -45,11 +50,8 @@ class Screen:
         from Settings import Settings
         Settings(self.master, self, self.main_bg)
 
-        settings_txt = 	"| Settings Button pressed       |"	
-        print(settings_txt)
-
     def goToMenu(self):
-        settings_txt = 	"| Going to Menu Screen          |"	
+        settings_txt = 	"| Going to Menu Screen           |"	
         print(settings_txt)
 
         from Menu import Menu
@@ -58,5 +60,5 @@ class Screen:
     def goToExit(self):
         self.master.destroy()
         
-        exit_log = "| Exit Button Pressed           |"
+        exit_log = "| Exit Button Pressed            |"
         print(exit_log)

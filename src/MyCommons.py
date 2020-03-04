@@ -19,7 +19,7 @@ def disable_event():
 	pass
 
 def create_button(master,text,func,x,y,color='#1E1E1E',size=36):
-	print("| -- creating button			|")
+	print("| -- creating button	         |")
 	button = Button(master, text = text,
 		font = Font(family='Helvetica', size=size, weight='bold'),
 		fg = 'white', bg = color, 

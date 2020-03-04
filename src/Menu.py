@@ -17,10 +17,7 @@ class Menu():
 	def __init__(self, master, prev_sc, main_bg):
 		# 1. Initilising GUI Components
 		# a. screen and log components
-		MenuScreen = Screen(master, prev_sc, main_bg)
-
-		# b. setting background
-		set_bg(MenuScreen.master,MenuScreen.main_bg,'bg/main.png')
+		MenuScreen = Screen(master, prev_sc, main_bg,'bg/main.png')
 
 		# a. Start Button
 		MenuScreen.start_button = \
