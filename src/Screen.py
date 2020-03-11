@@ -2,6 +2,14 @@ import inspect
 import tkinter
 from tkinter import *
 from utils import *
+from MyCommons import *
+from math import *
+
+WHITE = [255.0, 255.0, 255.0]
+GREEN = [0.0, 200.0, 0.0]
+RED = [255.0, 0.0, 0.0]
+BABY_BLUE = [137.0, 207.0, 240.0]
+BG_COLOR = BABY_BLUE
 
 
 class Screen:
@@ -20,6 +28,11 @@ class Screen:
         self.main_bg = main_bg
         self.prev_sc = prev_sc
         self.sw, self.sh = self.master.winfo_screenwidth(), self.master.winfo_screenheight()
+
+        self.radius = 2*self.sw/3 if self.sw < self.sh else 2*self.sh/3
+        self.center_w, self.center_h = self.sw/2, 4*self.sh/5
+        self.points = tkinter.StringVar()
+        self.points.set(0)
 
         # b. setting background
         if bg_img is not None:
@@ -62,7 +75,7 @@ class Screen:
     # Starting a game Screen
 
     def createButtons(self, center_h, center_w, radius):
-                # print(self.createb_txt)
+            # print(self.createb_txt)
         self.button_1 = CircularButton(self.master, 100, 100,
                                        color=RED, bg=BG_COLOR, command=self.button1_click)
         self.button_1.place(x=center_w-radius,
@@ -119,37 +132,46 @@ class Screen:
                             anchor='center')
         self.buttons.append(self.button_8)
 
-        def button1_click(self):
-            print("|--- button 1 click             |")
-            self.check_action(1)
+        self.points_label = tkinter.Label(self.master, textvariable=self.points, width=3,
+                                          bg='white', fg='black',
+                                          font=Font(family='Helvetica',
+                                                    size=30, weight='bold'),
+                                          padx=20, pady=20, bd=4, highlightbackground='black',
+                                          highlightthickness=2, relief="solid")
+        self.points_label.place(
+            x=self.center_w, y=self.center_h, anchor='center')
 
-        def button2_click(self):
-            print("|--- button 2 click             |")
-            self.check_action(2)
+    def button1_click(self):
+        print("|--- button 1 click             |")
+        self.check_action(1)
 
-        def button3_click(self):
-            print("|--- button 3 click             |")
-            self.check_action(3)
+    def button2_click(self):
+        print("|--- button 2 click             |")
+        self.check_action(2)
 
-        def button4_click(self):
-            print("|--- button 4 click             |")
-            self.check_action(4)
+    def button3_click(self):
+        print("|--- button 3 click             |")
+        self.check_action(3)
 
-        def button5_click(self):
-            print("|--- button 5 click             |")
-            self.check_action(5)
+    def button4_click(self):
+        print("|--- button 4 click             |")
+        self.check_action(4)
 
-        def button6_click(self):
-            print("|--- button 6 click             |")
-            self.check_action(6)
+    def button5_click(self):
+        print("|--- button 5 click             |")
+        self.check_action(5)
 
-        def button7_click(self):
-            print("|--- button 7 click             |")
-            self.check_action(7)
+    def button6_click(self):
+        print("|--- button 6 click             |")
+        self.check_action(6)
 
-        def button8_click(self):
-            print("|--- button 8 click             |")
-            self.check_action(8)
+    def button7_click(self):
+        print("|--- button 7 click             |")
+        self.check_action(7)
+
+    def button8_click(self):
+        print("|--- button 8 click             |")
+        self.check_action(8)
 
     def conditionalReforce(self):
         print("This is the standard conditionalReforce")
