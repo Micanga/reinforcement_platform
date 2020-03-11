@@ -266,6 +266,15 @@ class Screen:
             # self.master.after(int(float(self.settings['iti'])*1000),self.replay)
             self.master.after(1*1000, self.replay)
 
+    def averageIRT(self):
+        print(self.game)
+
+        time2answerReinforced = [i for i, val in enumerate(self.game['reinforced']) if (val == True)] 
+        time2answerReinforced = self.game['time2answer'][time2answerReinforced]
+
+        print(time2answerReinforced)
+        
+       
 
     def replay(self):
         # 1. Writing results in log file
