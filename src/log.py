@@ -32,10 +32,10 @@ def write_round(game,nickname,start_time):
 		str(game[-1]['stage']) + ';' +\
 		str(game[-1]['answer'][-1]) + ';' +\
 		str(game[-1]['time2answer'][-1]) + ';' +\
-		str(game[-1]['reinforce'][-1]) + ';' + \
+		str(game[-1]['reinforced'][-1]) + ';' + \
 		str(game[-1]['frequency']) + ';' + \
-		str(game[-1]['points'][-1]) + ';' + \
-		str(game[-1]['total_points'][1]) + ';' + \
+		str(game[-1]['points']) + ';' + \
+		str(calculate_total_points(game)) + ';' + \
 		';' + \
 		';' + \
 		';' + \
@@ -46,6 +46,11 @@ def write_round(game,nickname,start_time):
 
 	result_file.close()
 
+def calculate_total_points(game):
+	total_points = 0
+	for g in game:
+		total_points += int(g['points'])
+	return total_points
 
 def write_result(index,game,fill=True,memory=False):
 	# 2. Saving the results on the result file

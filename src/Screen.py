@@ -3,6 +3,7 @@ import tkinter
 from tkinter import *
 from utils import *
 from MyCommons import *
+from pygame import mixer
 from math import *
 import numpy as np
 
@@ -62,8 +63,10 @@ class Screen:
             self.group = None
         if '    ' in attributes:
             self.stage = self.prev_sc.stage
+            update_screen(self,BG_COLOR)
         else:
             self.stage = None
+            update_screen(self)
 
     def destroyAll(self, prev_sc):
         clean_log = "| Cleaning Last Screen           |"
@@ -74,7 +77,6 @@ class Screen:
         removeButtons(prev_sc.buttons)
 
     # Starting a game Screen
-
     def createButtons(self, center_h, center_w, radius):
             # print(self.createb_txt)
 
@@ -135,6 +137,7 @@ class Screen:
                             anchor='center')
         self.buttons.append(self.button_8)
 
+    def createPointCounter(self):
         self.points_label = tkinter.Label(self.master, textvariable=self.points, width=3,
                                           bg='white', fg='black',
                                           font=Font(family='Helvetica',
@@ -187,10 +190,6 @@ class Screen:
         print("|--- button 8 click             |")
         self.check_action(8)
 
-    def conditionalReforce(self):
-        print("This is the standard conditionalReforce")
-        return TRUE
-
     def check_action(self, clicked_button):
         # a. updating game log
         self.game['answer'].append(clicked_button)
@@ -203,13 +202,19 @@ class Screen:
 
         #print("Checking a Condtional Reforce")
 
-        if self.conditionalReforce():
+        if self.conditionalReinforce():
             removeButtons(self.buttons)
             self.cur_color = np.array(BG_COLOR)
             self.ref_color = np.array(BG_COLOR) - np.array(GREEN)
+
+            mixer.music.play() 
             self.positive_reinforce_action()
         else:
             print(sum(self.game['frequency'].values()))
+
+    def conditionalReinforce(self):
+        print("This is the standard conditionalReforce")
+        return TRUE
 
     def positive_reinforce_action(self):
         # a. calculating the color fade (to green)
