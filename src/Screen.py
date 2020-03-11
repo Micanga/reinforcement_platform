@@ -3,6 +3,7 @@ import tkinter
 from tkinter import *
 from utils import *
 from MyCommons import *
+from pygame import mixer
 from math import *
 
 WHITE = [255.0, 255.0, 255.0]
@@ -61,8 +62,10 @@ class Screen:
             self.group = None
         if 'stage' in attributes:
             self.stage = self.prev_sc.stage
+            update_screen(self,BG_COLOR)
         else:
             self.stage = None
+            update_screen(self)
 
     def destroyAll(self, prev_sc):
         clean_log = "| Cleaning Last Screen           |"
@@ -73,7 +76,6 @@ class Screen:
         removeButtons(prev_sc.buttons)
 
     # Starting a game Screen
-
     def createButtons(self, center_h, center_w, radius):
             # print(self.createb_txt)
         self.button_1 = CircularButton(self.master, 100, 100,
@@ -132,6 +134,7 @@ class Screen:
                             anchor='center')
         self.buttons.append(self.button_8)
 
+    def createPointCounter(self):
         self.points_label = tkinter.Label(self.master, textvariable=self.points, width=3,
                                           bg='white', fg='black',
                                           font=Font(family='Helvetica',
@@ -140,6 +143,11 @@ class Screen:
                                           highlightthickness=2, relief="solid")
         self.points_label.place(
             x=self.center_w, y=self.center_h, anchor='center')
+
+
+    def load_sfx(self,sfx_path='local/default/sfx.wav'):
+        mixer.init()
+        mixer.music.load(sfx_path)
 
     def button1_click(self):
         print("|--- button 1 click             |")
@@ -173,10 +181,6 @@ class Screen:
         print("|--- button 8 click             |")
         self.check_action(8)
 
-    def conditionalReforce(self):
-        print("This is the standard conditionalReforce")
-        return TRUE
-
     def check_action(self, clicked_button):
         # a. updating game log
         self.game['answer'].append(clicked_button)
@@ -187,15 +191,21 @@ class Screen:
 
         # b.reinforcing the action
 
-        print(self.conditionalReforce)
+        print(self.conditionalReinforce)
 
-        if self.conditionalReforce():
+        if self.conditionalReinforce():
             removeButtons(self.buttons)
             self.cur_color = np.array(BG_COLOR)
             self.ref_color = np.array(BG_COLOR) - np.array(GREEN)
+
+            mixer.music.play() 
             self.positive_reinforce_action()
         else:
             print(sum(self.game['frequency'].values()))
+
+    def conditionalReinforce(self):
+        print("This is the standard conditionalReforce")
+        return TRUE
 
     def positive_reinforce_action(self):
         # a. calculating the color fade (to green)
@@ -218,7 +228,6 @@ class Screen:
             self.master.after(1*1000, self.replay)
 
     # Going to another Screen
-
     def goToStage1(self):
         txt = "| Going to Stage 1 Screen        |"
         print(txt)
