@@ -5,7 +5,6 @@ from utils import *
 from Screen import Screen
 from math import *
 
-
 AUTO = False
 
 WHITE = [255.0,255.0,255.0]
