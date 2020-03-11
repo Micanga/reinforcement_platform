@@ -62,7 +62,7 @@ class Screen:
             self.group = self.prev_sc.group
         else:
             self.group = None
-        if '    ' in attributes:
+        if 'stage' in attributes:
             self.stage = self.prev_sc.stage
             update_screen(self,BG_COLOR)
         else:
@@ -80,8 +80,6 @@ class Screen:
     # Starting a game Screen
     def createButtons(self, center_h, center_w, radius):
             # print(self.createb_txt)
-
-        update_screen(self, BG_COLOR)
         self.button_1 = CircularButton(self.master, 100, 100,
                                        color=RED, bg=BG_COLOR, command=self.button1_click)
         self.button_1.place(x=center_w-radius,
@@ -158,6 +156,11 @@ class Screen:
         self.game['frequency'] = {1: 0, 2: 0,
                                   3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0}
         self.round_start_time = datetime.datetime.now()
+        
+
+    def load_sfx(self,sfx_path='local/default/sfx.wav'):
+        mixer.init()
+        mixer.music.load(sfx_path)
 
     def button1_click(self):
         print("|--- button 1 click             |")
@@ -201,7 +204,7 @@ class Screen:
 
         # b.reinforcing the action
 
-        #print("Checking a Condtional Reforce")
+        print(self.conditionalReinforce)
 
         if self.conditionalReinforce():
             removeButtons(self.buttons)
@@ -213,16 +216,16 @@ class Screen:
             self.positive_reinforce_action()
             
         else:
+            removeButtons(self.buttons)
             self.game['reinforced'].append(False)
             self.cur_color = np.array(BG_COLOR)
             self.ref_color = np.array(BG_COLOR) - np.array(BLACK)
-
             self.negative_reinforce_action()
             #print(sum(self.game['frequency'].values()))
 
     def conditionalReinforce(self):
         print("This is the standard conditionalReforce")
-        return TRUE
+        return True
 
     def positive_reinforce_action(self):
         # a. calculating the color fade (to green)
@@ -255,7 +258,7 @@ class Screen:
         # c. checking the fade stop
         if (self.ref_color[1] >= 0 and int(self.cur_color[1]) > 0)\
                 or (self.ref_color[1] < 0 and int(self.cur_color[1]) < 0):
-            self.master.after(50, self.positive_reinforce_action)
+            self.master.after(50, self.negative_reinforce_action)
         else:
             # - setting green bg
             self.main_bg.configure(bg="#%02x%02x%02x" % (0, 0, 0))
