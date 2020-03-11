@@ -1,11 +1,13 @@
 import inspect
 import tkinter
 from tkinter import *
-from utils import *
-from MyCommons import *
 from pygame import mixer
+
+from log import *
 from math import *
+from MyCommons import *
 import numpy as np
+from utils import *
 
 WHITE = [255.0, 255.0, 255.0]
 GREEN = [0.0, 200.0, 0.0]
@@ -37,12 +39,6 @@ class Screen:
         self.points = tkinter.StringVar()
         self.points.set(0)
 
-        # b. setting background
-        if bg_img is not None:
-            self.main_bg = set_bg(self.master, self.main_bg, bg_img)
-        elif self.main_bg is not None:
-            self.main_bg.destroy()
-
         # c. initialising screen variables
         self.widgets = []
         self.buttons = []
@@ -64,10 +60,27 @@ class Screen:
             self.group = None
         if 'stage' in attributes:
             self.stage = self.prev_sc.stage
-            update_screen(self,BG_COLOR)
+
+            if bg_img is not None:
+                update_screen(self,BG_COLOR)
+                self.main_bg = set_bg(self.master, self.main_bg, bg_img)
+            elif self.main_bg is not None:
+                self.main_bg.destroy()
+                update_screen(self,BG_COLOR)
         else:
             self.stage = None
-            update_screen(self)
+
+            if bg_img is not None:
+                update_screen(self)
+                self.main_bg = set_bg(self.master, self.main_bg, bg_img)
+            elif self.main_bg is not None:
+                self.main_bg.destroy()
+                update_screen(self)
+
+        if 'game' in attributes:
+            self.game = self.prev_sc.game
+        else:
+            self.game = None
 
     def destroyAll(self, prev_sc):
         clean_log = "| Cleaning Last Screen           |"
@@ -147,17 +160,8 @@ class Screen:
         # points label
         self.points_label.place(
             x=self.center_w, y=self.center_h, anchor='center')
-
-        # game variables
-        self.game = {}
-        self.game['answer'] = []
-        self.game['reinforced'] = []
-        self.game['time2answer'] = []
-        self.game['frequency'] = {1: 0, 2: 0,
-                                  3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0}
-        self.round_start_time = datetime.datetime.now()
+        self.widgets.append(self.points_label)
         
-
     def load_sfx(self,sfx_path='local/default/sfx.wav'):
         mixer.init()
         mixer.music.load(sfx_path)
@@ -196,11 +200,11 @@ class Screen:
 
     def check_action(self, clicked_button):
         # a. updating game log
-        self.game['answer'].append(clicked_button)
+        self.game[-1]['answer'].append(clicked_button)
         
-        self.game['time2answer'].append(
+        self.game[-1]['time2answer'].append(
             datetime.datetime.now() - self.round_start_time)
-        self.game['frequency'][clicked_button] += 1
+        self.game[-1]['frequency'][clicked_button] += 1
 
         # b.reinforcing the action
 
@@ -208,7 +212,7 @@ class Screen:
 
         if self.conditionalReinforce():
             removeButtons(self.buttons)
-            self.game['reinforced'].append(True)
+            self.game[-1]['reinforced'].append(True)
             self.cur_color = np.array(BG_COLOR)
             self.ref_color = np.array(BG_COLOR) - np.array(GREEN)
 
@@ -217,7 +221,7 @@ class Screen:
             
         else:
             removeButtons(self.buttons)
-            self.game['reinforced'].append(False)
+            self.game[-1]['reinforced'].append(False)
             self.cur_color = np.array(BG_COLOR)
             self.ref_color = np.array(BG_COLOR) - np.array(BLACK)
             self.negative_reinforce_action()
@@ -226,6 +230,18 @@ class Screen:
     def conditionalReinforce(self):
         print("This is the standard conditionalReforce")
         return True
+
+    def number_of_blocks(self):
+        block_counter = 0
+
+        # NOTE: the first game in the array is the
+        # initial one, so we don't count it
+        for i in range(1,len(self.game)):
+            if self.game[i]['group'] == self.group\
+            and self.game[i]['stage'] == self.stage:
+             block_counter += 1
+
+        return block_counter
 
     def positive_reinforce_action(self):
         # a. calculating the color fade (to green)
@@ -266,27 +282,78 @@ class Screen:
             # self.master.after(int(float(self.settings['iti'])*1000),self.replay)
             self.master.after(1*1000, self.replay)
 
+    def auto_play(self):
+        coin = int(random.uniform(0,8))
+        if coin <= 1:
+            self.button1_click()
+        elif coin <= 2:
+            self.button2_click()
+        elif coin <= 3:
+            self.button3_click()
+        elif coin <= 4:
+            self.button4_click()
+        elif coin <= 5:
+            self.button5_click()
+        elif coin <= 6:
+            self.button6_click()
+        elif coin <= 7:
+            self.button7_click()
+        else:
+            self.button8_click()
 
     def replay(self):
         # 1. Writing results in log file
+        write_round(self.game,self.nickname,self.start_time)
 
         # 2. Checking replay conditions
-        # a. end stage
-        if self.check_stage_conditions():
-            self.rgb = np.array([0.0, 200.0, 0.0])
-            self.win_txt = tkinter.Label(self.master, bg="#%02x%02x%02x" % (0, 200, 0), fg="#%02x%02x%02x" % (0, 200, 0),
-                                         text='ATÉ O MOMENTO VOCÊ ACUMULOU '+str(int(self.points.get())+int(self.prev_sc.points.get())) +
-                                         ' PONTOS!', font=Font(family='Helvetica', size=16, weight='bold'))
-            self.master.after(20, self.fadeResetText)
-        # b. keep playing
+        # a. checking the end of the block (8 actions)
+        if len(self.game[-1]['reinforced']) == 8:
+            print("|--- starting new block         |")
+            self.game[-1]['block_time'] = (datetime.datetime.now() - self.block_start_time)
+            self.block_start_time = datetime.datetime.now()
+            self.update_variables()
+
+        # b. end stage
+        if self.check_stage_end_conditions():
+            self.rgb = np.array([0.0,200.0,0.0])
+            self.win_txt = tkinter.Label(self.master, bg= "#%02x%02x%02x" % (0, 200, 0), fg = "#%02x%02x%02x" % (0, 200, 0),\
+                 text='ATÉ O MOMENTO VOCÊ ACUMULOU '+str(int(self.points.get())+int(self.prev_sc.points.get()))+\
+                 ' PONTOS!', font=Font(family='Helvetica', size=16, weight='bold'))
+            self.master.after(20,self.fadeResetText)
+        # c. keep playing
         else:
             # - setting the round start variable
             self.round_start_time = datetime.datetime.now()
-            self.main_bg.configure(bg="#%02x%02x%02x" %
-                                   (int(BG_COLOR[0]), int(BG_COLOR[1]), int(BG_COLOR[2])))
+            self.main_bg.configure(bg="#%02x%02x%02x" %\
+                (int(BG_COLOR[0]),int(BG_COLOR[1]),int(BG_COLOR[2])))
 
-            # - creating the buttons
+            # - creating the buttons and enabling the mouse
             self.createButtons(self.center_h, self.center_w, self.radius)
+            reset_mouse_position(self)
+            ableMouse(self)
+
+        if self.AUTO:
+            self.auto_play()
+
+    def update_variables(self):
+        # a. screen var
+        self.game.append({})
+
+        self.game[-1]['group'] = self.group
+        self.game[-1]['stage'] = self.stage
+
+        # b. round var
+        self.game[-1]['answer'] = []
+        self.game[-1]['time2answer'] = []
+        self.game[-1]['reinforced'] = []
+        self.game[-1]['frequency'] = self.game[-2]['frequency']
+        self.round_start_time = datetime.datetime.now()
+
+        self.game[-1]['points'] = self.game[-2]['points']
+
+        # c. block var
+        self.game[-1]['block_time'] = 0
+        self.block_start_time = datetime.datetime.now()
 
     # Going to another Screen
 
