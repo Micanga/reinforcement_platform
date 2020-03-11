@@ -282,17 +282,15 @@ class Screen:
             # self.master.after(int(float(self.settings['iti'])*1000),self.replay)
             self.master.after(1*1000, self.replay)
 
-<<<<<<< HEAD
     def averageIRT(self):
-        print(self.game)
+        print(self.game[-1])
 
-        time2answerReinforced = [i for i, val in enumerate(self.game['reinforced']) if (val == True)] 
-        time2answerReinforced = self.game['time2answer'][time2answerReinforced]
+        time2answerReinforced = [i for i, val in enumerate(self.game[-1]['reinforced']) if (val == True)] 
+        #time2answerReinforced = self.game[-1]['time2answer'][time2answerReinforced]
 
         print(time2answerReinforced)
         
        
-=======
     def auto_play(self):
         coin = int(random.uniform(0,8))
         if coin <= 1:
@@ -311,7 +309,6 @@ class Screen:
             self.button7_click()
         else:
             self.button8_click()
->>>>>>> 75b339b71c45b8841783a379c6213e39f987961c
 
     def replay(self):
         # 1. Writing results in log file
@@ -319,7 +316,7 @@ class Screen:
 
         # 2. Checking replay conditions
         # a. checking the end of the block (8 actions)
-        if len(self.game[-1]['reinforced']) == 8:
+        if len(self.game[-1]['reinforced']) == 10:
             print("|--- starting new block         |")
             self.game[-1]['block_time'] = (datetime.datetime.now() - self.block_start_time)
             self.block_start_time = datetime.datetime.now()
@@ -380,6 +377,14 @@ class Screen:
         # Nickname Screen
         from Stage1 import Stage1
         Stage1(self.master, self, self.main_bg)
+
+    def goToStage2(self):
+        txt = "| Going to Stage 2 Screen        |"
+        print(txt)
+
+        # Nickname Screen
+        from Stage2 import Stage2
+        Stage2(self.master, self, self.main_bg)
 
     def goToNickName(self):
         txt = "| Going to Nickname Screen       |"

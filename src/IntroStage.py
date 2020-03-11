@@ -42,9 +42,15 @@ class IntroStage(Screen):
 		self.text_display.place(x=self.sw/2,y=self.sh/2,anchor='center')
 
 		# b. start button
-		self.start_button = \
-			create_button(self.master,'AVANÇAR',self.goToStage1,\
-				self.sw/2,5*self.sh/6,size=18)
+		if (self.stage == 1):
+			self.start_button = \
+				create_button(self.master,'AVANÇAR',self.goToStage1,\
+					self.sw/2,5*self.sh/6,size=18)
+		elif (self.stage == 2):
+			self.start_button = \
+				create_button(self.master,'AVANÇAR',self.goToStage2,\
+					self.sw/2,5*self.sh/6,size=18)
+
 		self.widgets.append(self.start_button)
 		self.buttons.append(self.start_button)
 
