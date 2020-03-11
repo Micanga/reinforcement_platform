@@ -10,6 +10,7 @@ import numpy as np
 WHITE = [255.0, 255.0, 255.0]
 GREEN = [0.0, 200.0, 0.0]
 RED = [255.0, 0.0, 0.0]
+BLACK = [0.0, 0.0, 0.0]
 BABY_BLUE = [137.0, 207.0, 240.0]
 BG_COLOR = BABY_BLUE
 
@@ -193,7 +194,7 @@ class Screen:
     def check_action(self, clicked_button):
         # a. updating game log
         self.game['answer'].append(clicked_button)
-        self.game['reinforced'].append(True)
+        
         self.game['time2answer'].append(
             datetime.datetime.now() - self.round_start_time)
         self.game['frequency'][clicked_button] += 1
@@ -204,13 +205,20 @@ class Screen:
 
         if self.conditionalReinforce():
             removeButtons(self.buttons)
+            self.game['reinforced'].append(True)
             self.cur_color = np.array(BG_COLOR)
             self.ref_color = np.array(BG_COLOR) - np.array(GREEN)
 
             mixer.music.play() 
             self.positive_reinforce_action()
+            
         else:
-            print(sum(self.game['frequency'].values()))
+            self.game['reinforced'].append(False)
+            self.cur_color = np.array(BG_COLOR)
+            self.ref_color = np.array(BG_COLOR) - np.array(BLACK)
+
+            self.negative_reinforce_action()
+            #print(sum(self.game['frequency'].values()))
 
     def conditionalReinforce(self):
         print("This is the standard conditionalReforce")
@@ -235,6 +243,26 @@ class Screen:
             # self.master.after(int(float(self.settings['iti'])*1000),self.replay)
             self.points.set(int(self.points.get())+10)
             self.master.after(1*1000, self.replay)
+
+    def negative_reinforce_action(self):
+        # a. calculating the color fade (to green)
+        self.cur_color -= (0.1*self.ref_color)
+
+        # b. changing background color
+        self.main_bg.configure(bg="#%02x%02x%02x" %
+                               (int(self.cur_color[0]), int(self.cur_color[1]), int(self.cur_color[2])))
+
+        # c. checking the fade stop
+        if (self.ref_color[1] >= 0 and int(self.cur_color[1]) > 0)\
+                or (self.ref_color[1] < 0 and int(self.cur_color[1]) < 0):
+            self.master.after(50, self.positive_reinforce_action)
+        else:
+            # - setting green bg
+            self.main_bg.configure(bg="#%02x%02x%02x" % (0, 0, 0))
+            # self.points.set(int(self.points.get())+int(self.settings['points']))
+            # self.master.after(int(float(self.settings['iti'])*1000),self.replay)
+            self.master.after(1*1000, self.replay)
+
 
     def replay(self):
         # 1. Writing results in log file

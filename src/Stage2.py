@@ -10,8 +10,10 @@ class Stage2(Screen):
 
 		self.VR5 = [1, 1, 1, 2, 3, 4, 5, 7, 10, 17]
 		self.VR20 = [1, 1, 1, 2, 3, 4, 5, 7, 10, 17]
+		self.load_sfx()
 
 		self.createButtons(self.center_h, self.center_w, self.radius)
+		self.createPointCounter()
 
 		self.reinforced_clicks = random.sample(self.VR5,5)
 		print(self.reinforced_clicks) # five numbers of list VR5 without replacement
