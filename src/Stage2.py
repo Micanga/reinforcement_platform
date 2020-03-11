@@ -21,7 +21,7 @@ class Stage2(Screen):
 	
 	def conditionalReforce(self):
 		print("This is conditionalReforce of Stage2")
-		return sum(self.game['frequency'].values()) in self.reinforced_clicks
+		return (sum(self.game['frequency'].values()) in self.reinforced_clicks)
 
 
        

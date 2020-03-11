@@ -1,17 +1,4 @@
-import tkinter
-from tkinter import *
-from MyCommons import *
-from utils import *
 from Screen import Screen
-from math import *
-
-AUTO = False
-
-WHITE = [255.0,255.0,255.0]
-GREEN = [0.0,200.0,0.0]
-RED = [255.0,0.0,0.0]
-BABY_BLUE = [137.0,207.0,240.0]
-BG_COLOR = BABY_BLUE
 
 class StageScreen(Screen):
 	def __init__(self, master, prev_sc, main_bg):

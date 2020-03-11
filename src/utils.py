@@ -29,7 +29,7 @@ def set_bg(master,main_bg,path):
 	return main_bg
 
 def update_screen(cur_sc,bg_color=[255.0,255.0,255.0]):
-	cur_sc.main_bg.destroy()
+	#cur_sc.main_bg.destroy()
 	cur_sc.main_bg = tkinter.Label(cur_sc.master, \
 	 bg= "#%02x%02x%02x" % (int(bg_color[0]),int(bg_color[1]),int(bg_color[2])))
 	cur_sc.main_bg.place(x=0,y=0,relwidth=1,relheight=1)

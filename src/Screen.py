@@ -4,6 +4,7 @@ from tkinter import *
 from utils import *
 from MyCommons import *
 from math import *
+import numpy as np
 
 WHITE = [255.0, 255.0, 255.0]
 GREEN = [0.0, 200.0, 0.0]
@@ -59,7 +60,7 @@ class Screen:
             self.group = self.prev_sc.group
         else:
             self.group = None
-        if 'stage' in attributes:
+        if '    ' in attributes:
             self.stage = self.prev_sc.stage
         else:
             self.stage = None
@@ -76,6 +77,8 @@ class Screen:
 
     def createButtons(self, center_h, center_w, radius):
             # print(self.createb_txt)
+
+        update_screen(self, BG_COLOR)
         self.button_1 = CircularButton(self.master, 100, 100,
                                        color=RED, bg=BG_COLOR, command=self.button1_click)
         self.button_1.place(x=center_w-radius,
@@ -138,8 +141,19 @@ class Screen:
                                                     size=30, weight='bold'),
                                           padx=20, pady=20, bd=4, highlightbackground='black',
                                           highlightthickness=2, relief="solid")
+
+        # points label
         self.points_label.place(
             x=self.center_w, y=self.center_h, anchor='center')
+
+        # game variables
+        self.game = {}
+        self.game['answer'] = []
+        self.game['reinforced'] = []
+        self.game['time2answer'] = []
+        self.game['frequency'] = {1: 0, 2: 0,
+                                  3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0}
+        self.round_start_time = datetime.datetime.now()
 
     def button1_click(self):
         print("|--- button 1 click             |")
@@ -187,7 +201,7 @@ class Screen:
 
         # b.reinforcing the action
 
-        print(self.conditionalReforce)
+        #print("Checking a Condtional Reforce")
 
         if self.conditionalReforce():
             removeButtons(self.buttons)
@@ -217,7 +231,32 @@ class Screen:
             self.points.set(int(self.points.get())+10)
             self.master.after(1*1000, self.replay)
 
+    def replay(self):
+        # 1. Writing results in log file
+
+        # 2. Checking replay conditions
+        # a. end stage
+        if self.check_stage_conditions():
+            self.rgb = np.array([0.0, 200.0, 0.0])
+            self.win_txt = tkinter.Label(self.master, bg="#%02x%02x%02x" % (0, 200, 0), fg="#%02x%02x%02x" % (0, 200, 0),
+                                         text='ATÉ O MOMENTO VOCÊ ACUMULOU '+str(int(self.points.get())+int(self.prev_sc.points.get())) +
+                                         ' PONTOS!', font=Font(family='Helvetica', size=16, weight='bold'))
+            self.master.after(20, self.fadeResetText)
+        # b. keep playing
+        else:
+            # - setting the round start variable
+            self.round_start_time = datetime.datetime.now()
+            self.main_bg.configure(bg="#%02x%02x%02x" %
+                                   (int(BG_COLOR[0]), int(BG_COLOR[1]), int(BG_COLOR[2])))
+
+            # - creating the buttons
+            self.createButtons(self.center_h, self.center_w, self.radius)
+
     # Going to another Screen
+
+
+    def check_stage_conditions(self):
+	    return False
 
     def goToStage1(self):
         txt = "| Going to Stage 1 Screen        |"
