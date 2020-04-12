@@ -288,6 +288,7 @@ class Screen:
         time2answerReinforced = [i for i, val in enumerate(self.game[-1]['reinforced']) if (val == True)] 
         #time2answerReinforced = self.game[-1]['time2answer'][time2answerReinforced]
 
+        print("!time2answer")
         print(time2answerReinforced)
         
        

@@ -6,6 +6,7 @@ import numpy as np
 
 class Stage2(Screen):
 	def __init__(self, master, prev_sc, main_bg):
+		self.AUTO = True
 		
 		super().__init__(master, prev_sc, main_bg)
 
