@@ -68,7 +68,7 @@ def write_result(game,nickname,start_time):
 
 	if len(game) >= 3 + 1:
 		result_file.write(\
-			str(IRT(game,3)) + ';' + \
+			str(Stability(game,3)) + ';' + \
 			str(U(game[-1]['frequency'])) + ';' + \
 			'\n'
 		)

@@ -105,7 +105,7 @@ from math import log2, fabs
 def U(freq):
 	number_of_actions = len(freq)
 	rf = [RF(seq,freq) for seq in freq]
-	return -sum([(rf[i]*log2(rf[i])) for i in range(number_of_actions)])/log2(16)
+	return -sum([(rf[i]*log2(rf[i])) for i in range(number_of_actions)])/log2(number_of_actions)
 
 def Threshold(seq,freq,combinations,reinforced):
 	return FRP(seq,freq,reinforced)/\
@@ -118,7 +118,7 @@ def FRP(seq,freq,reinforced):
 def RF(seq,freq):
 	return freq[seq]/sum([freq[x] for x in freq])
 
-def IRT(game,n):
+def Stability(game,n):
 	time_vector = [game[i-n]['block_time'] for i in range(n)]
 
 	time_var = [(fabs(time_vector[i].total_seconds() - time_vector[i-1].total_seconds())/\
