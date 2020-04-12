@@ -207,9 +207,6 @@ class Screen:
         self.game[-1]['frequency'][clicked_button] += 1
 
         # b.reinforcing the action
-
-        print(self.conditionalReinforce)
-
         if self.conditionalReinforce():
             removeButtons(self.buttons)
             self.game[-1]['reinforced'].append(True)
@@ -292,7 +289,7 @@ class Screen:
         
        
     def auto_play(self):
-        coin = int(random.uniform(0,8))
+        coin = float(random.uniform(0,8))
         if coin <= 1:
             self.button1_click()
         elif coin <= 2:
@@ -311,16 +308,18 @@ class Screen:
             self.button8_click()
 
     def replay(self):
-        # 1. Writing results in log file
-        write_round(self.game,self.nickname,self.start_time)
-
-        # 2. Checking replay conditions
-        # a. checking the end of the block (8 actions)
+        # 1. Checking replay conditions
+        # a. checking the end of the block (10 actions)
         if len(self.game[-1]['reinforced']) == 10:
-            print("|--- starting new block         |")
             self.game[-1]['block_time'] = (datetime.datetime.now() - self.block_start_time)
+            write_result(self.game,self.nickname,self.start_time)
+
             self.block_start_time = datetime.datetime.now()
             self.update_variables()
+        # b. or not end of the block
+        else:
+            # - writing results in log file
+            write_round(self.game,self.nickname,self.start_time)
 
         # b. end stage
         if self.check_stage_end_conditions():
