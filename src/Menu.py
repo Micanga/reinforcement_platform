@@ -11,31 +11,40 @@ from MyCommons import *
 
 from Screen import Screen
 
-
-class Menu():
+class Menu(Screen):
 
 	def __init__(self, master, prev_sc, main_bg):
-		# 1. Initilising GUI Components
-		# a. screen and log components
-		MenuScreen = Screen(master, prev_sc, main_bg,'bg/main.png')
+		# 1. Initializing the necessary variables
+		# a. initializing the screen
+		super().__init__(master, prev_sc, main_bg,'bg/main.png')
 
+		# b. log text
+		self.start_log = 		"---------------------------------\n" + \
+								"| LOG STAGE 1 PLAY SCREEN       |\n" + \
+								"---------------------------------"
+		self.createb_txt =		"|--- creating buttons           |"
+		self.timeout_txt = 		"| Time Out                      |"
+		self.finish_txt = 		"| Stage Finished                |"
+		print(self.start_log)
+
+		# 2. Setting the screen buttons and widgets
 		# a. Start Button
-		MenuScreen.start_button = \
-			create_button(MenuScreen.master,'JOGAR',MenuScreen.goToNickName,\
-				MenuScreen.sw/3,MenuScreen.sh/3,'#f01515')
-		MenuScreen.widgets.append(MenuScreen.start_button)
+		start_button = \
+			create_button(self.master,'JOGAR',self.goToNickName,\
+				self.sw/3,self.sh/3,'#f01515')
+		self.widgets.append(start_button)
+		self.buttons.append(start_button)
 
 		# b. Settings Button
-		MenuScreen.settings_button = \
-			create_button(MenuScreen.master,'CONFIGURAR',MenuScreen.goToSettings,\
-				2*MenuScreen.sw/3,MenuScreen.sh/3,'#2BA1EE')
-		MenuScreen.widgets.append(MenuScreen.settings_button)
-		MenuScreen.buttons.append(MenuScreen.settings_button)
+		settings_button = \
+			create_button(self.master,'CONFIGURAR',self.goToSettings,\
+				2*self.sw/3,self.sh/3,'#2BA1EE')
+		self.widgets.append(settings_button)
+		self.buttons.append(settings_button)
 
 		# c. Exit Button
-		MenuScreen.exit_button = \
-			create_button(MenuScreen.master,'SAIR',MenuScreen.goToExit,\
-				MenuScreen.sw/2,2*MenuScreen.sh/3,'#37EE2B')
-		MenuScreen.widgets.append(MenuScreen.exit_button)
-		MenuScreen.buttons.append(MenuScreen.exit_button)
-
+		exit_button = \
+			create_button(self.master,'SAIR',self.goToExit,\
+				self.sw/2,2*self.sh/3,'#37EE2B')
+		self.widgets.append(exit_button)
+		self.buttons.append(exit_button)

@@ -21,8 +21,8 @@ class Screen:
 
     def __init__(self, master, prev_sc, main_bg, bg_img=None):
         start = "---------------------------------\n" + \
-            "| New Screen                     |\n" + \
-            "---------------------------------"
+                "| New Screen                     |\n" + \
+                "---------------------------------"
         print(start)
 
         # a. setting screen components
@@ -81,6 +81,15 @@ class Screen:
             self.game = self.prev_sc.game
         else:
             self.game = None
+        if 'settings' in attributes:
+            self.settings = self.prev_sc.settings
+        else:
+            self.settings = {\
+                'actions_per_block':10,\
+                'min_blocks':6,\
+                'max_blocks':20,\
+                'IRT_threshold':0.1
+            }
 
     def destroyAll(self, prev_sc):
         clean_log = "| Cleaning Last Screen           |"
