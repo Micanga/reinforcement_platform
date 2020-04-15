@@ -8,7 +8,7 @@ class NickName(Screen):
 
     def __init__(self, master, prev_sc, main_bg):
 
-        super().__init__(master, prev_sc, main_bg)
+        super().__init__(master, prev_sc, main_bg,screen_name='NickName')
 
         #label and text inout
         self.nickname_label, self.nickname_entry = \
@@ -36,7 +36,7 @@ class NickName(Screen):
 
         self.nickname = self.nickname_entry.get()
         print("| Sending Nickname: " + self.nickname)
-        print("| Start Button clicked           |")
+        print("| Start Button clicked")
         destroyWidgets(self.widgets)
 
         from ChooseExperiment import ChooseExperiment
@@ -44,7 +44,7 @@ class NickName(Screen):
 
     def create_label_entry(self,label_text,x,y):
         # 1. Creating Entry Label
-        print("| -- creating labels nickname    |")
+        print("| -- creating labels nickname")
         label = tkinter.Label(self.master, bg="#%02x%02x%02x" % (255, 255, 255),justify='left',\
             fg = 'black', text=label_text, font=Font(family='Helvetica', size=20))
         label.place(x=x,y=y,anchor='center')
@@ -71,6 +71,6 @@ class NickName(Screen):
         return True
 
     def ableButtons(self):
-        print("| -- enabling the buttons       |")
+        print("| -- enabling the buttons")
         for b in self.buttons:
             b.configure(state="normal")

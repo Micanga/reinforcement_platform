@@ -21,18 +21,8 @@ class ChooseExperiment(Screen):
 
 	def __init__(self, master, prev_sc, main_bg):
 		# 1. Initilising GUI Components
-		# a. screen and log components
-		
-		super().__init__(master, prev_sc, main_bg,'bg/choose.png')
+		super().__init__(master, prev_sc, main_bg,'bg/choose.png','Choose Experiment')
 		self.nickname = self.prev_sc.nickname
-
-		# b. log components
-		self.start_log = 		"---------------------------------\n" + \
-								"| LOG CHOOSE EXP SCREEN         |\n" + \
-								"---------------------------------\n"+\
-								"| Nickname Received "+prev_sc.nickname+"\n"
-		self.back_txt = 		"| Back Button Pressed           |"
-		print(self.start_log)
 
 		# 2. Buttons Functions
 		# a. Group Menu
@@ -112,8 +102,6 @@ class ChooseExperiment(Screen):
 		self.group = int(self.group_var.get())
 		self.stage = int(self.stage_var.get())
 		self.start_time = datetime.datetime.now()
-
-		self.game = []
 
 		from IntroStage import IntroStage
 		IntroStage(self.master,self,self.main_bg)

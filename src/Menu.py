@@ -16,18 +16,10 @@ class Menu(Screen):
 	def __init__(self, master, prev_sc, main_bg):
 		# 1. Initializing the necessary variables
 		# a. initializing the screen
-		super().__init__(master, prev_sc, main_bg,'bg/main.png')
-
-		# b. log text
-		self.start_log = 		"---------------------------------\n" + \
-								"| LOG STAGE 1 PLAY SCREEN       |\n" + \
-								"---------------------------------"
-		self.createb_txt =		"|--- creating buttons           |"
-		self.timeout_txt = 		"| Time Out                      |"
-		self.finish_txt = 		"| Stage Finished                |"
-		print(self.start_log)
+		super().__init__(master, prev_sc, main_bg,'bg/main.png','Menu')
 
 		# 2. Setting the screen buttons and widgets
+		print('| - creating buttons')
 		# a. Start Button
 		start_button = \
 			create_button(self.master,'JOGAR',self.goToNickName,\

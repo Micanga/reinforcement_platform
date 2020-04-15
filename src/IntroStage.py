@@ -22,13 +22,8 @@ class IntroStage(Screen):
 
 	def __init__(self, master, prev_sc, main_bg):
 		# 1. Initilising GUI Components
-		# a. screen and log components
-		
-		super().__init__(master, prev_sc, main_bg)
+		super().__init__(master, prev_sc, main_bg,screen_name='IntroStage')
 		print(self.nickname,self.start_time,self.group,self.stage)
-
-		# b. log components
-		self.back_txt = 		"| Back Button Pressed           |"
 
 		# 2. Buttons Functions
 		# a. intro text

@@ -8,18 +8,8 @@ class Stage1(Screen):
 	def __init__(self, master, prev_sc, main_bg):
 		self.AUTO = True
 		# 1. Initializing the necessary variables
-		# a. initializing the screen
-		super().__init__(master, prev_sc, main_bg)
+		super().__init__(master, prev_sc, main_bg,screen_name='Stage 1')
 		self.init_variables()
-
-		# b. log text
-		self.start_log = 		"---------------------------------\n" + \
-								"| LOG STAGE 1 PLAY SCREEN       |\n" + \
-								"---------------------------------"
-		self.createb_txt =		"|--- creating buttons           |"
-		self.timeout_txt = 		"| Time Out                      |"
-		self.finish_txt = 		"| Stage Finished                |"
-		print(self.start_log)
 
 		# 2. Setting the screen buttons and widgets
 		# a. buttons
