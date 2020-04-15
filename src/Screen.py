@@ -280,7 +280,6 @@ class Screen:
             self.master.after(1*1000, self.replay)
 
     def averageIRT(self):
-        print(self.game[-1])
 
         time2answerReinforced = [i for i, val in enumerate(self.game[-1]['reinforced']) if (val == True)] 
         #time2answerReinforced = self.game[-1]['time2answer'][time2answerReinforced]
