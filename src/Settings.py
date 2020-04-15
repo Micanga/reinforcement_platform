@@ -1,179 +1,141 @@
-# Interface Imports
-import tkinter
-from tkinter import *
-from tkinter import font
-from tkinter import LEFT, RIGHT, BOTTOM, TOP, NONE
-from tkinter import messagebox, filedialog, StringVar
-from tkinter.font import Font
-
-# Utils Imports
-import datetime
-import os
-import re
-import time
+# Imports
 from MyCommons import *
-import utils
+from Screen import Screen
+from utils import is_int, is_float, disableButtons
 
-class Settings:
+class Settings(Screen):
 
 	def __init__(self, master, prev_sc, main_bg):
-		self.buttons, self.widgets = [], []
+		# 1. Initializing the necessary variables
+		# a. initializing the screen
+		super().__init__(master, prev_sc, main_bg,'bg/settings.png')
 
-		# 1. Initilising GUI Components
-		# a. screen and log components
-		self.master = master
-		self.main_bg = main_bg
-		self.main_bg.destroy()
-		sw, sh = self.master.winfo_screenwidth(), self.master.winfo_screenheight()
-
+		# b. log text
 		self.start_log = 		"---------------------------------\n" + \
-								"| LOG SETTINGS SCREEN           |\n" + \
+								"| LOG STAGE 1 PLAY SCREEN	   |\n" + \
 								"---------------------------------"
-		self.disabled_txt = 	"| -- disabling the buttons      |"
-		self.abled_txt = 		"| -- enabling the buttons       |"
-		self.destroy_txt = 		"| -- destroying the screen      |"
-		self.back_txt = 		"| Back Action Button Pressed    |"
-		self.save_txt =		 	"| Save Action Button Pressed    |"
+		self.createb_txt =		"|--- creating buttons		   |"
+		self.timeout_txt = 		"| Time Out					  |"
+		self.finish_txt = 		"| Stage Finished				|"
 		print(self.start_log)
 
-		# b. setting background
-		utils.set_bg(self.master,self.main_bg,'bg/settings.png')
+		# 2. Setting the screen buttons and widgets
+		# a. actions_per_block button
+		self.apb_label, self.apb_entry = \
+			self.create_setting_field('Ações por bloco:',self.sw/2,self.sh/6)
+		self.apb_entry.insert(END, str(self.settings['actions_per_block']))
+		self.widgets.append(self.apb_label)
+		self.buttons.append(self.apb_entry)
 
-		# c. title and settings background
-		self.settings_bg = tkinter.Frame(self.master,width=int(4*sw/5),height=int(4*sh/5),bg="#%02x%02x%02x" % (220, 220, 220))
-		self.settings_bg.pack_propagate(0) # Stops child widgets of label_frame from resizing it
-		self.settings_bg.place(x=sw/10,y=sh/10)
+		# b. min_blocks button
+		self.minb_label, self.minb_entry = \
+			self.create_setting_field('Minimo de Blocos por Fase:',self.sw/2,2*self.sh/6)
+		self.minb_entry.insert(END, str(self.settings['min_blocks']))
+		self.widgets.append(self.minb_label)
+		self.buttons.append(self.minb_entry)
 
-		self.settings_label = tkinter.Label(master, bg="#%02x%02x%02x" % (220, 220, 220),\
-									 fg = 'black', text='CONFIGURAÇÕES:',\
-									 font=Font(family='Helvetica', size=24, weight='bold'))
-		self.settings_label.place(x=sw/10,y=sh/10)
+		# c. max_blocks button
+		self.maxb_label, self.maxb_entry = \
+			self.create_setting_field('Máximo de Blocos por Fase:',self.sw/2,3*self.sh/6)
+		self.maxb_entry.insert(END, str(self.settings['max_blocks']))
+		self.widgets.append(self.maxb_label)
+		self.buttons.append(self.maxb_entry)
 
-		# . Back Button
-		self.back_button = Button(master, anchor = 'center', compound = 'center', 
-									text = 'VOLTAR',font = Font(family='Helvetica', size=18, weight='bold'),
-									bg = "#%02x%02x%02x" % (30, 30, 30), fg = 'white',
-									command = self.back_button_click,
-									highlightthickness = 0, 
-									bd = 0, padx=0,pady=0,height=2,width=13)
-		self.back_button.place(x = sw/10, y = 8*sh/10)
-		self.buttons.append(self.back_button)
-		self.widgets.append(self.back_button)
+		# d. IRT_threshold button
+		self.irt_label, self.irt_entry = \
+			self.create_setting_field('Limiar IRT:',self.sw/2,4*self.sh/6)
+		self.irt_entry.insert(END, str(self.settings['IRT_threshold']))
+		self.widgets.append(self.irt_label)
+		self.buttons.append(self.irt_entry)
 
-		# . Save Button
-		self.save_button = Button(master, anchor = 'center', compound = 'center', 
-									text = 'SALVAR',font = Font(family='Helvetica', size=18, weight='bold'),
-									bg = "#%02x%02x%02x" % (30, 30, 30), fg = 'white',
-									command = self.save_button_click,
-									highlightthickness = 0, 
-									bd = 0, padx=0,pady=0,height=2,width=13)
-		self.save_button.place(x = 9*sw/10, y = 8*sh/10,anchor='ne')
+		# e. save button
+		self.save_button = \
+			create_button(self.master,'SALVAR',self.save_func,\
+				8*self.sw/10,5*self.sh/6,size=18)
 		self.buttons.append(self.save_button)
-		self.widgets.append(self.save_button)
 
-		# 3. Loading the previous settings and images
+		# f. back button
+		self.back_button = \
+			create_button(self.master,'VOLTAR',self.goToMenu,\
+				2*self.sw/10,5*self.sh/6,size=18)
+		self.buttons.append(self.back_button)
 
-	def back_button_click(self):
-		print(self.back_txt)
+	def create_setting_field(self,text,x,y):
+		# 1. Creating Entry Label
+		print("| -- creating labels nickname	|")
+		label = tkinter.Label(self.master, bg="#%02x%02x%02x" % (255, 255, 255),justify='left',\
+			fg = 'black', text=text, font=Font(family='Helvetica', size=20))
+		label.place(x=x,y=y,anchor='center')
 
-		self.destroyWidgets()
+		# 2. Creating the Entry
+		entry = tkinter.Entry(self.master, fg = 'black', font = Font(family='Helvetica', size=20),\
+									bg = "#%02x%02x%02x" % (255, 255, 255), insertbackground = 'black',\
+									highlightcolor = "#%02x%02x%02x" % (180,180,180), highlightbackground= "#%02x%02x%02x" % (50,50,50),\
+									bd=0, width = 33, justify='center')
+		entry.place(x = x, y = y+50,anchor='center')
 
-		from Menu import Menu
-		Menu(self.master,self,self.main_bg)
+		# 3. Returning
+		return label,entry
 
-	def save_button_click(self):
-		print(self.save_txt)
-
-		# 1. Checking the entries
-		if not self.intCheck(self.max_time_entry.get(),'Tempo Máximo','90'):
-			return None
-		elif not self.floatCheck(self.iri_entry.get(),'IRI','0.5'):
-			return None
-		elif not self.floatCheck(self.stability_entry.get(),'Estabilidade','0.2','1'):
-			return None
-		elif not self.floatCheck(self.threshold_entry.get(),'Limiar','0.2','1'):
-			return None
-		elif not self.floatCheck(self.preinf_entry.get(),'Acurácia','1.0','1'):
-			return None
-		elif not self.floatCheck(self.screen_entry.get(),'ITI','1.5'):
-			return None
-		elif not self.intCheck(self.block_entry1.get(),'número Mínimo de Blocos (Fase 1)','10'):
-			return None
-		elif not self.intCheck(self.block_entry2.get(),'número Mínimo de Blocos (Fase 2)','10'):
-			return None
-		elif not self.intCheck(self.block_entry3.get(),'número Mínimo de Blocos (Fase 3)','15'):
-			return None
-		elif not self.intCheck(self.points_entry.get(),'Pontos por Acerto','10'):
-			return None
-		elif not self.floatCheck(self.u_entry.get(),'Limiar U','1.0','1'):
-			return None
-		if not self.intCheck(self.min_memo_entry.get(),'Mínimo de Acertos em Memória','80'):
+	def save_func(self):
+		# action per block check
+		if not is_int(self.apb_entry.get()):
+			self.errorPopUp('Valor para \"Ações por bloco\" inválido.\n'+\
+					'O valor deve ser um número inteiro,\n maior que zero e não vazio.\n')
 			return None
 
-		# 2. Saving Settings
-		time = datetime.datetime.now()
-		save_file = open('local/settings/'+time.strftime("%Y%m%d_%H%M%S")+".csv","w")
-		save_file.write('max_time,'+self.max_time_entry.get()+"\n")
-		save_file.write('iri,'+self.iri_entry.get()+"\n")
-		save_file.write('stability,'+self.stability_entry.get()+"\n")
-		save_file.write('threshold,'+self.threshold_entry.get()+"\n")
-		save_file.write('preinf,'+self.preinf_entry.get()+"\n")
-		save_file.write('iti,'+self.screen_entry.get()+"\n")
-		save_file.write('blocks1,'+self.block_entry1.get()+"\n")
-		save_file.write('blocks2,'+self.block_entry2.get()+"\n")
-		save_file.write('blocks3,'+self.block_entry3.get()+"\n")
-		save_file.write('points,'+self.points_entry.get()+"\n")
-		save_file.write('u_threshold,'+self.u_entry.get()+"\n")
-		save_file.write('min_memo,'+self.min_memo_entry.get()+"\n")
-		save_file.close()
+		if not int(self.apb_entry.get()) > 0:
+			self.errorPopUp('Valor para \"Ações por bloco\" inválido.\n'+\
+					'O valor deve ser um número inteiro,\n maior que zero e não vazio.\n')
+			return None
+		
+		# min blocks check
+		if not is_int(self.minb_entry.get()):
+			self.errorPopUp('Valor para \"Mínimo de Bloco por Fase\" inválido.\n'+\
+					'O valor deve ser um número inteiro,\n maior que zero e não vazio.\n')
+			return None
 
-		# 3. Destroying screen
-		self.destroyWidgets()
+		if not int(self.minb_entry.get()) > 0:
+			self.errorPopUp('Valor para \"Mínimo de Bloco por Fase\" inválido.\n'+\
+					'O valor deve ser um número inteiro,\n maior que zero e não vazio.\n')
+			return None
 
-		# 4. Returning to Menu
-		from Menu import Menu
-		Menu(self.master,self,self.main_bg)
+		# max blocks check
+		if not is_int(self.maxb_entry.get()):
+			self.errorPopUp('Valor para \"Máximo de Bloco por Fase\" inválido.\n'+\
+					'O valor deve ser um número inteiro,\n maior que zero e não vazio.\n')
+			return None
 
-	def intCheck(self,value,name,eg='10'):
-		if re.match("^$",value) is not None:
-			self.disableButtons()
-			myPopUp(self,'Valor para '+name+' Vazio!\nPor favor, informe um valor válido.')
-			return False
-		if re.match("^\d+$",value) is None:
-			self.disableButtons()
-			myPopUp(self,'Valor para '+name+' Inválido!\nPor favor, entre com um valor decimal válido.\nExemplo: '+eg)
-			return False
-		return True
+		if not int(self.maxb_entry.get()) > 0:
+			self.errorPopUp('Valor para \"Máximo de Bloco por Fase\" inválido.\n'+\
+					'O valor deve ser um número inteiro,\n maior que zero e não vazio.\n')
+			return None
 
-	def floatCheck(self,value,name,eg='0.5',max_value=99999):
-		if re.match("^$",value) is not None:
-			self.disableButtons()
-			myPopUp(self,'Valor para '+name+' Vazio!\nPor favor, informe um valor válido.')
-			return False
-		if re.match("^\d*[.]{0,1}\d*$",value) is None:
-			self.disableButtons()
-			myPopUp(self,'Valor para '+name+' Inválido!\nPor favor, entre com um valor decimal válido.\nExemplo: '+str(eg))
-			return False
-		if float(value) > float(max_value): 
-			self.disableButtons()
-			myPopUp(self,'Valor para '+name+' Inválido!\nPor favor, entre com um valor entre 0 e '+str(max_value)+'.')
-			return False
-		return True
+		# irt check
+		if not is_float(self.irt_entry.get()):
+			self.errorPopUp('Valor para \"Limiar IRT\" inválido.\n'+\
+					'O valor deve ser um número decimal,\n entre 0 e 1 e não vazio.\n')
+			return None
+
+		if not float(self.irt_entry.get()) >= 0\
+		or not float(self.irt_entry.get()) <= 1:
+			self.errorPopUp('Valor para \"Limiar IRT\" inválido.\n'+\
+					'O valor deve ser um número decimal, entre 0 e 1\n e não vazio.\n')
+			return None
+
+		self.settings['actions_per_block'] = int(self.apb_entry.get())
+		self.settings['min_blocks'] = int(self.minb_entry.get())
+		self.settings['max_blocks'] = int(self.maxb_entry.get())
+		self.settings['IRT_threshold'] = float(self.irt_entry.get())
+		
+		self.goToMenu()
+
+
+	def errorPopUp(self,text):
+		disableButtons(self.buttons)
+		myPopUp(self,text)
 
 	def ableButtons(self):
-		print(self.abled_txt)
-		self.back_button.configure(state="normal")
-		self.save_button.configure(state="normal")
-
-	def disableButtons(self):
-		print(self.disabled_txt)
-		self.back_button.configure(state="disabled")
-		self.save_button.configure(state="disabled")
-
-	def destroyWidgets(self):
-		print(self.destroy_txt)
-		self.settings_bg.destroy()
-		self.settings_label.destroy() 
-
-		self.back_button.destroy()
-		self.save_button.destroy()
+		print("| -- enabling the buttons	   |")
+		for b in self.buttons:
+			b.configure(state="normal")

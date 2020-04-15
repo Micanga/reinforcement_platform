@@ -21,8 +21,8 @@ class Screen:
 
     def __init__(self, master, prev_sc, main_bg, bg_img=None):
         start = "---------------------------------\n" + \
-            "| New Screen                     |\n" + \
-            "---------------------------------"
+                "| New Screen                     |\n" + \
+                "---------------------------------"
         print(start)
 
         # a. setting screen components
@@ -81,6 +81,18 @@ class Screen:
             self.game = self.prev_sc.game
         else:
             self.game = None
+        if 'settings' in attributes:
+            self.settings = self.prev_sc.settings
+        else:
+            self.settings = {\
+                'actions_per_block':10,\
+                'min_blocks':6,\
+                'max_blocks':20,\
+                'IRT_threshold':0.1
+            }
+
+        print('| Settings')
+        print(self.settings)
 
     def destroyAll(self, prev_sc):
         clean_log = "| Cleaning Last Screen           |"
@@ -167,35 +179,35 @@ class Screen:
         mixer.music.load(sfx_path)
 
     def button1_click(self):
-        print("|--- button 1 click             |")
+        #print("|--- button 1 click             |")
         self.check_action(1)
 
     def button2_click(self):
-        print("|--- button 2 click             |")
+        #print("|--- button 2 click             |")
         self.check_action(2)
 
     def button3_click(self):
-        print("|--- button 3 click             |")
+        #print("|--- button 3 click             |")
         self.check_action(3)
 
     def button4_click(self):
-        print("|--- button 4 click             |")
+        #print("|--- button 4 click             |")
         self.check_action(4)
 
     def button5_click(self):
-        print("|--- button 5 click             |")
+        #print("|--- button 5 click             |")
         self.check_action(5)
 
     def button6_click(self):
-        print("|--- button 6 click             |")
+        #print("|--- button 6 click             |")
         self.check_action(6)
 
     def button7_click(self):
-        print("|--- button 7 click             |")
+        #print("|--- button 7 click             |")
         self.check_action(7)
 
     def button8_click(self):
-        print("|--- button 8 click             |")
+        #print("|--- button 8 click             |")
         self.check_action(8)
 
     def check_action(self, clicked_button):
@@ -225,7 +237,7 @@ class Screen:
             #print(sum(self.game['frequency'].values()))
 
     def conditionalReinforce(self):
-        print("This is the standard conditionalReforce")
+        #print("This is the standard conditionalReforce")
         return True
 
     def number_of_blocks(self):
@@ -239,6 +251,11 @@ class Screen:
              block_counter += 1
 
         return block_counter
+
+    def number_of_rounds(self):
+        round_counter = \
+            len(self.game[-1]['group'])
+        return round_counter
 
     def positive_reinforce_action(self):
         # a. calculating the color fade (to green)
@@ -310,7 +327,7 @@ class Screen:
     def replay(self):
         # 1. Checking replay conditions
         # a. checking the end of the block (10 actions)
-        if len(self.game[-1]['reinforced']) == 10:
+        if self.number_of_rounds() == self.settings['actions_per_block']:
             self.game[-1]['block_time'] = (datetime.datetime.now() - self.block_start_time)
             write_result(self.game,self.nickname,self.start_time)
 
@@ -321,8 +338,13 @@ class Screen:
             # - writing results in log file
             write_round(self.game,self.nickname,self.start_time)
 
+        # 2. Checking the stop coditions
+        # a. maximum blocks
+        if number_of_blocks() == self.settings['max_blocks']:
+            # IMPLEMENT THE TIMEOUT
+
         # b. end stage
-        if self.check_stage_end_conditions():
+        elif self.check_stage_end_conditions():
             self.rgb = np.array([0.0,200.0,0.0])
             self.win_txt = tkinter.Label(self.master, bg= "#%02x%02x%02x" % (0, 200, 0), fg = "#%02x%02x%02x" % (0, 200, 0),\
                  text='ATÉ O MOMENTO VOCÊ ACUMULOU '+str(int(self.points.get())+int(self.prev_sc.points.get()))+\
@@ -364,8 +386,6 @@ class Screen:
         self.block_start_time = datetime.datetime.now()
 
     # Going to another Screen
-
-
     def check_stage_conditions(self):
 	    return False
 

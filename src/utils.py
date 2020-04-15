@@ -35,21 +35,21 @@ def update_screen(cur_sc,bg_color=[255.0,255.0,255.0]):
 	cur_sc.main_bg.place(x=0,y=0,relwidth=1,relheight=1)
 
 def ableButtons(buttons):
-	print("| -- enabling the buttons        |")
+	print("| -- enabling the buttons		|")
 	for b in buttons:
 		b.configure(state="normal")
 
 def disableButtons(buttons):
-	print("| -- disabing the buttons        |")
+	print("| -- disabing the buttons		|")
 	for b in buttons:
 		b.configure(state="disabled")
 
 def disableMouse(cur_sc):
-	print("| -- disabing the mouse          |")
+	print("| -- disabing the mouse		  |")
 	cur_sc.master.configure(cursor='none')
 
 def ableMouse(cur_sc):
-	print("| -- enabling the mouse          |")
+	print("| -- enabling the mouse		  |")
 	cur_sc.master.configure(cursor='')
 
 def ableButtonsAndMouse(cur_sc):
@@ -65,13 +65,13 @@ def reset_mouse_position(cur_sc):
 	 x=cur_sc.center_w, y=cur_sc.center_h)
 
 def removeButtons(buttons):
-	print("| -- destroying  the buttons     |")
+	print("| -- destroying  the buttons	 |")
 	for b in buttons:
 		b.destroy()
 	buttons = []
 
 def destroyWidgets(widgets):
-	print("| -- destroying  the widgets     |")
+	print("| -- destroying  the widgets	 |")
 	for w in widgets:
 		w.destroy()
 	widgets = []
@@ -82,7 +82,7 @@ def getPage(master, prev_sc, main_bg, pathNextPage):
 '''
 # LOAD
 def load_text(stage):
-	print("| -- loading text...            |")
+	print("| -- loading text...			|")
 	text = ""
 	saved_texts = [name for name in os.listdir('local/texts/stage'+str(stage)+'/')]
 	saved_texts.sort()
@@ -90,12 +90,12 @@ def load_text(stage):
 		with open('local/texts/stage'+str(stage)+'/'+saved_texts[-1],encoding='latin-1') as prev_file:
 			for line in prev_file:
 				text += line[:-1]
-		print("| -- custom text loaded.        |")
+		print("| -- custom text loaded.		|")
 	else:
 		with open('local/default/stage'+str(stage)+'.txt',encoding='latin-1') as default_text:
 			for line in default_text:
 				text += line[:-1]
-		print("| -- default text loaded.       |")
+		print("| -- default text loaded.	   |")
 
 	return text
 
@@ -138,3 +138,16 @@ def ReinfStability(vector, block_len, threshold):
 	check = [(fabs(reinf[i] - reinf[i-1])/reinf[i]) <= threshold for i in [0,1,2]]
 
 	return(check[0] and check[1] and check[2])
+
+# CHECK
+def is_int(string):
+	if re.match('^\s*[0-9]+\s*$',string) is not None:
+		return True
+	else:
+		return False
+
+def is_float(string):
+	if re.match('^\s*[0-9]+.[0-9]+\s*$',string) is not None:
+		return True
+	else:
+		return False
