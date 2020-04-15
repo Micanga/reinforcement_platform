@@ -19,7 +19,7 @@ BG_COLOR = BABY_BLUE
 class Game(object):
 
     def __init__(self):
-        self.game = []
+        return
 
     def auto_play(self):
         coin = float(random.uniform(0,8))
@@ -42,10 +42,8 @@ class Game(object):
 
     def number_of_blocks(self):
         block_counter = 0
-        
-        # NOTE: the first game in the array is the
-        # initial one, so we don't count it
-        for i in range(1,len(self.game)):
+
+        for i in range(len(self.game)):
             if self.game[i]['group'] == self.group\
             and self.game[i]['stage'] == self.stage:
              block_counter += 1
