@@ -162,6 +162,9 @@ class Screen:
         self.buttons.append(self.button_8)
 
     def createPointCounter(self):
+        self.points = tkinter.StringVar()
+        self.points.set(0)
+
         self.points_label = tkinter.Label(self.master, textvariable=self.points, width=3,
                                           bg='white', fg='black',
                                           font=Font(family='Helvetica',
@@ -325,36 +328,37 @@ class Screen:
             self.button8_click()
 
     def replay(self):
-        # 1. Checking replay conditions
-        # a. checking the end of the block (10 actions)
+        # 1. Writting results
         if self.number_of_rounds() == self.settings['actions_per_block']:
             self.game[-1]['block_time'] = (datetime.datetime.now() - self.block_start_time)
             write_result(self.game,self.nickname,self.start_time)
-
-            self.block_start_time = datetime.datetime.now()
-            self.update_variables()
-        # b. or not end of the block
         else:
             # - writing results in log file
             write_round(self.game,self.nickname,self.start_time)
 
         # 2. Checking the stop coditions
-        # a. maximum blocks
-        if self.number_of_blocks() == self.settings['max_blocks']:
-            myFailPopUp(self,'O experimento chegou ao fim!\n'+\
-                'Contacte o resposável e informe o fim.\n'+\
-                'Obrigado pela participação.')
-        # b. end stage
-        elif self.check_stage_end_conditions():
+        # a. end stage
+        if self.check_stage_end_conditions():
             self.rgb = np.array([0.0,200.0,0.0])
             self.win_txt = tkinter.Label(self.master, bg= "#%02x%02x%02x" % (0, 200, 0), fg = "#%02x%02x%02x" % (0, 200, 0),\
                  text='ATÉ O MOMENTO VOCÊ ACUMULOU '+str(int(self.points.get())+int(self.prev_sc.points.get()))+\
                  ' PONTOS!', font=Font(family='Helvetica', size=16, weight='bold'))
-            self.master.after(20,self.fadeResetText)
+            self.master.after(20,self.fadeNextStage)
+        # b. maximum blocks
+        elif self.number_of_blocks() == self.settings['max_blocks']\
+        and self.number_of_rounds() == self.settings['actions_per_block']:
+            myFailPopUp(self,'O experimento chegou ao fim!\n'+\
+                'Contacte o resposável e informe o fim.\n'+\
+                'Obrigado pela participação.')
         # c. keep playing
         else:
             # - setting the round start variable
-            self.round_start_time = datetime.datetime.now()
+            if self.number_of_rounds() == self.settings['actions_per_block']:
+                add_block()
+            else:
+                self.round_start_time = datetime.datetime.now()
+
+            # - recovering std background    
             self.main_bg.configure(bg="#%02x%02x%02x" %\
                 (int(BG_COLOR[0]),int(BG_COLOR[1]),int(BG_COLOR[2])))
 
@@ -366,24 +370,38 @@ class Screen:
         if self.AUTO:
             self.auto_play()
 
-    def update_variables(self):
-        # a. screen var
+    def init_variables(self):
         self.game.append({})
 
         self.game[-1]['group'] = self.group
         self.game[-1]['stage'] = self.stage
 
-        # b. round var
+        self.game[-1]['answer'] = []
+        self.game[-1]['time2answer'] = []
+        self.game[-1]['reinforced'] = []
+        self.game[-1]['frequency'] = {1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0}
+
+        self.game[-1]['points'] = 0
+        self.game[-1]['block_time'] = 0
+
+        self.round_start_time = datetime.datetime.now()
+        self.block_start_time = datetime.datetime.now()
+
+    def add_block(self):
+        self.game.append({})
+
+        self.game[-1]['group'] = self.group
+        self.game[-1]['stage'] = self.stage
+
         self.game[-1]['answer'] = []
         self.game[-1]['time2answer'] = []
         self.game[-1]['reinforced'] = []
         self.game[-1]['frequency'] = self.game[-2]['frequency']
-        self.round_start_time = datetime.datetime.now()
-
+        
         self.game[-1]['points'] = self.game[-2]['points']
-
-        # c. block var
         self.game[-1]['block_time'] = 0
+
+        self.round_start_time = datetime.datetime.now()
         self.block_start_time = datetime.datetime.now()
 
     # Going to another Screen

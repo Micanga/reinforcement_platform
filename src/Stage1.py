@@ -10,9 +10,7 @@ class Stage1(Screen):
 		# 1. Initializing the necessary variables
 		# a. initializing the screen
 		super().__init__(master, prev_sc, main_bg)
-		self.update_variables()
-		self.game[-1]['frequency'] = {1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0}
-		self.game[-1]['points'] = 0
+		self.init_variables()
 
 		# b. log text
 		self.start_log = 		"---------------------------------\n" + \
@@ -25,14 +23,10 @@ class Stage1(Screen):
 
 		# 2. Setting the screen buttons and widgets
 		# a. buttons
-		self.radius = 2*self.sw/3 if self.sw < self.sh else 2*self.sh/3
-		self.center_w, self.center_h = self.sw/2, 4*self.sh/5
 		self.createButtons(self.center_h, self.center_w, self.radius)
 		utils.ableButtonsAndMouse(self)
 
 		# b. points counter
-		self.points = tkinter.StringVar()
-		self.points.set(0)
 		self.createPointCounter()
 
 		# c. sound effects
