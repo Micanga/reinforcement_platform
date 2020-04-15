@@ -258,7 +258,7 @@ class myFailPopUp:
 		self.ok_button = Button(self.cur_popup, anchor = 'center',
 									bg = "#%02x%02x%02x" % (200, 200, 200), fg = 'black', text= 'OK',
 									font = Font(family='Helvetica', size=14, weight='bold'),highlightcolor='black',
-									command = multFunc(cur_screen.goMenu, self.cur_popup.destroy),
+									command = multFunc(cur_screen.goToMenu, self.cur_popup.destroy),
 									highlightthickness = 0, activebackground = "#%02x%02x%02x" % (230, 230, 230),
 									bd = 1, padx=5,pady=5,height=1,width=4)
 		self.ok_button.grid(row=1, column=0)

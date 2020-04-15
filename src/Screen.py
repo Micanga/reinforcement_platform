@@ -254,7 +254,7 @@ class Screen:
 
     def number_of_rounds(self):
         round_counter = \
-            len(self.game[-1]['group'])
+            len(self.game[-1]['reinforced'])
         return round_counter
 
     def positive_reinforce_action(self):
@@ -340,9 +340,10 @@ class Screen:
 
         # 2. Checking the stop coditions
         # a. maximum blocks
-        if number_of_blocks() == self.settings['max_blocks']:
-            # IMPLEMENT THE TIMEOUT
-
+        if self.number_of_blocks() == self.settings['max_blocks']:
+            myFailPopUp(self,'O experimento chegou ao fim!\n'+\
+                'Contacte o resposável e informe o fim.\n'+\
+                'Obrigado pela participação.')
         # b. end stage
         elif self.check_stage_end_conditions():
             self.rgb = np.array([0.0,200.0,0.0])
@@ -387,7 +388,7 @@ class Screen:
 
     # Going to another Screen
     def check_stage_conditions(self):
-	    return False
+        return False
 
     def goToStage1(self):
         txt = "| Going to Stage 1 Screen        |"
