@@ -291,15 +291,18 @@ class Screen(Game):
 
         for i in self.game:
         	print(i)
-
+        
+        #blocks that have to be used to calculate mean
         firstId = len(self.game) - self.MIN_BLOCOS
-        lastId = len(self.game) # the last block added but NOT USED TO MAKE MEAN
+        lastId = len(self.game) 
 
         time2ReinforcedAnswer = [] # array with all the time
         
+        #getting all Id's with Reinforced Answer
         for i in  range (firstId,lastId):
             idAnswerReinforced = [j for j, val in enumerate(self.game[i]['reinforced']) if (val == True)] 
 
+            #getting all the times that we reinforced
             for j in  idAnswerReinforced:
                 time2ReinforcedAnswer.append(self.game[i]['time2answer'][j])
             
@@ -307,13 +310,14 @@ class Screen(Game):
             print(idAnswerReinforced)
 
             print("time2ReinforcedAnswer")
+            print(time2ReinforcedAnswer)
             mean = 0
 
+            #just calculating mean 
             if(len(time2ReinforcedAnswer) != 0):
                 for i in time2ReinforcedAnswer:
                     mean += i.total_seconds()
 
-                print(mean/ len(time2ReinforcedAnswer))
                 return (mean/ len(time2ReinforcedAnswer))
 
         return 0

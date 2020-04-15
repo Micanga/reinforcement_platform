@@ -33,15 +33,17 @@ class Stage2(Screen):
 
 		# THE STAGE METHODS
 	def check_stage_end_conditions(self): 
-		self.settings['min_blocks'] = 3
+		self.settings['min_blocks'] = 2
 
 		print("print(self.settings)")
 		print(self.settings)
 		
 
 		if self.number_of_blocks() >= self.settings['min_blocks']:
-			self.averageIRT()
-			return False
+			if self.averageIRT() > self.settings['IRT_threshold']: ## verify this 
+				return False
+			else:
+				return True
 		else:
 			return False
 		#check that user makes unless the minimun number of blocks
