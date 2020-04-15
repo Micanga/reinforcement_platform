@@ -38,7 +38,8 @@ class Stage1(Screen):
 
 	# THE STAGE METHODS
 	def check_stage_end_conditions(self):
-		# if the number of blocks is greather than 16, finish the stage
+		# if the number of blocks is greather than the min of blocks
+		# and the average IRT is less then the IRT threshold, finish the stage
 		if self.number_of_blocks() >= self.settings['min_blocks']\
 		and self.averageIRT() < self.settings['IRT_threshold']:
 			return True

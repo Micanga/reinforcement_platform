@@ -113,28 +113,7 @@ class ChooseExperiment(Screen):
 		self.stage = int(self.stage_var.get())
 		self.start_time = datetime.datetime.now()
 
-		self.create_game_variables()
+		self.game = []
 
 		from IntroStage import IntroStage
 		IntroStage(self.master,self,self.main_bg)
-
-	def create_game_variables(self):
-		# a. screen var
-		self.game = []
-		self.game.append({})
-
-		self.game[-1]['group'] = self.group
-		self.game[-1]['stage'] = self.stage
-
-		# b. round var
-		self.game[-1]['answer'] = []
-		self.game[-1]['time2answer'] = []
-		self.game[-1]['reinforced'] = []
-		self.game[-1]['frequency'] = {1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0}
-		self.round_start_time = datetime.datetime.now()
-
-		self.game[-1]['points'] = 0
-
-		# c. block var
-		self.game[-1]['block_time'] = []
-		self.block_start_time = datetime.datetime.now()

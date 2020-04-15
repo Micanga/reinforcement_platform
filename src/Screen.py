@@ -337,24 +337,26 @@ class Screen:
             write_round(self.game,self.nickname,self.start_time)
 
         # 2. Checking the stop coditions
-        # a. end stage
-        if self.check_stage_end_conditions():
-            self.rgb = np.array([0.0,200.0,0.0])
-            self.win_txt = tkinter.Label(self.master, bg= "#%02x%02x%02x" % (0, 200, 0), fg = "#%02x%02x%02x" % (0, 200, 0),\
-                 text='ATÉ O MOMENTO VOCÊ ACUMULOU '+str(int(self.points.get())+int(self.prev_sc.points.get()))+\
-                 ' PONTOS!', font=Font(family='Helvetica', size=16, weight='bold'))
-            self.master.after(20,self.fadeNextStage)
-        # b. maximum blocks
-        elif self.number_of_blocks() == self.settings['max_blocks']\
+        # a. maximum blocks allowed (Fail)
+        if self.number_of_blocks() == self.settings['max_blocks']\
         and self.number_of_rounds() == self.settings['actions_per_block']:
             myFailPopUp(self,'O experimento chegou ao fim!\n'+\
                 'Contacte o resposável e informe o fim.\n'+\
-                'Obrigado pela participação.')
-        # c. keep playing
+                'Obrigado pela participação!')
+        # b. keep playing
         else:
-            # - setting the round start variable
+            # - end of the block
             if self.number_of_rounds() == self.settings['actions_per_block']:
-                add_block()
+                # - end game
+                if self.check_stage_end_conditions():
+                    self.rgb = np.array([0.0,200.0,0.0])
+                    self.win_txt = tkinter.Label(self.master, bg= "#%02x%02x%02x" % (0, 200, 0), fg = "#%02x%02x%02x" % (0, 200, 0),\
+                         text='ATÉ O MOMENTO VOCÊ ACUMULOU '+str(int(self.points.get())+int(self.prev_sc.points.get()))+\
+                         ' PONTOS!', font=Font(family='Helvetica', size=16, weight='bold'))
+                    self.master.after(20,self.fadeNextStage)
+                else:
+                    add_block()
+            # - updating round
             else:
                 self.round_start_time = datetime.datetime.now()
 
