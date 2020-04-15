@@ -289,6 +289,9 @@ class Screen(Game):
 
     def averageIRT(self):
 
+        for i in self.game:
+        	print(i)
+
         firstId = len(self.game) - self.MIN_BLOCOS
         lastId = len(self.game) # the last block added but NOT USED TO MAKE MEAN
 

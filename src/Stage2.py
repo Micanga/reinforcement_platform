@@ -37,10 +37,7 @@ class Stage2(Screen):
 
 		print("print(self.settings)")
 		print(self.settings)
-		for i in self.game:
-			print(i)
-
-
+		
 
 		if self.number_of_blocks() >= self.settings['min_blocks']:
 			self.averageIRT()
