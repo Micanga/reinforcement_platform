@@ -21,6 +21,8 @@ class Game(object):
     def __init__(self):
         self.game = []
 
+    
+
     def auto_play(self):
         coin = float(random.uniform(0,8))
         if coin <= 1:

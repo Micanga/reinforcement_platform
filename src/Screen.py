@@ -286,3 +286,31 @@ class Screen(Game):
 
         exit_log = "| Exit Button Pressed"
         print(exit_log)
+
+    def averageIRT(self):
+
+        firstId = len(self.game) - self.MIN_BLOCOS
+        lastId = len(self.game) # the last block added but NOT USED TO MAKE MEAN
+
+        time2ReinforcedAnswer = [] # array with all the time
+        
+        for i in  range (firstId,lastId):
+            idAnswerReinforced = [j for j, val in enumerate(self.game[i]['reinforced']) if (val == True)] 
+
+            for j in  idAnswerReinforced:
+                time2ReinforcedAnswer.append(self.game[i]['time2answer'][j])
+            
+            print("idAnswerReinforced")
+            print(idAnswerReinforced)
+
+            print("time2ReinforcedAnswer")
+            mean = 0
+
+            if(len(time2ReinforcedAnswer) != 0):
+                for i in time2ReinforcedAnswer:
+                    mean += i.total_seconds()
+
+                print(mean/ len(time2ReinforcedAnswer))
+                return (mean/ len(time2ReinforcedAnswer))
+
+        return 0
