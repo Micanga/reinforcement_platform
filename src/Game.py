@@ -215,3 +215,17 @@ class Game(object):
 
         self.round_start_time = datetime.datetime.now()
         self.block_start_time = datetime.datetime.now()
+
+
+
+    #get All blocks from the group and stage specified    
+
+    def getAllBlocks(self,group,stage):
+
+        blocks = []
+        
+        for i in range(len(self.game)):
+            if self.game[i]['group'] == group and self.game[i]['stage'] == stage:
+                blocks.append(i)
+
+        return blocks
