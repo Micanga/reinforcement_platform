@@ -36,7 +36,6 @@ class Stage3(Screen):
 
 		#end dummie delete
 
-
 		blocksS1 = self.getAllBlocks(self.group,self.stage-1) #(stage 1 for stage 3) or (stage 4 for stage 6) 
 		blocksS2 = self.getAllBlocks(self.group,self.stage-2) #(stage 2 for stage 3) or (stage 5 for stage 6) 
 		blocksS3 = 60 - (len(blocksS1) +  len(blocksS2)) # number of blocks from stage 3 or stage 6
@@ -53,5 +52,10 @@ class Stage3(Screen):
 			return True
 		# else keep playing
 		return False
+
+	def conditionalReinforce(self):
+		#VI (auto aco)
+		print("This is conditionalReforce of Stage3")
+		return (sum(self.game[-1]['frequency'].values()) in self.reinforced_clicks)
 
 

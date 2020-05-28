@@ -281,6 +281,14 @@ class Screen(Game):
         from Stage3 import Stage3
         Stage3(self.master, self, self.main_bg)
 
+    def goToStage4(self):
+        txt = "| Going to Stage 4 Screen"
+        print(txt)
+
+        # Nickname Screen
+        from Stage4 import Stage4
+        Stage4(self.master, self, self.main_bg)
+
     def goToNickName(self):
         txt = "| Going to Nickname Screen"
         print(txt)
