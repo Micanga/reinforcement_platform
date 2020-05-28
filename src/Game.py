@@ -167,7 +167,7 @@ class Game(object):
                 (int(BG_COLOR[0]),int(BG_COLOR[1]),int(BG_COLOR[2])))
 
             # - replaying
-            if self.settings['return_click'] is False:
+            if self.settings['return_click'] == False:
                 # - creating the buttons and enabling the mouse
                 self.createButtons(self.center_h, self.center_w, self.radius)
                 reset_mouse_position(self)
