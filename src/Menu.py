@@ -17,7 +17,7 @@ class Menu(Screen):
 		# 1. Initializing the necessary variables
 		# a. initializing the screen
 		super().__init__(master, prev_sc, main_bg,'bg/main.png','Menu')
-
+		print(self.settings)
 		# 2. Setting the screen buttons and widgets
 		print('| - creating buttons')
 		# a. Start Button
