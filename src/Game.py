@@ -166,13 +166,20 @@ class Game(object):
             self.main_bg.configure(bg="#%02x%02x%02x" %\
                 (int(BG_COLOR[0]),int(BG_COLOR[1]),int(BG_COLOR[2])))
 
-            # - creating the buttons and enabling the mouse
-            self.createButtons(self.center_h, self.center_w, self.radius)
-            reset_mouse_position(self)
-            ableMouse(self)
+            # - replaying
+            if self.settings['return_click'] is False:
+                # - creating the buttons and enabling the mouse
+                self.createButtons(self.center_h, self.center_w, self.radius)
+                reset_mouse_position(self)
+                ableMouse(self)
+                if self.AUTO:
+                    self.auto_play()
+            else:
+                self.return_click()
 
-        if self.AUTO:
-            self.auto_play()
+    def return_click(self):
+        ableMouse(self)
+        self.createReturnButton(self.center_h, self.center_w)
 
     def averageIRT(self):
 

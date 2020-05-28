@@ -11,6 +11,7 @@ import numpy as np
 from utils import *
 
 WHITE = [255.0, 255.0, 255.0]
+YELLOW = [255.0, 255.0, 0.0]
 GREEN = [0.0, 200.0, 0.0]
 RED = [255.0, 0.0, 0.0]
 BLACK = [0.0, 0.0, 0.0]
@@ -224,6 +225,18 @@ class Screen(Game):
         self.points_label.place(
             x=self.center_w, y=self.center_h, anchor='center')
         self.widgets.append(self.points_label)
+
+    def createReturnButton(self, center_h, center_w):
+        self.return_button = CircularButton(self.master, 150, 150,
+                                       color=YELLOW, bg=BG_COLOR, command=self.return_button_click)
+        self.return_button.place(x=center_w,
+                            y=center_h,
+                            anchor='center')
+
+    def return_button_click(self):
+        # - creating the buttons and enabling the mouse
+        self.createButtons(self.center_h, self.center_w, self.radius)
+        self.return_button.destroy()
 
     """
     ..........................................................
