@@ -21,8 +21,6 @@ class Game(object):
     def __init__(self):
         return
 
-    
-
     def auto_play(self):
         coin = float(random.uniform(0,8))
         if coin <= 1:
@@ -133,10 +131,10 @@ class Game(object):
         # 1. Writting results
         if self.number_of_rounds() == self.settings['actions_per_block']:
             self.game[-1]['block_time'] = (datetime.datetime.now() - self.block_start_time)
-            write_result(self.game,self.nickname,self.start_time)
+            write_result(self.game,self.nickname,self.group,self.stage,self.start_time)
         else:
             # - writing results in log file
-            write_round(self.game,self.nickname,self.start_time)
+            write_round(self.game,self.nickname,self.group,self.stage,self.start_time)
 
         # 2. Checking the stop coditions
         # a. maximum blocks allowed (Fail)
