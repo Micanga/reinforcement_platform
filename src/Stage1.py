@@ -1,4 +1,5 @@
 # Imports
+import log
 from MyCommons import *
 from Screen import Screen
 import utils
@@ -11,7 +12,10 @@ class Stage1(Screen):
 		super().__init__(master, prev_sc, main_bg,screen_name='Stage 1')
 		self.init_variables()
 
-		# 2. Setting the screen buttons and widgets
+		# 2. creating the result file
+		log.create_file(self.nickname,self.group,self.stage,self.start_time)
+
+		# 3. Setting the screen buttons and widgets
 		# a. buttons
 		self.createButtons(self.center_h, self.center_w, self.radius)
 		utils.ableButtonsAndMouse(self)
