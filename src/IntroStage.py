@@ -56,9 +56,6 @@ class IntroStage(Screen):
 
 		self.widgets.append(self.start_button)
 		self.buttons.append(self.start_button)
-
-		# c. creating the result file
-		log.create_file(self.nickname,self.start_time)
 			
 	def create_label_entry(self,label_text,x,y):
 		# 1. Creating Entry Label

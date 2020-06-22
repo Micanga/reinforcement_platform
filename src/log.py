@@ -1,8 +1,8 @@
 from utils import *
 
-def create_file(nickname,start_time):
-	filename = nickname+'_'+\
-		start_time.strftime("%Y%m%d_%H%M%S")
+def create_file(nickname,group,stage,start_time):
+	filename = nickname+'_G'+str(group)+'_F'+str(stage)+\
+		'_'+start_time.strftime("%Y-%m-%d_%H:%M:%S")
 	write_header(filename)
 
 def write_header(filename):
@@ -24,9 +24,9 @@ def write_header(filename):
 	 	'\n')
 	result_file.close()
 
-def write_round(game,nickname,start_time):
-	filename = nickname+'_'+\
-		start_time.strftime("%Y%m%d_%H%M%S")
+def write_round(game,nickname,group,stage,start_time):
+	filename = nickname+'_G'+str(group)+'_F'+str(stage)+\
+		'_'+start_time.strftime("%Y-%m-%d_%H:%M:%S")
 	result_file = open('results/'+filename+".csv","a")
 
 	result_file.write(\
@@ -48,9 +48,9 @@ def write_round(game,nickname,start_time):
 
 	result_file.close()
 
-def write_result(game,nickname,start_time):
-	filename = nickname+'_'+\
-	start_time.strftime("%Y%m%d_%H%M%S")
+def write_result(game,nickname,group,stage,start_time):
+	filename = nickname+'_G'+str(group)+'_F'+str(stage)+\
+		'_'+start_time.strftime("%Y-%m-%d_%H:%M:%S")
 	result_file = open('results/'+filename+".csv","a")
 
 	result_file.write(\
