@@ -50,10 +50,10 @@ class ChooseExperiment(Screen):
 		self.stage_label.place(x=2*self.sw/3,y=self.sh/2-50,anchor='center')
 		self.widgets.append(self.stage_label)
 
-		stage_list = ['1','2','3','4','5','6','7']
-		self.stage_var = StringVar(self.master)
-		self.stage_var.set(stage_list[0])
-		self.stage_option = OptionMenu(self.master, self.stage_var, *stage_list)
+		session_list = ['1','2']
+		self.session_var = StringVar(self.master)
+		self.session_var.set(session_list[0])
+		self.stage_option = OptionMenu(self.master, self.session_var, *session_list)
 		self.stage_option.config(width = 5, 
 			font = Font(family='Helvetica', size=18, weight='bold'),
 			bd=3, relief="solid")
@@ -100,7 +100,8 @@ class ChooseExperiment(Screen):
 
 	def start_button_click(self):
 		self.group = int(self.group_var.get())
-		self.stage = int(self.stage_var.get())
+		self.stage = int(1) #always start from the first phase
+		self.session = int(self.session_var.get())
 		self.start_time = datetime.datetime.now()
 
 		from IntroStage import IntroStage
