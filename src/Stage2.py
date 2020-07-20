@@ -31,7 +31,7 @@ class Stage2(Screen):
 		return (sum(self.game[-1]['frequency'].values()) in self.reinforced_clicks)
 
 
-		# THE STAGE METHODS
+	# THE STAGE METHODS
 	def check_stage_end_conditions(self): 
 		self.settings['min_blocks'] = 2
 
@@ -46,10 +46,7 @@ class Stage2(Screen):
 				return True
 		else:
 			return False
-		#check that user makes unless the minimun number of blocks
-		
-
-			
+		#check that user makes unless the minimun number of blocks		
 		#self.averageIRT()
 
 	def setReinforcedClicks(self):
