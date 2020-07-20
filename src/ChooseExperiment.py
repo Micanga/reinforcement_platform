@@ -100,8 +100,14 @@ class ChooseExperiment(Screen):
 
 	def start_button_click(self):
 		self.group = int(self.group_var.get())
-		self.stage = int(1) #always start from the first phase
 		self.session = int(self.session_var.get())
+
+		#always start from the first phase (phase 4 is the first phase of second session)
+		if(self.session == 2):
+			self.stage = int(4) 
+		else:
+			self.stage = int(1) 
+		
 		self.start_time = datetime.datetime.now()
 
 		from IntroStage import IntroStage
