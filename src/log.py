@@ -1,5 +1,6 @@
 import sys
 from utils import *
+import numpy as np
 
 def create_file(nickname,group,stage,start_time):
 	filename = nickname+'_G'+str(group)+'_F'+str(stage)+\
@@ -9,76 +10,50 @@ def create_file(nickname,group,stage,start_time):
 def write_header(filename):
 	result_file = open('results/'+filename+".csv","w")
 	result_file.write(\
-	 	'# Grupo'+\
-		'# Fase;'+\
-		'Acao;'+\
-		'Tempo de Resposta;'+\
-		'Reinforco;'+\
-		'Frequencia;'+\
-		'Pontuação Atual;'+\
-		'Pontuação Acumulada;'+\
-		'# Bloco;'+\
-		'Tempo do Bloco;'+\
-	 	'Tentativas Reforçadas (%);'+\
-		'Estabilidade na Taxa de Respostas (%);'+\
 	 	'Indice U'+\
-	 	'\n')
+		'Frequencia Absoluta;'+\
+		'Frequencia Percentual;'+\
+		'Proporção de Alternacoes;'+\
+		'Tempo para Resposta;'+\
+		'Taxa de Respostas;'+\
+		'Desvio Padrao da Taxa de Respostas;'+\
+		'\n')
 	result_file.close()
 
 def write_round(game,nickname,group,stage,start_time):
 	filename = nickname+'_G'+str(group)+'_F'+str(stage)+\
 		'_'+start_time.strftime("%d-%m-%Y_%Hh%Mm%Ss")
-	result_file = open_file('results/'+filename+".csv","a")
+	result_file = open('results/'+filename+".csv","a")
 
+	# setting the variables
+	index_U = str(U(game[-1]['frequency']))
+	abs_freq = str(game[-1]['frequency'])
+
+	percent_freq = {}
+	for action in game[-1]['frequency']:
+		percent_freq[action] = game[-1]['frequency'][action] /  sum([game[-1]['frequency'][a] for a in game[-1]['frequency'] ])
+	percent_freq = str(percent_freq)
+
+	change_prop = str('VERIFICAR MEDIDA')
+	time2ans = str(game[-1]['time2answer'][-1])
+	
+	answer_rate = str(sum([game[-1]['frequency'][a] for a in game[-1]['frequency']])/\
+		(sum([time.total_seconds() for time in game[-1]['time2answer']])/60.0))
+	
+	#dev_time2ans += r['time2answer'].total_seconds()
+	#dev_time2ans = str(np.sqrt((sum((game[-1]['time2answer']/60) - float(mean_time2ans))**2)/len(game[-1]['time2answer'])))
+	dev_time2ans = str(0.0)
+
+	# writting
 	result_file.write(\
-		str(game[-1]['group']) + ';' +\
-		str(game[-1]['stage']) + ';' +\
-		str(game[-1]['answer'][-1]) + ';' +\
-		str(game[-1]['time2answer'][-1]) + ';' +\
-		str(game[-1]['reinforced'][-1]) + ';' + \
-		str(game[-1]['frequency']) + ';' + \
-		str(game[-1]['points']) + ';' + \
-		str(calculate_total_points(game)) + ';' + \
-		';' + \
-		';' + \
-		';' + \
-		';' + \
-		';' + \
-		'\n'
-	)
-
-	result_file.close()
-
-def write_result(game,nickname,group,stage,start_time):
-	filename = nickname+'_G'+str(group)+'_F'+str(stage)+\
-		'_'+start_time.strftime("%d-%m-%Y_%Hh%Mm%Ss")
-	result_file = open('resultszz'+filename+".csv","a")
-
-	result_file.write(\
-		str(game[-1]['group']) + ';' +\
-		str(game[-1]['stage']) + ';' +\
-		str(game[-1]['answer'][-1]) + ';' +\
-		str(game[-1]['time2answer'][-1]) + ';' +\
-		str(game[-1]['reinforced'][-1]) + ';' + \
-		str(game[-1]['frequency']) + ';' + \
-		str(game[-1]['points']) + ';' + \
-		str(calculate_total_points(game)) + ';' + \
-		str(len(game) - 1) + ';' + \
-		str(game[-1]['block_time']) + ';' + \
-		str(calculate_reinforce_percent(game)) + ';')
-
-	if len(game) >= 3 + 1:
-		result_file.write(\
-			str(Stability(game,3)) + ';' + \
-			str(U(game[-1]['frequency'])) + ';' + \
-			'\n'
-		)
-	else:
-		result_file.write(\
-			';' + \
-			';' + \
-			'\n'
-		)
+		index_U + ';' +\
+		abs_freq + ';' + \
+		percent_freq + ';' + \
+		change_prop + \
+		time2ans + ';' +\
+		answer_rate + ';' +\
+		dev_time2ans + ';' +\
+		'\n')
 
 	result_file.close()
 
