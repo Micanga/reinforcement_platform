@@ -45,7 +45,7 @@ class ChooseExperiment(Screen):
 
 		# b. Stage Menu
 		self.stage_label = tkinter.Label(self.master, bg="#%02x%02x%02x" % (255, 255, 255),justify='left',\
-			fg = 'black', text='FASE', font=Font(family='Helvetica', size=20),
+			fg = 'black', text='Sessão', font=Font(family='Helvetica', size=20),
 			padx=10,pady=10,bd=4, relief="solid", width=15)
 		self.stage_label.place(x=2*self.sw/3,y=self.sh/2-50,anchor='center')
 		self.widgets.append(self.stage_label)
@@ -63,7 +63,7 @@ class ChooseExperiment(Screen):
 
 		# c. Main Label
 		self.main_label = tkinter.Label(self.master, bg="#%02x%02x%02x" % (255, 255, 255),justify='left',\
-			fg = 'black', text='ESCOLHA O GRUPO E A FASE DO EXPERIMENTO', font=Font(family='Helvetica', size=20),
+			fg = 'black', text='ESCOLHA O GRUPO E A SESSÃO DO EXPERIMENTO', font=Font(family='Helvetica', size=20),
 			padx=10,pady=10)
 		self.main_label.place(x=self.sw/2,y=self.sh/4,anchor='center')
 		self.widgets.append(self.main_label)

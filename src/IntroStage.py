@@ -27,7 +27,12 @@ class IntroStage(Screen):
 
 		# 2. Buttons Functions
 		# a. intro text
-		text = utils.load_text(prev_sc.stage)
+		if(self.settings['return_click'] == True):
+			text = utils.load_text(prev_sc.stage)
+			text +=  utils.load_text("Click")
+		else:
+			text = utils.load_text(prev_sc.stage)
+		
 		self.text_display = scrolledtext.ScrolledText(master, fg = 'black', font = Font(family='Helvetica', size=18),\
 									 bg = "#%02x%02x%02x" % (255, 255, 255), insertbackground = 'black',\
 									 highlightcolor = "#%02x%02x%02x" % (180,180,180), highlightbackground= "#%02x%02x%02x" % (50,50,50),\
