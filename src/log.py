@@ -1,8 +1,9 @@
+import sys
 from utils import *
 
 def create_file(nickname,group,stage,start_time):
 	filename = nickname+'_G'+str(group)+'_F'+str(stage)+\
-		'_'+start_time.strftime("%d-%m-%Y_%H:%M:%S")
+		'_'+start_time.strftime("%d-%m-%Y_%Hh%Mm%Ss")
 	write_header(filename)
 
 def write_header(filename):
@@ -20,14 +21,14 @@ def write_header(filename):
 		'Tempo do Bloco;'+\
 	 	'Tentativas Reforçadas (%);'+\
 		'Estabilidade na Taxa de Respostas (%);'+\
-	 	'Indice U;'+\
+	 	'Indice U'+\
 	 	'\n')
 	result_file.close()
 
 def write_round(game,nickname,group,stage,start_time):
 	filename = nickname+'_G'+str(group)+'_F'+str(stage)+\
-		'_'+start_time.strftime("%d-%m-%Y_%H:%M:%S")
-	result_file = open('results/'+filename+".csv","a")
+		'_'+start_time.strftime("%d-%m-%Y_%Hh%Mm%Ss")
+	result_file = open_file('results/'+filename+".csv","a")
 
 	result_file.write(\
 		str(game[-1]['group']) + ';' +\
@@ -50,8 +51,8 @@ def write_round(game,nickname,group,stage,start_time):
 
 def write_result(game,nickname,group,stage,start_time):
 	filename = nickname+'_G'+str(group)+'_F'+str(stage)+\
-		'_'+start_time.strftime("%d-%m-%Y_%H:%M:%S")
-	result_file = open('results/'+filename+".csv","a")
+		'_'+start_time.strftime("%d-%m-%Y_%Hh%Mm%Ss")
+	result_file = open('resultszz'+filename+".csv","a")
 
 	result_file.write(\
 		str(game[-1]['group']) + ';' +\
