@@ -100,7 +100,8 @@ class Screen(Game):
                 'min_blocks':6,\
                 'max_blocks':20,\
                 'IRT_threshold':0.1,\
-                'return_click':0
+                'return_click':0,\
+                'choose_aco':False
             }
 
     def destroyAll(self, prev_sc):

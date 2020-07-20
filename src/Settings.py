@@ -48,12 +48,21 @@ class Settings(Screen):
 		self.widgets.append(self.irt_label)
 		self.buttons.append(self.irt_entry)
 
+		# e. return click
 		self.check_label, self.check_button, self.check_var = \
-			self.create_setting_field('Habilitar clique de retorno:',3*self.sw/4,self.sh/7,type_='check')
+			self.create_setting_field('Habilitar clique de retorno:',3*self.sw/4,2*self.sh/7,type_='check')
 		self.check_var.set(self.settings['return_click'])
 		self.check_button.var = self.check_var
 		self.widgets.append(self.check_label)
 		self.buttons.append(self.check_button)
+
+		# f. enable file selection (for aco) button
+		self.aco_label, self.aco_button, self.aco_var = \
+			self.create_setting_field('Selecionar arquivo ACO:',3*self.sw/4,self.sh/7,type_='check')
+		self.aco_var.set(self.settings['choose_aco'])
+		self.aco_button.var = self.check_var
+		self.widgets.append(self.aco_label)
+		self.buttons.append(self.aco_button)
 
 		#======================================================
 		# SAVE AND BACK BUTTON
