@@ -319,36 +319,42 @@ class Screen(Game):
         print(exit_log)
 
     def averageIRT(self):
-
-        for i in self.game:
-        	print(i)
-        
+       
         #blocks that have to be used to calculate mean
-        firstId = len(self.game) - self.MIN_BLOCOS
+        firstId = len(self.game) - self.settings['min_blocks']
         lastId = len(self.game) 
 
         time2ReinforcedAnswer = [] # array with all the time
         
         #getting all Id's with Reinforced Answer
         for i in  range (firstId,lastId):
+            print("| --------- BLOCO")
+            print(self.game[i])
             idAnswerReinforced = [j for j, val in enumerate(self.game[i]['reinforced']) if (val == True)] 
 
             #getting all the times that we reinforced
             for j in  idAnswerReinforced:
                 time2ReinforcedAnswer.append(self.game[i]['time2answer'][j])
             
-            print("idAnswerReinforced")
+            print("| ------- ID'S Reforçados ")
             print(idAnswerReinforced)
 
-            print("time2ReinforcedAnswer")
+            print("| ------- (T) ID'S Reforçados ")
             print(time2ReinforcedAnswer)
             mean = 0
 
-            #just calculating mean 
-            if(len(time2ReinforcedAnswer) != 0):
-                for i in time2ReinforcedAnswer:
-                    mean += i.total_seconds()
 
-                return (mean/ len(time2ReinforcedAnswer))
+        #just calculating mean 
+        if(len(time2ReinforcedAnswer) != 0):
+            for i in time2ReinforcedAnswer:
+                mean += i.total_seconds()
+
+                
+            print("Your IRT = ")
+            print(mean/ len(time2ReinforcedAnswer))
+
+            print("IRT min = ")
+            print(self.settings['IRT_threshold'])
+            return (mean/ len(time2ReinforcedAnswer))    
 
         return 0

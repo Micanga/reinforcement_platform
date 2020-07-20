@@ -131,7 +131,7 @@ class Game(object):
         # 1. Writting results
         if self.number_of_rounds() == self.settings['actions_per_block']:
             self.game[-1]['block_time'] = (datetime.datetime.now() - self.block_start_time)
-            write_result(self.game,self.nickname,self.group,self.stage,self.start_time)
+            #write_result(self.game,self.nickname,self.group,self.stage,self.start_time)
         else:
             # - writing results in log file
             write_round(self.game,self.nickname,self.group,self.stage,self.start_time)
@@ -148,13 +148,15 @@ class Game(object):
             # - end of the block
             if self.number_of_rounds() == self.settings['actions_per_block']:
                 # - end game
-                if self.check_stage_end_conditions():
+                if self.check_stage_end_conditions() == True:
+                    print("| END STAGE")
                     self.rgb = np.array([0.0,200.0,0.0])
                     self.win_txt = tkinter.Label(self.master, bg= "#%02x%02x%02x" % (0, 200, 0), fg = "#%02x%02x%02x" % (0, 200, 0),\
                          text='ATÉ O MOMENTO VOCÊ ACUMULOU '+str(int(self.points.get())+int(self.prev_sc.points.get()))+\
                          ' PONTOS!', font=Font(family='Helvetica', size=16, weight='bold'))
                     self.master.after(20,self.fadeNextStage)
                 else:
+                    print("| ADD OTHER BLOCK")
                     self.add_block()
             # - updating round
             else:
