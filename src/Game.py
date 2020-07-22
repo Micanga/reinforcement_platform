@@ -205,12 +205,22 @@ class Game(object):
                                (int(self.cur_color[0]), int(self.cur_color[1]), int(self.cur_color[2])))
 
         # c. checking the fade stop
-        if (self.ref_color[1] >= 0 and int(self.cur_color[1]) > 0)\
-                or (self.ref_color[1] < 0 and int(self.cur_color[1]) < 0):
-            self.master.after(100, self.fadeNextStage)
+        if self.game[-1]['reinforced'][-1]:
+            if (int(self.cur_color[1]) > 0):
+                self.master.after(100, self.fadeNextStage)
+            else:
+                self.win_txt.configure(fg="#%02x%02x%02x" %
+                               (0,0,0))
+                self.points.set(int(self.points.get()) +int(self.prev_sc.points.get()))
+                self.master.after(3000,self.nextStage)
         else:
-            self.points.set(int(self.points.get()) +int(self.prev_sc.points.get()))
-            self.master.after(5000,self.nextStage)
+            if (int(self.cur_color[1]) < 255):
+                self.master.after(100, self.fadeNextStage)
+            else:
+                self.win_txt.configure(fg="#%02x%02x%02x" %
+                               (255,255,255))
+                self.points.set(int(self.points.get()) +int(self.prev_sc.points.get()))
+                self.master.after(3000,self.nextStage)
 
     def return_click(self):
         ableMouse(self)
