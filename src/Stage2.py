@@ -4,7 +4,9 @@ import random
 import re
 import tkinter
 from tkinter import *
-from utils import *
+
+import log
+import utils
 
 from Screen import Screen
 
@@ -13,20 +15,33 @@ class Stage2(Screen):
 		self.AUTO = True
 		
 		# 1. Initializing the necessary variables
-		# a. common variables
-		super().__init__(master, prev_sc, main_bg,screen_name='Stage 1')
+		# a. GUI variables
+		super().__init__(master, prev_sc, main_bg,screen_name='Stage 2')
 		self.init_variables()
-		self.load_sfx()
 
 		# b. reinforce vectors
 		self.VR5 = [1, 1, 1, 2, 3, 4, 5, 7, 10, 17]
 		self.VR20 = [1, 3, 6, 9, 12, 16, 21, 28, 38, 66]
 
+		# 2. creating the result file
+		log.create_file(self.nickname,self.group,self.stage,self.start_time)
+
 		# c. interface components
 		self.createButtons(self.center_h, self.center_w, self.radius)
+		utils.ableButtonsAndMouse(self)
+
+		# b. points counter
 		self.createPointCounter()
+
+		# c. sound effects
+		self.load_sfx()
+
 		self.aco_file = None
 		self.setReinforcedClicks()
+		
+		# d. auto-play
+		if self.AUTO:
+			self.auto_play()
 
 	#check this function for other blocks (frequency is acumulating )
 	def conditionalReinforce(self):
@@ -80,6 +95,7 @@ class Stage2(Screen):
 					result_files = os.listdir("./results/")
 					selected_files = [filename for filename in result_files if re.search("_G"+str(self.group-1)+"_F2_",filename) is not None]
 					self.aco_file = random.choice(selected_files)
+				print(self.aco_file)
 			
 			# b. defining the reinforcement condition
 			if self.group == 2: # applying the VI(aco) scheme [G2]

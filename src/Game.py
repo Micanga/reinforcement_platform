@@ -129,12 +129,8 @@ class Game(object):
 
     def replay(self):
         # 1. Writting results
-        if self.number_of_rounds() == self.settings['actions_per_block']:
-            self.game[-1]['block_time'] = (datetime.datetime.now() - self.block_start_time)
-            #write_result(self.game,self.nickname,self.group,self.stage,self.start_time)
-        else:
-            # - writing results in log file
-            write_round(self.game,self.nickname,self.group,self.stage,self.start_time)
+        # - writing results in log file
+        write_round(self.game,self.nickname,self.group,self.stage,self.start_time)
 
         # 2. Checking the stop coditions
         # a. maximum blocks allowed (Fail)
@@ -158,24 +154,39 @@ class Game(object):
                 else:
                     print("| ADD OTHER BLOCK")
                     self.add_block()
+
+                    # - recovering std background    
+                    self.main_bg.configure(bg="#%02x%02x%02x" %\
+                        (int(BG_COLOR[0]),int(BG_COLOR[1]),int(BG_COLOR[2])))
+
+                    # - replaying
+                    if self.settings['return_click'] == False:
+                        # - creating the buttons and enabling the mouse
+                        self.createButtons(self.center_h, self.center_w, self.radius)
+                        reset_mouse_position(self)
+                        ableMouse(self)
+                        if self.AUTO:
+                            self.auto_play()
+                    else:
+                        self.return_click()
             # - updating round
             else:
                 self.round_start_time = datetime.datetime.now()
 
-            # - recovering std background    
-            self.main_bg.configure(bg="#%02x%02x%02x" %\
-                (int(BG_COLOR[0]),int(BG_COLOR[1]),int(BG_COLOR[2])))
+                # - recovering std background    
+                self.main_bg.configure(bg="#%02x%02x%02x" %\
+                    (int(BG_COLOR[0]),int(BG_COLOR[1]),int(BG_COLOR[2])))
 
-            # - replaying
-            if self.settings['return_click'] == False:
-                # - creating the buttons and enabling the mouse
-                self.createButtons(self.center_h, self.center_w, self.radius)
-                reset_mouse_position(self)
-                ableMouse(self)
-                if self.AUTO:
-                    self.auto_play()
-            else:
-                self.return_click()
+                # - replaying
+                if self.settings['return_click'] == False:
+                    # - creating the buttons and enabling the mouse
+                    self.createButtons(self.center_h, self.center_w, self.radius)
+                    reset_mouse_position(self)
+                    ableMouse(self)
+                    if self.AUTO:
+                        self.auto_play()
+                else:
+                    self.return_click()
 
     def return_click(self):
         ableMouse(self)

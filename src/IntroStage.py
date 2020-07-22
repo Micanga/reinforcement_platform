@@ -33,7 +33,7 @@ class IntroStage(Screen):
 		else:
 			text = utils.load_text(prev_sc.stage)
 		
-		self.text_display = scrolledtext.ScrolledText(master, fg = 'black', font = Font(family='Helvetica', size=18),\
+		self.text_display = scrolledtext.ScrolledText(self.master, fg = 'black', font = Font(family='Helvetica', size=18),\
 									 bg = "#%02x%02x%02x" % (255, 255, 255), insertbackground = 'black',\
 									 highlightcolor = "#%02x%02x%02x" % (180,180,180), highlightbackground= "#%02x%02x%02x" % (50,50,50),\
 									  bd=0, width =47, height=10, padx=10, pady=10, wrap='word',undo=True)
@@ -61,19 +61,3 @@ class IntroStage(Screen):
 
 		self.widgets.append(self.start_button)
 		self.buttons.append(self.start_button)
-			
-	def create_label_entry(self,label_text,x,y):
-		# 1. Creating Entry Label
-		label = tkinter.Label(self.master, bg="#%02x%02x%02x" % (255, 255, 255),justify='left',\
-			fg = 'black', text=label_text, font=Font(family='Helvetica', size=20))
-		label.place(x=x,y=y,anchor='center')
-
-		# 2. Creating the Entry
-		entry = tkinter.Entry(self.master, fg = 'black', font = Font(family='Helvetica', size=20),\
-									 bg = "#%02x%02x%02x" % (255, 255, 255), insertbackground = 'black',\
-									 highlightcolor = "#%02x%02x%02x" % (180,180,180), highlightbackground= "#%02x%02x%02x" % (50,50,50),\
-									  bd=0, width = 33, justify='center')
-		entry.place(x = x, y = y+50,anchor='center')
-
-		# 3. Returning
-		return label,entry

@@ -262,7 +262,6 @@ class Screen(Game):
         txt = "| Going to Stage 1 Screen"
         print(txt)
 
-        # Nickname Screen
         from Stage1 import Stage1
         Stage1(self.master, self, self.main_bg)
 
@@ -270,7 +269,6 @@ class Screen(Game):
         txt = "| Going to Stage 2 Screen"
         print(txt)
 
-        # Nickname Screen
         from Stage2 import Stage2
         Stage2(self.master, self, self.main_bg)
 
@@ -278,7 +276,6 @@ class Screen(Game):
         txt = "| Going to Stage 3 Screen"
         print(txt)
 
-        # Nickname Screen
         from Stage3 import Stage3
         Stage3(self.master, self, self.main_bg)
 
@@ -286,7 +283,6 @@ class Screen(Game):
         txt = "| Going to Stage 4 Screen"
         print(txt)
 
-        # Nickname Screen
         from Stage4 import Stage4
         Stage4(self.master, self, self.main_bg)
 
@@ -294,7 +290,6 @@ class Screen(Game):
         txt = "| Going to Nickname Screen"
         print(txt)
 
-        # Nickname Screen
         from NickName import NickName
         NickName(self.master, self, self.main_bg)
 
