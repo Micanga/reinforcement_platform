@@ -328,19 +328,19 @@ class Screen(Game):
         
         #getting all Id's with Reinforced Answer
         for i in  range (firstId,lastId):
-            print("| --------- BLOCO")
-            print(self.game[i])
+            #print("| --------- BLOCO")
+            #print(self.game[i])
             idAnswerReinforced = [j for j, val in enumerate(self.game[i]['reinforced']) if (val == True)] 
 
             #getting all the times that we reinforced
             for j in  idAnswerReinforced:
                 time2ReinforcedAnswer.append(self.game[i]['time2answer'][j])
             
-            print("| ------- ID'S Reforçados ")
-            print(idAnswerReinforced)
+            #print("| ------- ID'S Reforçados ")
+            #print(idAnswerReinforced)
 
-            print("| ------- (T) ID'S Reforçados ")
-            print(time2ReinforcedAnswer)
+            #print("| ------- (T) ID'S Reforçados ")
+            #print(time2ReinforcedAnswer)
             mean = 0
 
 

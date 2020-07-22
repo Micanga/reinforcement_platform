@@ -22,27 +22,21 @@ class Stage3(Screen):
 		# c. sound effects
 		self.load_sfx()
 
-		#delete these things later please don't forget dummie
-
-
-		for i in range(20):
-			self.add_block()
-
-		self.game[-1]['stage'] = 1
-		self.game[-2]['stage'] = 2
-
-		print("Numbers blocks of Stage3 ")
-		print((blocksS3))
-
-		#end dummie delete
+		
 
 		blocksS1 = self.getAllBlocks(self.group,self.stage-1) #(stage 1 for stage 3) or (stage 4 for stage 6) 
-		blocksS2 = self.getAllBlocks(self.group,self.stage-2) #(stage 2 for stage 3) or (stage 5 for stage 6) 
-		blocksS3 = 60 - (len(blocksS1) +  len(blocksS2)) # number of blocks from stage 3 or stage 6
+		blocksS2 = self.getAllBlocks(self.group,self.stage-2) #(stage 2 for stage 3) or (stage 5 for stage 6) 	
+		blocksS3 = self.settings['max_blocks'] - (len(blocksS1) +  len(blocksS2)) # number of blocks from stage 3 or stage 6
 		
+		print("Numbers blocks of Stage3 ")
+		print(blocksS3)
+		print(self.game)
+
 		# d. auto-play
 		if self.AUTO:
 			self.auto_play()
+		
+		#print(self.game)
 
 	# THE STAGE METHODS
 	def check_stage_end_conditions(self):
@@ -56,6 +50,7 @@ class Stage3(Screen):
 	def conditionalReinforce(self):
 		#VI (auto aco)
 		print("This is conditionalReforce of Stage3")
+		
 		return (sum(self.game[-1]['frequency'].values()) in self.reinforced_clicks)
 
 

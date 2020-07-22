@@ -42,6 +42,7 @@ class Stage2(Screen):
 		# and the average IRT is less then the IRT threshold, finish the stage
 		if self.number_of_blocks() >= self.settings['min_blocks']\
 		and self.averageIRT() < self.settings['IRT_threshold']:
+			print(self.game)
 			return True
 		# else keep playing
 		return False
@@ -67,3 +68,13 @@ class Stage2(Screen):
 				self.reinforced_clicks = []
 			else: # applying the VR(aco) scheme [G3]
 				self.reinforced_clicks = []
+
+
+	def fadeNextStage(self):
+		txt = "| Going to Stage 3 Screen"
+		print(txt)
+
+		# Nickname Screen
+		self.stage = 3
+		from IntroStage import IntroStage
+		IntroStage(self.master,self,self.main_bg)
