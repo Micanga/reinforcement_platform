@@ -10,9 +10,9 @@ def create_file(nickname,group,stage,start_time):
 def write_header(filename):
 	result_file = open('results/'+filename+".csv","w")
 	result_file.write(\
-		'Reforço Positivo?'+\
-		'Acao'+\
-	 	'Indice U'+\
+		'Reforço Positivo?;'+\
+		'Acao;'+\
+	 	'Indice U;'+\
 		'Frequencia Absoluta;'+\
 		'Frequencia Percentual;'+\
 		'Proporção de Alternacoes;'+\
@@ -24,7 +24,7 @@ def write_header(filename):
 		'IMR;'+\
 		'IMR (desvio padrao);'+\
 		'NRR;'+\
-		'NRR (desvio padrao)'+\
+		'NRR (desvio padrao);'+\
 		'pALTref;'+\
 		'pALTresp;'+\
 		'DFRO;'+\
@@ -51,7 +51,8 @@ def write_round(game,nickname,group,stage,start_time):
 		percent_freq[a] = game[-1]['frequency'][a] / total_answers
 	percent_freq = str(percent_freq)
 
-	change_prop = str('VERIFICAR MEDIDA')
+	change_prop = str(sum([1 if game[-1]['answer'][i] != game[-1]['answer'][i-1] else 0 for i in range(1,len(game[-1]['answer']))])/(len(game[-1]['answer']) - 1))\
+		if len(game[-1]['answer']) > 1 else ''
 
 	time2ans = str(game[-1]['time2answer'][-1])
 	time2ans_cum = str(np.cumsum([time.total_seconds() for time in game[-1]['time2answer']])[-1])
