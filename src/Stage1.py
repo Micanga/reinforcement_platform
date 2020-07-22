@@ -31,9 +31,6 @@ class Stage1(Screen):
 		if self.AUTO:
 			self.auto_play()
 
-	def fadeNextStage(self):
-		self.master.after(20,self.nextStage)
-
 	def nextStage(self):
 		txt = "| Going to Stage 2 Screen"
 		print(txt)

@@ -121,7 +121,7 @@ class Game(object):
                 or (self.ref_color[1] < 0 and int(self.cur_color[1]) < 0):
             self.master.after(50, self.negative_reinforce_action)
         else:
-            # - setting green bg
+            # - setting black bg
             self.main_bg.configure(bg="#%02x%02x%02x" % (0, 0, 0))
             # self.points.set(int(self.points.get())+int(self.settings['points']))
             # self.master.after(int(float(self.settings['iti'])*1000),self.replay)
@@ -146,10 +146,18 @@ class Game(object):
                 # - end game
                 if self.check_stage_end_conditions() == True:
                     print("| END STAGE")
-                    self.rgb = np.array([0.0,200.0,0.0])
-                    self.win_txt = tkinter.Label(self.master, bg= "#%02x%02x%02x" % (0, 200, 0), fg = "#%02x%02x%02x" % (0, 200, 0),\
+                    if self.game[-1]['reinforced'][-1]:
+                        self.cur_color = np.array([0.0,200.0,0.0])
+                        self.ref_color = self.cur_color - np.array(BLACK)
+                    else:
+                        self.cur_color = np.array([0.0,0.0,0.0])
+                        self.ref_color = self.cur_color - np.array(WHITE)
+                    self.win_txt = tkinter.Label(self.master,\
+                         bg= "#%02x%02x%02x" % (int(self.cur_color[0]), int(self.cur_color[1]), int(self.cur_color[2])),\
+                         fg = "#%02x%02x%02x" % (int(self.cur_color[0]), int(self.cur_color[1]), int(self.cur_color[2])),\
                          text='ATÉ O MOMENTO VOCÊ ACUMULOU '+str(int(self.points.get())+int(self.prev_sc.points.get()))+\
                          ' PONTOS!', font=Font(family='Helvetica', size=16, weight='bold'))
+                    self.win_txt.place(x=self.sw/2,y=self.sh/2,anchor='center')
                     self.master.after(20,self.fadeNextStage)
                 else:
                     print("| ADD OTHER BLOCK")
@@ -187,6 +195,22 @@ class Game(object):
                         self.auto_play()
                 else:
                     self.return_click()
+
+    def fadeNextStage(self):
+        # a. calculating the color fade (to black)
+        self.cur_color -= (0.1*self.ref_color)
+
+        # b. changing text color
+        self.win_txt.configure(fg="#%02x%02x%02x" %
+                               (int(self.cur_color[0]), int(self.cur_color[1]), int(self.cur_color[2])))
+
+        # c. checking the fade stop
+        if (self.ref_color[1] >= 0 and int(self.cur_color[1]) > 0)\
+                or (self.ref_color[1] < 0 and int(self.cur_color[1]) < 0):
+            self.master.after(100, self.fadeNextStage)
+        else:
+            self.points.set(int(self.points.get()) +int(self.prev_sc.points.get()))
+            self.master.after(5000,self.nextStage)
 
     def return_click(self):
         ableMouse(self)
