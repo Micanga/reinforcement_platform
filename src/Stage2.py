@@ -25,16 +25,34 @@ class Stage2(Screen):
 		# c. interface components
 		self.createButtons(self.center_h, self.center_w, self.radius)
 		self.createPointCounter()
+		self.aco_file = None
 		self.setReinforcedClicks()
 
 	#check this function for other blocks (frequency is acumulating )
 	def conditionalReinforce(self):
-		current_click = sum(self.game[-1]['frequency'].values())
-		if current_click > self.reinforced_clicks[-1]:
-			self.setReinforcedClicks(offset=current_click)
-			return False
+		# checking the reinforcement for group 1 [VR-5]
+		if self.group == 1:
+			current_click = sum(self.game[-1]['frequency'].values())
+			if current_click > self.reinforced_clicks[-1]:
+				self.setReinforcedClicks(offset=current_click)
+				return False
+			else:
+				return (current_click in self.reinforced_clicks)
+		# checking the reinforcement for group 2 [VI (aco)]
+		elif self.group == 2:
+			time2ans_cum = str(np.cumsum([time.total_seconds() for time in self.game[-1]['time2answer']])[-1])
+			if time2ans_cum > self.reinforced_clicks[-1]:
+				self.setReinforcedClicks(time2ans_cum)
+				return False
+			else:
+				return any(time2ans_cum < self.reinforced_clicks)
+		# checking the reinforcement for group 3 [VR (aco)]
 		else:
-			return (current_click in self.reinforced_clicks)
+			if len(self.game[-1]['reinforced']) + 1 > self.reinforced_clicks[-1]:
+				self.setReinforcedClicks(len(self.game[-1]['reinforced']) + 1)
+				return False
+			else:
+				return any(len(self.game[-1]['reinforced']) + 1 == self.reinforced_clicks)
 
 	# THE STAGE METHODS
 	def check_stage_end_conditions(self): 
@@ -54,16 +72,29 @@ class Stage2(Screen):
 
 		else:
 			# a. choosing the file to aco
-			if self.settings['choose_aco']:
-				aco_file = tkinter.filedialog.askopenfilename(initialdir = "./results/")
-			else:
-				result_files = os.listdir("./results/")
-				selected_files = [filename for filename in result_files if re.search("_G"+str(self.group-1)+"_F2_",filename) is not None]
-				aco_file = random.choice(selected_files)
+			if self.aco_file is None:
+				if self.settings['choose_aco']:
+					self.aco_file = tkinter.filedialog.askopenfilename(initialdir = "./results/")
+				else:
+					result_files = os.listdir("./results/")
+					selected_files = [filename for filename in result_files if re.search("_G"+str(self.group-1)+"_F2_",filename) is not None]
+					self.aco_file = random.choice(selected_files)
 			
-			exit(1)
 			# b. defining the reinforcement condition
 			if self.group == 2: # applying the VI(aco) scheme [G2]
-				self.reinforced_clicks = []
+				counter, self.reinforced_clicks = 0, []
+				with open(aco_file) as ref_file:
+					for line in ref_file:
+						cum_time = line.split(';')[7]
+						if counter != 0:
+							self.reinforced_clicks.append(cum_time + offset)
+						counter += 1
+
 			else: # applying the VR(aco) scheme [G3]
-				self.reinforced_clicks = []
+				counter, self.reinforced_clicks = 0, []
+				with open(aco_file) as ref_file:
+					for line in ref_file:
+						reinf_flag = line.split(';')[0]
+						if counter != 0 and reinf_flag == 'SIM':
+							self.reinforced_clicks.append(counter + offset)
+						counter += 1
