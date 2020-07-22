@@ -28,6 +28,7 @@ def write_header(filename):
 		'pALTref;'+\
 		'pALTresp;'+\
 		'DFRO;'+\
+		'DFRO Percentual;'+\
 		'QMR;'+\
 		'QMN'+\
 	'\n')
@@ -63,9 +64,41 @@ def write_round(game,nickname,group,stage,start_time):
 		dev_time2ans += ((time.total_seconds()/60.0) - mean_time2ans)**2
 	dev_time2ans =  str((dev_time2ans)/len(game[-1]['time2answer']))
 
+
+	last_reinforce, imr_array, imr = 0, [], 0
+	for i in range(len(game[-1]['reinforced'])):
+		if game[-1]['reinforced'][i] == True:
+			imr_array.append(sum([float(time.total_seconds()/60.0) for time in game[-1]['time2answer'][last_reinforce:i+1]]))
+			imr += imr_array[-1]
+			last_reinforce = i+1
+	imr = '' if game[-1]['reinforced'].count(True) == 0 else str(imr/float(game[-1]['reinforced'].count(True)))
+
+	imr_std = str(np.std(imr_array))
+
+	nrr = '' if game[-1]['reinforced'].count(True) == 0 else str(len(game[-1]['reinforced'])/float(game[-1]['reinforced'].count(True)))
+	nrr_std = str(np.std(game[-1]['reinforced']))
+
+	ALTref = [1 if game[-1]['reinforced'][i] == True and i > 0 and game[-1]['answer'][i] != game[-1]['answer'][i-1] else 0 for i in range(len(game[-1]['reinforced']))]
+	ALTref = sum(ALTref)
+	pALTref = '' if game[-1]['reinforced'].count(True) == 0 else  str(ALTref/float(game[-1]['reinforced'].count(True)))
+
+	ALT_count = [1 if i > 0 and game[-1]['answer'][i] != game[-1]['answer'][i-1] else 0 for i in range(len(game[-1]['reinforced']))]
+	ALT_count = sum(ALT_count)
+	pALTresp = '' if ALT_count == 0 else  str(ALTref/ALT_count)
+
+	DFRO, pDFRO = {}, {}
+	for a in game[-1]['frequency']:
+		DFRO[a] = 0.0
+	
+	for i in range(len(game[-1]['reinforced'])):
+		DFRO[game[-1]['answer'][i]] += 1 if game[-1]['reinforced'][i] == True else 0
+
+	for a in game[-1]['frequency']:
+		pDFRO[a] = 0 if game[-1]['reinforced'].count(True) == 0 else DFRO[a]/game[-1]['reinforced'].count(True)
+
 	# writting
 	result_file.write(\
-		reinforced + ';' +\
+		str(reinforced) + ';' +\
 		action + ';' +\
 		index_U + ';' +\
 		abs_freq + ';' + \
@@ -76,13 +109,14 @@ def write_round(game,nickname,group,stage,start_time):
 		answer_rate + ';' +\
 		dev_time2ans + ';' +\
 		str(1/float(answer_rate)) + ';' +\
-		'IMR;'+\
-		'IMR (desvio padrao);'+\
-		'NRR;'+\
-		'NRR (desvio padrao)'+\
-		'pALTref;'+\
-		'pALTresp;'+\
-		'DFRO;'+\
+		imr + ';' +\
+		imr_std + ';' +\
+		nrr + ';' +\
+		nrr_std + ';' +\
+		pALTref + ';' +\
+		pALTresp + ';' +\
+		str(DFRO) + ';' +\
+		str(pDFRO) + ';' +\
 		'QMR;'+\
 		'QMN'+\
 		'\n')

@@ -102,9 +102,12 @@ def load_text(stage):
 # MATH
 from math import log2, fabs
 
-def U(freq):
-	print(sum([freq[f] for f in freq]))
-	if sum([freq[f] for f in freq]) < 3:
+def U(ref_freq):
+	freq = {}
+	for a in freq:
+		freq[a] = ref_freq[a]+1
+
+	if sum([freq[f] for f in freq]) < 11:
 		return 1.0
 		
 	number_of_actions = len(freq)
