@@ -109,7 +109,7 @@ class Game(object):
             self.master.after(1*1000, self.replay)
 
     def negative_reinforce_action(self):
-        # a. calculating the color fade (to green)
+        # a. calculating the color fade (to black)
         self.cur_color -= (0.1*self.ref_color)
 
         # b. changing background color

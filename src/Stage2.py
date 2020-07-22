@@ -43,6 +43,17 @@ class Stage2(Screen):
 		if self.AUTO:
 			self.auto_play()
 
+	def fadeNextStage(self):
+		self.master.after(20,self.nextStage)
+
+	def nextStage(self):
+		txt = "| Going to Stage 3 Screen"
+		print(txt)
+
+		self.stage = 3
+		from IntroStage import IntroStage
+		IntroStage(self.master,self,self.main_bg)
+
 	#check this function for other blocks (frequency is acumulating )
 	def conditionalReinforce(self):
 		# checking the reinforcement for group 1 [VR-5]
