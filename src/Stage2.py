@@ -63,7 +63,7 @@ class Stage2(Screen):
 				return (current_click in self.reinforced_clicks)
 		# checking the reinforcement for group 2 [VI (aco)]
 		elif self.group == 2:
-			time2ans_cum = str(np.cumsum([time.total_seconds() for time in self.game[-1]['time2answer']])[-1])
+			time2ans_cum = np.cumsum([time.total_seconds() for time in self.game[-1]['time2answer']])[-1]
 			if time2ans_cum > self.reinforced_clicks[-1]:
 				self.setReinforcedClicks(time2ans_cum)
 				return False
@@ -108,16 +108,16 @@ class Stage2(Screen):
 			# b. defining the reinforcement condition
 			if self.group == 2: # applying the VI(aco) scheme [G2]
 				counter, self.reinforced_clicks = 0, []
-				with open(aco_file) as ref_file:
+				with open("./results/"+self.aco_file) as ref_file:
 					for line in ref_file:
 						cum_time = line.split(';')[7]
 						if counter != 0:
-							self.reinforced_clicks.append(cum_time + offset)
+							self.reinforced_clicks.append(float(cum_time) + offset)
 						counter += 1
 
 			else: # applying the VR(aco) scheme [G3]
 				counter, self.reinforced_clicks = 0, []
-				with open(aco_file) as ref_file:
+				with open("./results/"+self.aco_file) as ref_file:
 					for line in ref_file:
 						reinf_flag = line.split(';')[0]
 						if counter != 0 and reinf_flag == 'SIM':
