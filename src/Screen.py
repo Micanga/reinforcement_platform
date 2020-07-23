@@ -2,6 +2,7 @@ import inspect
 import tkinter
 from tkinter import *
 from pygame import mixer
+import random
 
 from Game import Game
 from log import *
@@ -12,8 +13,9 @@ from utils import *
 
 WHITE = [255.0, 255.0, 255.0]
 YELLOW = [255.0, 255.0, 0.0]
+BLUE = [0.0, 0.0, 200.0]
 GREEN = [0.0, 200.0, 0.0]
-RED = [255.0, 0.0, 0.0]
+RED = [200.0, 0.0, 0.0]
 BLACK = [0.0, 0.0, 0.0]
 BABY_BLUE = [137.0, 207.0, 240.0]
 BG_COLOR = BABY_BLUE
@@ -259,33 +261,166 @@ class Screen(Game):
     ..######..##.....##.##.....##.##....##..######...########.
     ..........................................................
     """
-    def goToStage1(self):
-        txt = "| Going to Stage 1 Screen"
-        print(txt)
+    def stageFade(self):
+        # a. calculating the color fade
+        self.cur_color -= (0.025*self.ref_color)
+        self.text_cur_color -= (0.025*self.text_ref_color)
 
-        from Stage1 import Stage1
-        Stage1(self.master, self, self.main_bg)
+        # b. checking the fade stop
+        if (int(self.cur_color[0]) >= 0 and int(self.cur_color[1]) >= 0 and int(self.cur_color[2]) >= 0\
+            and int(self.cur_color[0]) < 255 and int(self.cur_color[1]) < 255 and int(self.cur_color[2]) < 255):
+            self.main_bg.configure(bg="#%02x%02x%02x" %
+                               (int(self.cur_color[0]), int(self.cur_color[1]), int(self.cur_color[2])))
+            self.stage_txt.configure(
+                bg="#%02x%02x%02x" % (int(self.cur_color[0]), int(self.cur_color[1]), int(self.cur_color[2])),
+                fg="#%02x%02x%02x" % (int(self.text_cur_color[0]), int(self.text_cur_color[1]), int(self.text_cur_color[2])))
+            self.master.after(100, self.stageFade)
+        else:
+            if self.stage == 1:
+                self.goToStage1(fade=False)
+            if self.stage == 2:
+                self.goToStage2(fade=False)
+            if self.stage == 3:
+                self.goToStage3(fade=False)
+            if self.stage == 4:
+                self.goToStage4(fade=False)
+            if self.stage == 5:
+                self.goToStage5(fade=False)
+            if self.stage == 6:
+                self.goToStage6(fade=False)
 
-    def goToStage2(self):
-        txt = "| Going to Stage 2 Screen"
-        print(txt)
+    def goToStage1(self,fade=True):
+        print(self.stage,fade)
+        if fade:
+            removeButtons(self.buttons)
+            destroyWidgets(self.widgets)
+            self.cur_color = BG_COLOR
+            self.ref_color = self.cur_color - np.array(random.sample([YELLOW,RED,BLUE],1)[0])
+            self.text_cur_color = BG_COLOR
+            self.text_ref_color = self.cur_color - np.array(BLACK)
 
-        from Stage2 import Stage2
-        Stage2(self.master, self, self.main_bg)
+            self.stage_txt = tkinter.Label(self.master,\
+                bg= "#%02x%02x%02x" % (int(self.cur_color[0]), int(self.cur_color[1]), int(self.cur_color[2])),\
+                fg = "#%02x%02x%02x" % (int(self.text_cur_color[0]), int(self.text_cur_color[1]), int(self.text_cur_color[2])),\
+                text='FASE '+str(self.stage), font=Font(family='Helvetica', size=48, weight='bold'))
+            self.stage_txt.place(x=self.sw/2,y=self.sh/2,anchor='center')
 
-    def goToStage3(self):
-        txt = "| Going to Stage 3 Screen"
-        print(txt)
+            self.stageFade()
+        else:
+            txt = "| Going to Stage 1 Screen"
+            print(txt)
+            from Stage1 import Stage1
+            Stage1(self.master, self, self.main_bg)
 
-        from Stage3 import Stage3
-        Stage3(self.master, self, self.main_bg)
+    def goToStage2(self,fade=True):
+        if fade:
+            removeButtons(self.buttons)
+            destroyWidgets(self.widgets)
+            self.cur_color = BG_COLOR
+            self.ref_color = self.cur_color - np.array(random.sample([YELLOW,RED,BLUE],1)[0])
+            self.text_cur_color = BG_COLOR
+            self.text_ref_color = self.cur_color - np.array(BLACK)
 
-    def goToStage4(self):
-        txt = "| Going to Stage 4 Screen"
-        print(txt)
+            self.stage_txt = tkinter.Label(self.master,\
+                bg= "#%02x%02x%02x" % (int(self.cur_color[0]), int(self.cur_color[1]), int(self.cur_color[2])),\
+                fg = "#%02x%02x%02x" % (int(self.text_cur_color[0]), int(self.text_cur_color[1]), int(self.text_cur_color[2])),\
+                text='FASE '+str(self.stage), font=Font(family='Helvetica', size=48, weight='bold'))
+            self.stage_txt.place(x=self.sw/2,y=self.sh/2,anchor='center')
 
-        from Stage4 import Stage4
-        Stage4(self.master, self, self.main_bg)
+            self.stageFade()
+        else:
+            txt = "| Going to Stage 2 Screen"
+            print(txt)
+            from Stage2 import Stage2
+            Stage2(self.master, self, self.main_bg)
+
+    def goToStage3(self,fade=True):
+        if fade:
+            removeButtons(self.buttons)
+            destroyWidgets(self.widgets)
+            self.cur_color = BG_COLOR
+            self.ref_color = self.cur_color - np.array(random.sample([YELLOW,RED,BLUE],1)[0])
+            self.text_cur_color = BG_COLOR
+            self.text_ref_color = self.cur_color - np.array(BLACK)
+
+            self.stage_txt = tkinter.Label(self.master,\
+                bg= "#%02x%02x%02x" % (int(self.cur_color[0]), int(self.cur_color[1]), int(self.cur_color[2])),\
+                fg = "#%02x%02x%02x" % (int(self.text_cur_color[0]), int(self.text_cur_color[1]), int(self.text_cur_color[2])),\
+                text='FASE '+str(self.stage), font=Font(family='Helvetica', size=48, weight='bold'))
+            self.stage_txt.place(x=self.sw/2,y=self.sh/2,anchor='center')
+
+            self.stageFade()
+        else:
+            txt = "| Going to Stage 3 Screen"
+            print(txt)
+            from Stage3 import Stage3
+            Stage3(self.master, self, self.main_bg)
+
+    def goToStage4(self,fade=True):
+        if fade:
+            removeButtons(self.buttons)
+            destroyWidgets(self.widgets)
+            self.cur_color = BG_COLOR
+            self.ref_color = self.cur_color - np.array(random.sample([YELLOW,RED,BLUE],1)[0])
+            self.text_cur_color = BG_COLOR
+            self.text_ref_color = self.cur_color - np.array(BLACK)
+
+            self.stage_txt = tkinter.Label(self.master,\
+                bg= "#%02x%02x%02x" % (int(self.cur_color[0]), int(self.cur_color[1]), int(self.cur_color[2])),\
+                fg = "#%02x%02x%02x" % (int(self.text_cur_color[0]), int(self.text_cur_color[1]), int(self.text_cur_color[2])),\
+                text='FASE '+str(self.stage), font=Font(family='Helvetica', size=48, weight='bold'))
+            self.stage_txt.place(x=self.sw/2,y=self.sh/2,anchor='center')
+
+            self.stageFade()
+        else:
+            txt = "| Going to Stage 4 Screen"
+            print(txt)
+            from Stage4 import Stage4
+            Stage4(self.master, self, self.main_bg)
+
+    def goToStage5(self,fade=True):
+        if fade:
+            removeButtons(self.buttons)
+            destroyWidgets(self.widgets)
+            self.cur_color = BG_COLOR
+            self.ref_color = self.cur_color - np.array(random.sample([YELLOW,RED,BLUE],1)[0])
+            self.text_cur_color = BG_COLOR
+            self.text_ref_color = self.cur_color - np.array(BLACK)
+
+            self.stage_txt = tkinter.Label(self.master,\
+                bg= "#%02x%02x%02x" % (int(self.cur_color[0]), int(self.cur_color[1]), int(self.cur_color[2])),\
+                fg = "#%02x%02x%02x" % (int(self.text_cur_color[0]), int(self.text_cur_color[1]), int(self.text_cur_color[2])),\
+                text='FASE '+str(self.stage), font=Font(family='Helvetica', size=48, weight='bold'))
+            self.stage_txt.place(x=self.sw/2,y=self.sh/2,anchor='center')
+
+            self.stageFade()
+        else:
+            txt = "| Going to Stage 5 Screen"
+            print(txt)
+            from Stage5 import Stage5
+            Stage5(self.master, self, self.main_bg)
+
+    def goToStage6(self,fade=True):
+        if fade:
+            removeButtons(self.buttons)
+            destroyWidgets(self.widgets)
+            self.cur_color = BG_COLOR
+            self.ref_color = self.cur_color - np.array(random.sample([YELLOW,RED,BLUE],1)[0])
+            self.text_cur_color = BG_COLOR
+            self.text_ref_color = self.cur_color - np.array(BLACK)
+
+            self.stage_txt = tkinter.Label(self.master,\
+                bg= "#%02x%02x%02x" % (int(self.cur_color[0]), int(self.cur_color[1]), int(self.cur_color[2])),\
+                fg = "#%02x%02x%02x" % (int(self.text_cur_color[0]), int(self.text_cur_color[1]), int(self.text_cur_color[2])),\
+                text='FASE '+str(self.stage), font=Font(family='Helvetica', size=48, weight='bold'))
+            self.stage_txt.place(x=self.sw/2,y=self.sh/2,anchor='center')
+
+            self.stageFade()
+        else:
+            txt = "| Going to Stage 6 Screen"
+            print(txt)
+            from Stage6 import Stage6
+            Stage6(self.master, self, self.main_bg)
 
     def goToNickName(self):
         txt = "| Going to Nickname Screen"

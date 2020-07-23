@@ -40,6 +40,7 @@ class IntroStage(Screen):
 		self.text_display.insert('insert',text)
 		self.text_display.configure(state='disabled')
 		self.text_display.place(x=self.sw/2,y=self.sh/2,anchor='center')
+		self.widgets.append(self.text_display)
 
 		# b. start button
 		if (self.stage == 1):
