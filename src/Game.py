@@ -108,7 +108,7 @@ class Game(object):
             self.main_bg.configure(bg="#%02x%02x%02x" % (0, 200, 0))
             # self.points.set(int(self.points.get())+int(self.settings['points']))
             # self.master.after(int(float(self.settings['iti'])*1000),self.replay)
-            self.points.set(int(self.points.get())+10)
+            self.points.set(int(self.points.get())+1)
             self.master.after(1*1000, self.replay)
 
     def negative_reinforce_action(self):

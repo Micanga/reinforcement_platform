@@ -24,6 +24,7 @@ class IntroStage(Screen):
 		# 1. Initilising GUI Components
 		super().__init__(master, prev_sc, main_bg,screen_name='IntroStage')
 		print(self.nickname,self.start_time,self.group,self.stage)
+		self.points = self.prev_sc.points
 
 		# 2. Buttons Functions
 		# a. intro text
