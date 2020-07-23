@@ -123,56 +123,57 @@ class Screen(Game):
     """
     def createButtons(self, center_h, center_w, radius):
             # print(self.createb_txt)
-        self.button_1 = CircularButton(self.master, 100, 100,
+        diameter = 200
+        self.button_1 = CircularButton(self.master, diameter, diameter,
                                        color=RED, bg=BG_COLOR, command=self.button1_click)
         self.button_1.place(x=center_w-radius,
                             y=center_h,
                             anchor='center')
         self.buttons.append(self.button_1)
 
-        self.button_2 = CircularButton(self.master, 100, 100,
+        self.button_2 = CircularButton(self.master, diameter, diameter,
                                        color=RED, bg=BG_COLOR, command=self.button2_click)
         self.button_2.place(x=center_w-radius*cos(pi/7),
                             y=center_h-radius*sin(pi/7),
                             anchor='center')
         self.buttons.append(self.button_2)
 
-        self.button_3 = CircularButton(self.master, 100, 100,
+        self.button_3 = CircularButton(self.master, diameter, diameter,
                                        color=RED, bg=BG_COLOR, command=self.button3_click)
         self.button_3.place(x=center_w-radius*cos(2*pi/7),
                             y=center_h-radius*sin(2*pi/7),
                             anchor='center')
         self.buttons.append(self.button_3)
 
-        self.button_4 = CircularButton(self.master, 100, 100,
+        self.button_4 = CircularButton(self.master, diameter, diameter,
                                        color=RED, bg=BG_COLOR, command=self.button4_click)
         self.button_4.place(x=center_w-radius*cos(3*pi/7),
                             y=center_h-radius*sin(3*pi/7),
                             anchor='center')
         self.buttons.append(self.button_4)
 
-        self.button_5 = CircularButton(self.master, 100, 100,
+        self.button_5 = CircularButton(self.master, diameter, diameter,
                                        color=RED, bg=BG_COLOR, command=self.button5_click)
         self.button_5.place(x=center_w-radius*cos(4*pi/7),
                             y=center_h-radius*sin(4*pi/7),
                             anchor='center')
         self.buttons.append(self.button_5)
 
-        self.button_6 = CircularButton(self.master, 100, 100,
+        self.button_6 = CircularButton(self.master, diameter, diameter,
                                        color=RED, bg=BG_COLOR, command=self.button6_click)
         self.button_6.place(x=center_w-radius*cos(5*pi/7),
                             y=center_h-radius*sin(5*pi/7),
                             anchor='center')
         self.buttons.append(self.button_6)
 
-        self.button_7 = CircularButton(self.master, 100, 100,
+        self.button_7 = CircularButton(self.master, diameter, diameter,
                                        color=RED, bg=BG_COLOR, command=self.button7_click)
         self.button_7.place(x=center_w-radius*cos(6*pi/7),
                             y=center_h-radius*sin(6*pi/7),
                             anchor='center')
         self.buttons.append(self.button_7)
 
-        self.button_8 = CircularButton(self.master, 100, 100,
+        self.button_8 = CircularButton(self.master, diameter, diameter,
                                        color=RED, bg=BG_COLOR, command=self.button8_click)
         self.button_8.place(x=center_w-radius*cos(pi),
                             y=center_h-radius*sin(pi),

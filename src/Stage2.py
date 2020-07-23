@@ -26,7 +26,7 @@ class Stage2(Screen):
 		# 2. creating the result file
 		log.create_file(self.nickname,self.group,self.stage,self.start_time)
 
-		# c. interface components
+		# a. interface components
 		self.createButtons(self.center_h, self.center_w, self.radius)
 		utils.ableButtonsAndMouse(self)
 
