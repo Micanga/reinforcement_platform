@@ -19,6 +19,7 @@ BG_COLOR = BABY_BLUE
 class Game(object):
 
     def __init__(self):
+        self.test = True
         return
 
     def auto_play(self):
@@ -56,8 +57,9 @@ class Game(object):
         return round_counter
         
     def load_sfx(self,sfx_path='local/default/sfx.wav'):
-        mixer.init()
-        mixer.music.load(sfx_path)
+        if not self.test:
+            mixer.init()
+            mixer.music.load(sfx_path)
 
     def check_action(self, clicked_button):
         # a. updating game log
@@ -74,7 +76,8 @@ class Game(object):
             self.cur_color = np.array(BG_COLOR)
             self.ref_color = np.array(BG_COLOR) - np.array(GREEN)
 
-            mixer.music.play() 
+            if not self.test:
+                mixer.music.play() 
             self.positive_reinforce_action()
             
         else:
@@ -171,7 +174,8 @@ class Game(object):
                     if self.settings['return_click'] == False:
                         # - creating the buttons and enabling the mouse
                         self.createButtons(self.center_h, self.center_w, self.radius)
-                        reset_mouse_position(self)
+                        if not self.test:
+                            reset_mouse_position(self)
                         ableMouse(self)
                         if self.AUTO:
                             self.auto_play()
@@ -189,7 +193,8 @@ class Game(object):
                 if self.settings['return_click'] == False:
                     # - creating the buttons and enabling the mouse
                     self.createButtons(self.center_h, self.center_w, self.radius)
-                    reset_mouse_position(self)
+                    if not self.test:
+                        reset_mouse_position(self)
                     ableMouse(self)
                     if self.AUTO:
                         self.auto_play()

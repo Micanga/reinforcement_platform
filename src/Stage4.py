@@ -7,7 +7,8 @@ import utils
 class Stage4(Screen):
 
 	def __init__(self, master, prev_sc, main_bg):
-		self.AUTO = False
+		self.AUTO = True
+
 		# 1. Initializing the necessary variables
 		super().__init__(master, prev_sc, main_bg, screen_name='Stage 4')
 		self.init_variables()
@@ -30,15 +31,13 @@ class Stage4(Screen):
 		if self.AUTO:
 			self.auto_play()
 
-	def fadeNextStage(self):
-		txt = "| Going to Stage 5 Screen"
+	def nextStage(self):
+		txt = "| Going to Stage 2 Screen"
 		print(txt)
 
-		# Nickname Screen
-		self.stage = 5
+		self.stage = 2
 		from IntroStage import IntroStage
 		IntroStage(self.master,self,self.main_bg)
-
 
 	# THE STAGE METHODS
 	def check_stage_end_conditions(self):
