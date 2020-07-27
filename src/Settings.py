@@ -22,35 +22,28 @@ class Settings(Screen):
 
 		# b. min_blocks button
 		self.minb_label, self.minb_entry = \
-			self.create_setting_field('Minimo de Blocos por Fase:',self.sw/4,2*self.sh/7)
+			self.create_setting_field('Minimo de Blocos por Fase:',self.sw/4,2.5*self.sh/7)
 		self.minb_entry.insert(END, str(self.settings['min_blocks']))
 		self.widgets.append(self.minb_label)
 		self.buttons.append(self.minb_entry)
 
 		# c. max_blocks button
 		self.maxb_label, self.maxb_entry = \
-			self.create_setting_field('Máximo de Blocos por Fase:',self.sw/4,3*self.sh/7)
+			self.create_setting_field('Máximo de Blocos por Fase:',self.sw/4,4*self.sh/7)
 		self.maxb_entry.insert(END, str(self.settings['max_blocks']))
 		self.widgets.append(self.maxb_label)
 		self.buttons.append(self.maxb_entry)
 
 		# d. IRT_threshold button
 		self.irt_label, self.irt_entry = \
-			self.create_setting_field('Limiar IRT:',self.sw/4,4*self.sh/7)
-		self.irt_entry.insert(END, str(self.settings['IRT_threshold']))
-		self.widgets.append(self.irt_label)
-		self.buttons.append(self.irt_entry)
-
-		# d. IRT_threshold button
-		self.irt_label, self.irt_entry = \
-			self.create_setting_field('Limiar IRT:',self.sw/4,4*self.sh/7)
+			self.create_setting_field('Limiar IRT:',3*self.sw/4,1*self.sh/7)
 		self.irt_entry.insert(END, str(self.settings['IRT_threshold']))
 		self.widgets.append(self.irt_label)
 		self.buttons.append(self.irt_entry)
 
 		# e. return click
 		self.check_label, self.check_button, self.check_var = \
-			self.create_setting_field('Habilitar clique de retorno:',3*self.sw/4,self.sh/7,type_='check')
+			self.create_setting_field('Habilitar clique de retorno:',3*self.sw/4,2.5*self.sh/7,type_='check')
 		self.check_var.set(self.settings['return_click'])
 		self.check_button.var = self.check_var
 		self.widgets.append(self.check_label)
@@ -58,7 +51,7 @@ class Settings(Screen):
 
 		# f. enable file selection (for aco) button
 		self.aco_label, self.aco_button, self.aco_var = \
-			self.create_setting_field('Selecionar arquivo ACO:',3*self.sw/4,2*self.sh/7,type_='check')
+			self.create_setting_field('Selecionar arquivo ACO:',3*self.sw/4,4*self.sh/7,type_='check')
 		self.aco_var.set(self.settings['choose_aco'])
 		self.aco_button.var = self.aco_var
 		self.widgets.append(self.aco_label)
@@ -90,7 +83,7 @@ class Settings(Screen):
 										bg = "#%02x%02x%02x" % (255, 255, 255), insertbackground = 'black',\
 										highlightcolor = "#%02x%02x%02x" % (180,180,180),\
 										 highlightbackground= "#%02x%02x%02x" % (50,50,50),\
-										bd=0, width = 33, justify='center')
+										bd=2, width = 33, relief="solid", justify='center')
 			entry.place(x = x, y = y+50,anchor='center')
 			
 			return label,entry
@@ -99,12 +92,12 @@ class Settings(Screen):
 			check_var = tkinter.IntVar()
 			tkimage_off = tkinter.PhotoImage(file='local/default/off_icon.png')
 			tkimage_on = tkinter.PhotoImage(file='local/default/on_icon.png')
-			entry = tkinter.Checkbutton(self.master, image=tkimage_off, compound='center',\
-			 highlightcolor = 'white', highlightbackground= 'white', var=check_var,\
-			 selectimage=tkimage_on,relief='flat',offrelief='flat',bd=0,padx=0,pady=0,indicatoron=False)
+			entry = tkinter.Checkbutton(self.master, image=tkimage_off, compound='center',background='white',\
+			 highlightcolor = 'white', highlightbackground= 'white', var=check_var,highlightthickness=-1,\
+			 selectimage=tkimage_on,relief='flat',overrelief='flat',offrelief='flat',bd=-1,padx=-1,pady=-1,indicatoron=False)
 			entry.image = tkimage_off
 			entry.selectimage = tkimage_on
-			entry.place(x = x, y = y+50,anchor='center')
+			entry.place(x = x, y = y+60,anchor='center')
 
 			return label,entry, check_var
 		else:
