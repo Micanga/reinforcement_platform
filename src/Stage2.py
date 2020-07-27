@@ -22,7 +22,6 @@ class Stage2(Screen):
 
 		# b. reinforce vectors
 		self.VR5 = [1, 1, 1, 2, 3, 4, 5, 7, 10, 17]
-		self.VR20 = [1, 3, 6, 9, 12, 16, 21, 28, 38, 66]
 
 		# 2. creating the result file
 		log.create_file(self.nickname,self.group,self.stage,self.start_time)
