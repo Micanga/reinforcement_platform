@@ -12,6 +12,10 @@ class Stage3(Screen):
 		super().__init__(master, prev_sc, main_bg,screen_name='Stage 3')
 		self.init_variables()
 
+		# 2. creating the result file
+		log.create_file(self.nickname,self.group,self.stage,self.start_time)
+
+
 		# 2. Setting the screen buttons and widgets
 		# a. buttons
 		self.createButtons(self.center_h, self.center_w, self.radius)
@@ -22,6 +26,9 @@ class Stage3(Screen):
 
 		# c. sound effects
 		self.load_sfx()
+
+		self.aco_file = None
+		self.setReinforcedClicks()
 
 		blocksS1 = self.getAllBlocks(self.group,self.stage-1) #(stage 1 for stage 3) or (stage 4 for stage 6) 
 		blocksS2 = self.getAllBlocks(self.group,self.stage-2) #(stage 2 for stage 3) or (stage 5 for stage 6) 	

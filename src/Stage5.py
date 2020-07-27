@@ -3,6 +3,9 @@ from tkinter import *
 from utils import *
 from Screen import Screen
 import numpy as np
+import log
+import utils
+
 
 class Stage5(Screen):
 	
