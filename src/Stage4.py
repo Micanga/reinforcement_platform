@@ -32,10 +32,11 @@ class Stage4(Screen):
 			self.auto_play()
 
 	def nextStage(self):
-		txt = "| Going to Stage 2 Screen"
+		
+		txt = "| Going to Stage 5 Screen"
 		print(txt)
 
-		self.stage = 2
+		self.stage = 5
 		from IntroStage import IntroStage
 		IntroStage(self.master,self,self.main_bg)
 

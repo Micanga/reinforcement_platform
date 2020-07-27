@@ -4,7 +4,7 @@ from Screen import Screen
 import utils
 from datetime import timedelta
 
-class Stage3(Screen):
+class Stage6(Screen):
 
 	def __init__(self, master, prev_sc, main_bg):
 		self.AUTO = False

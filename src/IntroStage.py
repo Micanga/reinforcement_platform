@@ -60,6 +60,14 @@ class IntroStage(Screen):
 			self.start_button = \
 				create_button(self.master,'AVANÇAR',self.goToStage4,\
 					self.sw/2,5*self.sh/6,size=18)
+		elif (self.stage == 5):
+			self.start_button = \
+				create_button(self.master,'AVANÇAR',self.goToStage5,\
+					self.sw/2,5*self.sh/6,size=18)
+		elif (self.stage == 6):
+			self.start_button = \
+				create_button(self.master,'AVANÇAR',self.goToStage6,\
+					self.sw/2,5*self.sh/6,size=18)
 
 		self.widgets.append(self.start_button)
 		self.buttons.append(self.start_button)

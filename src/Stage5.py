@@ -1,10 +1,10 @@
 import tkinter
 from tkinter import *
 from utils import *
-from StageScreen import StageScreen
+from Screen import Screen
 import numpy as np
 
-class Stage5(StageScreen):
+class Stage5(Screen):
 	
 	def __init__(self, master, prev_sc, main_bg):
 		self.AUTO = True
@@ -38,10 +38,10 @@ class Stage5(StageScreen):
 			self.auto_play()
 
 	def nextStage(self):
-		txt = "| Going to Stage 3 Screen"
+		txt = "| Going to Stage 6 Screen"
 		print(txt)
 
-		self.stage = 3
+		self.stage = 6
 		from IntroStage import IntroStage
 		IntroStage(self.master,self,self.main_bg)
 
