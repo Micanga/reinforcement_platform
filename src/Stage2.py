@@ -13,7 +13,7 @@ from Screen import Screen
 class Stage2(Screen):
 	
 	def __init__(self, master, prev_sc, main_bg):
-		self.AUTO = True
+		self.AUTO = False
 		
 		# 1. Initializing the necessary variables
 		# a. GUI variables
@@ -22,6 +22,8 @@ class Stage2(Screen):
 
 		# b. reinforce vectors
 		self.VR5 = [1, 1, 1, 2, 3, 4, 5, 7, 10, 17]
+		#testing stage 3
+		#self.VR5 = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 		self.VR20 = [1, 3, 6, 9, 12, 16, 21, 28, 38, 66]
 
 		# 2. creating the result file
