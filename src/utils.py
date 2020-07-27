@@ -12,6 +12,8 @@ import random
 import re
 import os
 
+ENCODE = 'utf-8'
+
 # GUI
 def set_bg(master,main_bg,path):
 	from PIL import Image, ImageTk
@@ -87,14 +89,14 @@ def load_text(stage):
 	saved_texts = [name for name in os.listdir('local/texts/stage'+str(stage)+'/')]
 	saved_texts.sort()
 	if len(saved_texts) > 0:
-		with open('local/texts/stage'+str(stage)+'/'+saved_texts[-1],encoding='latin-1') as prev_file:
+		with open('local/texts/stage'+str(stage)+'/'+saved_texts[-1],encoding=ENCODE) as prev_file:
 			for line in prev_file:
-				text += line[:-1]
+				text += line
 		print("| -- custom text loaded.")
 	else:
-		with open('local/default/stage'+str(stage)+'.txt',encoding='latin-1') as default_text:
+		with open('local/default/stage'+str(stage)+'.txt',encoding=ENCODE) as default_text:
 			for line in default_text:
-				text += line[:-1]
+				text += line
 		print("| -- default text loaded.")
 
 	return text
