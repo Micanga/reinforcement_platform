@@ -263,8 +263,8 @@ class Screen(Game):
     """
     def stageFade(self):
         # a. calculating the color fade
-        self.cur_color -= (0.025*self.ref_color)
-        self.text_cur_color -= (0.025*self.text_ref_color)
+        self.cur_color -= (0.015*self.ref_color)
+        self.text_cur_color -= (0.015*self.text_ref_color)
 
         # b. checking the fade stop
         if (int(self.cur_color[0]) >= 0 and int(self.cur_color[1]) >= 0 and int(self.cur_color[2]) >= 0\
@@ -274,7 +274,7 @@ class Screen(Game):
             self.stage_txt.configure(
                 bg="#%02x%02x%02x" % (int(self.cur_color[0]), int(self.cur_color[1]), int(self.cur_color[2])),
                 fg="#%02x%02x%02x" % (int(self.text_cur_color[0]), int(self.text_cur_color[1]), int(self.text_cur_color[2])))
-            self.master.after(100, self.stageFade)
+            self.master.after(50, self.stageFade)
         else:
             if self.stage == 1:
                 self.goToStage1(fade=False)
