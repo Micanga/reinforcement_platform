@@ -70,9 +70,10 @@ class Stage6(Screen):
 
 	def conditionalReinforce(self):
 		#print(type(self))
-		if(self.isFirstReinforce == True):
+		if(self.isFirstReinforce == True and len(self.dateTimeReinforce) > 0):
 	
 			#dateTimeReinforce[0] is after to the acctually click
+
 			if(self.dateTimeReinforce[0] < self.game[-1]['time2answer'][-1]):
 				self.isFirstReinforce = False
 			else:
@@ -80,17 +81,16 @@ class Stage6(Screen):
 				return False
 
 		if(self.isFirstReinforce == False):
-			if(len(self.dateTimeReinforce) > 0):
-		
-				accumalator = timedelta(0,0,0)
-				#dateTimeReinforce[0] is before to the acctually click
-				while(len(self.dateTimeReinforce) > 0 and (self.dateTimeReinforce[0] + accumalator) < (self.game[-1]['time2answer'][-1])):
-					accumalator += self.dateTimeReinforce[0]
-					self.dateTimeReinforce.pop(0)
+			
+			accumalator = timedelta(0,0,0)
+			#dateTimeReinforce[0] is before to the acctually click
+			while(len(self.dateTimeReinforce) > 0 and (self.dateTimeReinforce[0] + accumalator) < (self.game[-1]['time2answer'][-1])):
+				accumalator += self.dateTimeReinforce[0]
+				self.dateTimeReinforce.pop(0)
 
-				return True
+			return True
 
-			else:
-				return False
+		else:
+			return False
 
 		

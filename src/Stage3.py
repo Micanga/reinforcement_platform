@@ -77,7 +77,7 @@ class Stage3(Screen):
 
 	def conditionalReinforce(self):
 		#print(type(self))
-		if(self.isFirstReinforce == True):
+		if(self.isFirstReinforce == True and len(self.dateTimeReinforce) > 0):
 	
 			#dateTimeReinforce[0] is after to the acctually click
 			if(self.dateTimeReinforce[0] < self.game[-1]['time2answer'][-1]):
