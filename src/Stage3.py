@@ -12,6 +12,7 @@ class Stage3(Screen):
 		self.AUTO = True
 
 		# 1. Initializing the necessary variables
+		# a. GUI variables
 		super().__init__(master, prev_sc, main_bg,screen_name='Stage 3')
 		self.init_variables()
 
@@ -35,30 +36,6 @@ class Stage3(Screen):
 		blocksS1 = self.getAllBlocks(self.group,self.stage-1) #(stage 1 for stage 3) or (stage 4 for stage 6) 
 		blocksS2 = self.getAllBlocks(self.group,self.stage-2) #(stage 2 for stage 3) or (stage 5 for stage 6) 	
 		self.blocksS3 = self.settings['max_blocks'] - (len(blocksS1) +  len(blocksS2)) # number of blocks from stage 3 or stage 6
-		
-
-		stageForReinforce = self.stage - 1
-
-		blocksForReinforce = []
-		self.dateTimeReinforce = []
-		self.isFirstReinforce = True
-		
-		#get all the blocks from the stage 2 or 5
-		for block in self.game:
-			if block['group'] == self.group and block['stage'] == stageForReinforce:
-				blocksForReinforce.append(block)
-
-		self.allClicks = []
-		sumClicks = 0
-		for block in blocksForReinforce:
-			#get the index for the clicks that have been reinforced
-			res = [i for i, val in enumerate(block['reinforced']) if val]
-			#select the datetimes
-			for i in res:
-				self.dateTimeReinforce.append(block['time2answer'][i])
-				sumClicks += i
-				self.allClicks.append(sumClicks)
-
 		self.setReinforcedClicks()
 			
 		# d. auto-play
@@ -77,19 +54,42 @@ class Stage3(Screen):
 		return False
 
 	def setReinforcedClicks(self,offset=0):
-		if self.group == 1 or self.group == 3: # applying the VR scheme [G1]
-			self.reinforced_clicks = np.cumsum([time.total_seconds() + offset for time in self.dateTimeReinforce])
-		else:
-			self.reinforced_clicks = np.array(self.allClicks) + offset
+		# a. choosing the file to aco
+		if self.aco_file is None:
+			self.aco_file = self.nickname+'_G'+str(self.group)+'_F'+str(self.stage -1)+\
+				'_'+self.start_time.strftime("%d-%m-%Y_%Hh%Mm%Ss")+'.csv'
+			print('ACO FILE:',self.aco_file)
+			
+		# b. defining the reinforcement condition
+		if self.group == 1 or self.group == 3: # applying the VI(auto-aco) scheme [G1 and G3]
+			counter, self.reinforced_clicks = 0, []
+			with open("./results/"+self.aco_file) as ref_file:
+				for line in ref_file:
+					reinf_flag = line.split(';')[0]
+					cum_time = line.split(';')[7]
+					if counter != 0 and reinf_flag == 'SIM':
+						self.reinforced_clicks.append(float(cum_time) + offset)
+					counter += 1
+
+		else: # applying the VR(auto-aco) scheme [G2]
+			counter, self.reinforced_clicks = 0, []
+			with open("./results/"+self.aco_file) as ref_file:
+				for line in ref_file:
+					reinf_flag = line.split(';')[0]
+					if counter != 0 and reinf_flag == 'SIM':
+						self.reinforced_clicks.append(counter + offset)
+					counter += 1
 		print(self.reinforced_clicks)
-		
+	
+	#check this function for other blocks (frequency is acumulating )
 	def conditionalReinforce(self):
-		if (self.group == 1 or self.group == 3):
-			time2ans_cum = np.cumsum([time.total_seconds() for time in self.game[-1]['time2answer']])[-1]
+		# checking the reinforcement for group 1 and 3 [VI (auto-aco)]
+		if self.group == 1 or self.group == 3: 
+			time2ans_cum = np.cumsum([time.total_seconds() for g in self.game if g['stage'] == self.game[-1]['stage'] for time in g['time2answer'] ] )[-1]
 			if self.reinforce_index > len(self.reinforced_clicks) - 1 or\
 			time2ans_cum > self.reinforced_clicks[-1]:
 				self.reinforce_index = 0
-				self.setReinforcedClicks()
+				self.setReinforcedClicks(time2ans_cum)
 				return False
 			else:
 				if self.reinforced_clicks[self.reinforce_index] <= time2ans_cum <= self.reinforced_clicks[self.reinforce_index+1]:
@@ -99,9 +99,10 @@ class Stage3(Screen):
 					if time2ans_cum > self.reinforced_clicks[self.reinforce_index+1]:
 						self.reinforce_index += 1
 					return False
+		# checking the reinforcement for group 2 [VR (auto-aco)]
 		else:
-			if len(self.game[-1]['reinforced']) + 1 > self.reinforced_clicks[-1]:
-				self.setReinforcedClicks()
+			if sum(self.game[-1]['frequency'].values()) > self.reinforced_clicks[-1]:
+				self.setReinforcedClicks(sum(self.game[-1]['frequency'].values()))
 				return False
 			else:
-				return any(len(self.game[-1]['reinforced']) + 1 == self.reinforced_clicks)
+				return any(sum(self.game[-1]['frequency'].values()) == self.reinforced_clicks)

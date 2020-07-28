@@ -274,8 +274,6 @@ class Game(object):
         self.round_start_time = datetime.datetime.now()
         self.block_start_time = datetime.datetime.now()
 
-
-
     #get All blocks from the group and stage specified    
 
     def getAllBlocks(self,group,stage):

@@ -64,7 +64,7 @@ class Stage2(Screen):
 				return (current_click in self.reinforced_clicks)
 		# checking the reinforcement for group 2 [VI (aco)]
 		elif self.group == 2:
-			time2ans_cum = np.cumsum([time.total_seconds() for time in self.game[-1]['time2answer']])[-1]
+			time2ans_cum = np.cumsum([time.total_seconds() for g in self.game if g['stage'] == self.game[-1]['stage'] for time in g['time2answer'] ] )[-1]
 			if self.reinforce_index > len(self.reinforced_clicks) - 1 or\
 			time2ans_cum > self.reinforced_clicks[-1]:
 				self.reinforce_index = 0
@@ -80,11 +80,11 @@ class Stage2(Screen):
 					return False
 		# checking the reinforcement for group 3 [VR (aco)]
 		else:
-			if len(self.game[-1]['reinforced']) + 1 > self.reinforced_clicks[-1]:
-				self.setReinforcedClicks(len(self.game[-1]['reinforced']) + 1)
+			if sum(self.game[-1]['frequency'].values()) > self.reinforced_clicks[-1]:
+				self.setReinforcedClicks(sum(self.game[-1]['frequency'].values()))
 				return False
 			else:
-				return any(len(self.game[-1]['reinforced']) + 1 == self.reinforced_clicks)
+				return any(sum(self.game[-1]['frequency'].values()) == self.reinforced_clicks)
 
 	# THE STAGE METHODS
 	def check_stage_end_conditions(self): 

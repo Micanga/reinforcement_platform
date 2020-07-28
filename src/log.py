@@ -55,7 +55,7 @@ def write_round(game,nickname,group,stage,start_time):
 		if len(game[-1]['answer']) > 1 else ''
 
 	time2ans = str(game[-1]['time2answer'][-1])
-	time2ans_cum = str(np.cumsum([time.total_seconds() for time in game[-1]['time2answer']])[-1])
+	time2ans_cum = str(np.cumsum([time.total_seconds() for g in game if g['stage'] == game[-1]['stage'] for time in g['time2answer'] ] )[-1])
 	total_time = sum([time.total_seconds() for time in game[-1]['time2answer']])/60.0
 
 	answer_rate = str(total_answers/total_time)
