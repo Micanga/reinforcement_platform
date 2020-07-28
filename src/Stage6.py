@@ -59,6 +59,9 @@ class Stage6(Screen):
 		
 		#print(self.game)
 
+	def nextStage(self):
+		myReturnMenuPopUp(self,'Parabéns! Você terminou o experimento!\nPor favor, contacte o aplicador para\nreceber futuras instruções. :)')
+		
 	# THE STAGE METHODS
 	def check_stage_end_conditions(self):
 

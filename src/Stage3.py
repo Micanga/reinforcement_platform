@@ -30,10 +30,7 @@ class Stage3(Screen):
 		self.load_sfx()
 
 		self.aco_file = None
-<<<<<<< HEAD
-=======
 		self.setReinforcedClicks()
->>>>>>> 8b0944fe6f1b5b08031fcd2c3fa4821dc32d8364
 		self.reinforce_index = 0
 
 		blocksS1 = self.getAllBlocks(self.group,self.stage-1) #(stage 1 for stage 3) or (stage 4 for stage 6) 
@@ -72,6 +69,9 @@ class Stage3(Screen):
 			self.auto_play()
 		
 		#print(self.game)
+	
+	def nextStage(self):
+		myReturnMenuPopUp(self,'Parabéns! Você terminou o experimento!\nPor favor, contacte o aplicador para\nreceber futuras instruções. :)')
 
 	# THE STAGE METHODS
 	def check_stage_end_conditions(self):
