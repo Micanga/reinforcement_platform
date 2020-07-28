@@ -30,7 +30,6 @@ class Stage3(Screen):
 		self.load_sfx()
 
 		self.aco_file = None
-		self.setReinforcedClicks()
 		self.reinforce_index = 0
 
 		blocksS1 = self.getAllBlocks(self.group,self.stage-1) #(stage 1 for stage 3) or (stage 4 for stage 6) 
@@ -51,7 +50,8 @@ class Stage3(Screen):
 				blocksForReinforce.append(block)
 
 
-		#for all blocks
+		allClicks = []
+		sumClicks = 0
 		for block in blocksForReinforce:
 			print(block)
 			#get the indice for the clicks that have been reinforced
@@ -61,6 +61,8 @@ class Stage3(Screen):
 			#select the datetimes
 			for i in res:
 				self.dateTimeReinforce.append(block['time2answer'][i])
+				sumClicks += i
+				allClicks.append(sumClicks)
 
 		self.setReinforcedClicks()
 			
@@ -69,9 +71,6 @@ class Stage3(Screen):
 			self.auto_play()
 		
 		#print(self.game)
-	
-	def nextStage(self):
-		myReturnMenuPopUp(self,'Parabéns! Você terminou o experimento!\nPor favor, contacte o aplicador para\nreceber futuras instruções. :)')
 
 	# THE STAGE METHODS
 	def check_stage_end_conditions(self):
@@ -85,13 +84,8 @@ class Stage3(Screen):
 
 	def setReinforcedClicks(self,offset=0):
 		if self.group == 1 or self.group == 3: # applying the VR scheme [G1]
-			print("Class of reinforced clicks")
-			print(self)
 			self.reinforced_clicks = self.dateTimeReinforce
 			self.reinforced_clicks = np.cumsum([time.total_seconds() for time in self.reinforced_clicks])
-			print("setReinforced")
-			print(self.reinforced_clicks)
-
 		
 	def conditionalReinforce(self):
 		#print(type(self))
