@@ -19,7 +19,6 @@ class Stage5(Screen):
 
 		# b. reinforce vectors
 		self.VR20 = [1, 3, 6, 9, 12, 16, 21, 28, 38, 66]
-		self.VR20 = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 
 		# 2. creating the result file
 		log.create_file(self.nickname,self.group,self.stage,self.start_time)
@@ -51,7 +50,7 @@ class Stage5(Screen):
 
 	#check this function for other blocks (frequency is acumulating )
 	def conditionalReinforce(self):
-		# checking the reinforcement for group 1 [VR-5]
+		# checking the reinforcement for group 1 [VR-20]
 		if self.group == 1:
 			current_click = sum(self.game[-1]['frequency'].values())
 			if current_click > self.reinforced_clicks[-1]:
@@ -62,11 +61,19 @@ class Stage5(Screen):
 		# checking the reinforcement for group 2 [VI (aco)]
 		elif self.group == 2:
 			time2ans_cum = np.cumsum([time.total_seconds() for time in self.game[-1]['time2answer']])[-1]
-			if time2ans_cum > self.reinforced_clicks[-1]:
+			if self.reinforce_index > len(self.reinforced_clicks) or\
+			time2ans_cum > self.reinforced_clicks[-1]:
+				self.reinforce_index = 0
 				self.setReinforcedClicks(time2ans_cum)
 				return False
 			else:
-				return any(time2ans_cum < self.reinforced_clicks)
+				if self.reinforced_clicks[self.reinforce_index] <= time2ans_cum <= self.reinforced_clicks[self.reinforce_index+1]:
+					self.reinforce_index += 1
+					return True
+				else:
+					if time2ans_cum > self.reinforced_clicks[self.reinforce_index+1]:
+						self.reinforce_index += 1
+					return False
 		# checking the reinforcement for group 3 [VR (aco)]
 		else:
 			if len(self.game[-1]['reinforced']) + 1 > self.reinforced_clicks[-1]:
@@ -88,7 +95,7 @@ class Stage5(Screen):
 
 	def setReinforcedClicks(self,offset=0):
 		if self.group == 1: # applying the VR scheme [G1]
-			self.reinforced_clicks = random.sample(self.VR20,5) # five numbers of list VR5 without replacement
+			self.reinforced_clicks = random.sample(self.VR20,5) # five numbers of list VR20 without replacement
 			self.reinforced_clicks = np.array(np.cumsum(self.reinforced_clicks)) # accumulated sum of list VR5 without replacement
 			self.reinforced_clicks += offset # addition of offset clicks
 
@@ -108,8 +115,9 @@ class Stage5(Screen):
 				counter, self.reinforced_clicks = 0, []
 				with open("./results/"+self.aco_file) as ref_file:
 					for line in ref_file:
+						reinf_flag = line.split(';')[0]
 						cum_time = line.split(';')[7]
-						if counter != 0:
+						if counter != 0 and reinf_flag == 'SIM':
 							self.reinforced_clicks.append(float(cum_time) + offset)
 						counter += 1
 
@@ -121,5 +129,3 @@ class Stage5(Screen):
 						if counter != 0 and reinf_flag == 'SIM':
 							self.reinforced_clicks.append(counter + offset)
 						counter += 1
-
-       
