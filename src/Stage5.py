@@ -34,6 +34,7 @@ class Stage5(Screen):
 		self.load_sfx()
 
 		self.aco_file = None
+		self.reinforce_index = 0
 		self.setReinforcedClicks()
 		
 		# d. auto-play
