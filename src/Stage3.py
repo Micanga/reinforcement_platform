@@ -5,17 +5,18 @@ import utils
 from datetime import timedelta
 import log
 import numpy as np
+
 class Stage3(Screen):
 
 	def __init__(self, master, prev_sc, main_bg):
 		self.AUTO = False
+
 		# 1. Initializing the necessary variables
 		super().__init__(master, prev_sc, main_bg,screen_name='Stage 3')
 		self.init_variables()
 
 		# 2. creating the result file
 		log.create_file(self.nickname,self.group,self.stage,self.start_time)
-
 
 		# 2. Setting the screen buttons and widgets
 		# a. buttons
@@ -29,6 +30,10 @@ class Stage3(Screen):
 		self.load_sfx()
 
 		self.aco_file = None
+<<<<<<< HEAD
+=======
+		self.setReinforcedClicks()
+>>>>>>> 8b0944fe6f1b5b08031fcd2c3fa4821dc32d8364
 		self.reinforce_index = 0
 
 		blocksS1 = self.getAllBlocks(self.group,self.stage-1) #(stage 1 for stage 3) or (stage 4 for stage 6) 

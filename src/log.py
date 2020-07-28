@@ -16,8 +16,8 @@ def write_header(filename):
 		'Frequencia Absoluta;'+\
 		'Frequencia Percentual;'+\
 		'Proporção de Alternacoes;'+\
-		'Tempo para Resposta;'+\
-		'Tempo para Resposta Acumulado;'+\
+		'Tempo para Resposta (s);'+\
+		'Tempo para Resposta Acumulado (s);'+\
 		'Taxa de Respostas;'+\
 		'Desvio Padrao da Taxa de Respostas;'+\
 		'ITR medio;'+\
