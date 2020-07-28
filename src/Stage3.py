@@ -29,8 +29,6 @@ class Stage3(Screen):
 		self.load_sfx()
 
 		self.aco_file = None
-		self.setReinforcedClicks()
-
 		self.reinforce_index = 0
 
 		blocksS1 = self.getAllBlocks(self.group,self.stage-1) #(stage 1 for stage 3) or (stage 4 for stage 6) 
@@ -62,7 +60,7 @@ class Stage3(Screen):
 			for i in res:
 				self.dateTimeReinforce.append(block['time2answer'][i])
 
-		
+		self.setReinforcedClicks()
 			
 		# d. auto-play
 		if self.AUTO:
@@ -85,26 +83,32 @@ class Stage3(Screen):
 			print("Class of reinforced clicks")
 			print(self)
 			self.reinforced_clicks = self.dateTimeReinforce
+			self.reinforced_clicks = np.cumsum([time.total_seconds() for time in self.reinforced_clicks])
+			print("setReinforced")
+			print(self.reinforced_clicks)
+
 		
 	def conditionalReinforce(self):
 		#print(type(self))
 		if (self.group == 1 or self.group == 3):
 			time2ans_cum = np.cumsum([time.total_seconds() for time in self.game[-1]['time2answer']])[-1]
-			print(self)
-			if self.reinforce_index > len(self.reinforced_clicks) or\
-			time2ans_cum > self.reinforced_clicks[-1]:
-				self.reinforce_index = 0
-				self.setReinforcedClicks(time2ans_cum)
-				return False
-			else:
-				if self.reinforced_clicks[self.reinforce_index] <= time2ans_cum <= self.reinforced_clicks[self.reinforce_index+1]:
-					self.reinforce_index += 1
-					return True
-				else:
-					if time2ans_cum > self.reinforced_clicks[self.reinforce_index+1]:
-						self.reinforce_index += 1
+			if  len(self.reinforced_clicks) > 0:
+				if self.reinforce_index > len(self.reinforced_clicks) or\
+				time2ans_cum > self.reinforced_clicks[-1]:
+					self.reinforce_index = 0
+					self.setReinforcedClicks(time2ans_cum)
 					return False
-		# checking the reinforcement for group 3 [VR (aco)]
+				else:
+					if self.reinforced_clicks[self.reinforce_index] <= time2ans_cum <= self.reinforced_clicks[self.reinforce_index+1]:
+						self.reinforce_index += 1
+						return True
+					else:
+						if  len(self.reinforced_clicks) > 1:
+							if time2ans_cum > self.reinforced_clicks[self.reinforce_index+1]:
+								self.reinforce_index += 1
+							return False
+						else: 
+							return False
 		else:
 			if len(self.game[-1]['reinforced']) + 1 > self.reinforced_clicks[-1]:
 				self.setReinforcedClicks(len(self.game[-1]['reinforced']) + 1)
