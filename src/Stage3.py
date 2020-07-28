@@ -65,6 +65,9 @@ class Stage3(Screen):
 		if self.AUTO:
 			self.auto_play()
 
+	def nextStage(self):
+		myReturnMenuPopUp(self,'Parabéns! Você terminou o experimento!\nPor favor, contacte o aplicador para\nreceber futuras instruções. :)')
+
 	# THE STAGE METHODS
 	def check_stage_end_conditions(self):
 		# if the number of blocks is the numbers block remaining
@@ -86,22 +89,19 @@ class Stage3(Screen):
 			if self.reinforce_index > len(self.reinforced_clicks) - 1 or\
 			time2ans_cum > self.reinforced_clicks[-1]:
 				self.reinforce_index = 0
-				self.setReinforcedClicks(time2ans_cum)
+				self.setReinforcedClicks()
 				return False
 			else:
 				if self.reinforced_clicks[self.reinforce_index] <= time2ans_cum <= self.reinforced_clicks[self.reinforce_index+1]:
 					self.reinforce_index += 1
 					return True
 				else:
-					if len(self.reinforced_clicks) > 1:
-						if time2ans_cum > self.reinforced_clicks[self.reinforce_index+1]:
-							self.reinforce_index += 1
-						return False
-					else: 
-						return False
+					if time2ans_cum > self.reinforced_clicks[self.reinforce_index+1]:
+						self.reinforce_index += 1
+					return False
 		else:
 			if len(self.game[-1]['reinforced']) + 1 > self.reinforced_clicks[-1]:
-				self.setReinforcedClicks(len(self.game[-1]['reinforced']) + 1)
+				self.setReinforcedClicks()
 				return False
 			else:
 				return any(len(self.game[-1]['reinforced']) + 1 == self.reinforced_clicks)
