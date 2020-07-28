@@ -23,7 +23,6 @@ class Stage2(Screen):
 		# b. reinforce vectors
 		self.VR5 = [1, 1, 1, 2, 3, 4, 5, 7, 10, 17]
 		
-
 		# 2. creating the result file
 		log.create_file(self.nickname,self.group,self.stage,self.start_time)
 
@@ -93,7 +92,6 @@ class Stage2(Screen):
 		# and the average IRT is less then the IRT threshold, finish the stage
 		if self.number_of_blocks() >= self.settings['min_blocks']\
 		and self.averageIRT() < self.settings['IRT_threshold']:
-			print(self.game)
 			return True
 		# else keep playing
 		return False
@@ -113,7 +111,7 @@ class Stage2(Screen):
 					result_files = os.listdir("./results/")
 					selected_files = [filename for filename in result_files if re.search("_G"+str(self.group-1)+"_F2_",filename) is not None]
 					self.aco_file = random.choice(selected_files)
-				print(self.aco_file)
+				print('ACO FILE:',self.aco_file)
 			
 			# b. defining the reinforcement condition
 			if self.group == 2: # applying the VI(aco) scheme [G2]
@@ -134,3 +132,4 @@ class Stage2(Screen):
 						if counter != 0 and reinf_flag == 'SIM':
 							self.reinforced_clicks.append(counter + offset)
 						counter += 1
+		print(self.reinforced_clicks)

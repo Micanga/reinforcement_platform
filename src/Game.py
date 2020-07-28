@@ -71,6 +71,7 @@ class Game(object):
 
         # b.reinforcing the action
         if self.conditionalReinforce():
+			print('Reinforced:',len(self.game[-1]['reinforced']))
             removeButtons(self.buttons)
             self.game[-1]['reinforced'].append(True)
             self.cur_color = np.array(BG_COLOR)
@@ -81,6 +82,7 @@ class Game(object):
             self.positive_reinforce_action()
             
         else:
+			print('Reinforced:',len(self.game[-1]['reinforced']))
             removeButtons(self.buttons)
             self.game[-1]['reinforced'].append(False)
             self.cur_color = np.array(BG_COLOR)
