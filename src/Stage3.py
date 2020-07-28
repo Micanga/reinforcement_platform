@@ -9,7 +9,7 @@ import numpy as np
 class Stage3(Screen):
 
 	def __init__(self, master, prev_sc, main_bg):
-		self.AUTO = False
+		self.AUTO = True
 
 		# 1. Initializing the necessary variables
 		super().__init__(master, prev_sc, main_bg,screen_name='Stage 3')
@@ -42,19 +42,16 @@ class Stage3(Screen):
 		blocksForReinforce = []
 		self.dateTimeReinforce = []
 		self.isFirstReinforce = True
-
 		
 		#get all the blocks from the stage 2 or 5
 		for block in self.game:
 			if block['group'] == self.group and block['stage'] == stageForReinforce:
 				blocksForReinforce.append(block)
 
-
-		allClicks = []
+		self.allClicks = []
 		sumClicks = 0
 		for block in blocksForReinforce:
-			print(block)
-			#get the indice for the clicks that have been reinforced
+			#get the index for the clicks that have been reinforced
 			res = [i for i, val in enumerate(block['reinforced']) if val]
 			print("This is my res")
 			print(res)
@@ -62,7 +59,7 @@ class Stage3(Screen):
 			for i in res:
 				self.dateTimeReinforce.append(block['time2answer'][i])
 				sumClicks += i
-				allClicks.append(sumClicks)
+				self.allClicks.append(sumClicks)
 
 		self.setReinforcedClicks()
 			
@@ -81,18 +78,18 @@ class Stage3(Screen):
 		# else keep playing
 		return False
 
-
 	def setReinforcedClicks(self,offset=0):
 		if self.group == 1 or self.group == 3: # applying the VR scheme [G1]
-			self.reinforced_clicks = self.dateTimeReinforce
-			self.reinforced_clicks = np.cumsum([time.total_seconds() for time in self.reinforced_clicks])
+			self.reinforced_clicks = np.cumsum([time.total_seconds() + offset for time in self.dateTimeReinforce])
+		else:
+			self.reinforced_clicks = np.array(self.allClicks) + offset
 		
 	def conditionalReinforce(self):
 		#print(type(self))
 		if (self.group == 1 or self.group == 3):
 			time2ans_cum = np.cumsum([time.total_seconds() for time in self.game[-1]['time2answer']])[-1]
 			if  len(self.reinforced_clicks) > 0:
-				if self.reinforce_index > len(self.reinforced_clicks) or\
+				if self.reinforce_index > len(self.reinforced_clicks) - 1 or\
 				time2ans_cum > self.reinforced_clicks[-1]:
 					self.reinforce_index = 0
 					self.setReinforcedClicks(time2ans_cum)
@@ -102,7 +99,7 @@ class Stage3(Screen):
 						self.reinforce_index += 1
 						return True
 					else:
-						if  len(self.reinforced_clicks) > 1:
+						if len(self.reinforced_clicks) > 1:
 							if time2ans_cum > self.reinforced_clicks[self.reinforce_index+1]:
 								self.reinforce_index += 1
 							return False
