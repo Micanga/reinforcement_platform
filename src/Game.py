@@ -71,6 +71,9 @@ class Game(object):
 
         # b.reinforcing the action
         if self.conditionalReinforce():
+            self.gif = AnimatedGIF(self.master, './local/default/coin-flip.gif')
+            self.gif.place(x=self.sw/2,y=self.sh/2,anchor='center')
+            
             print('Reinforced:',sum(self.game[-1]['frequency'].values()))
             removeButtons(self.buttons)
             self.game[-1]['reinforced'].append(True)
@@ -132,6 +135,7 @@ class Game(object):
             self.master.after(1*1000, self.replay)
 
     def replay(self):
+        self.gif.destroy()
         # 1. Writting results
         # - writing results in log file
         write_round(self.game,self.nickname,self.group,self.stage,self.start_time)
