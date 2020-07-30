@@ -103,7 +103,8 @@ class Screen(Game):
                 'max_blocks':20,\
                 'IRT_threshold':0.1,\
                 'return_click':0,\
-                'choose_aco':False
+                'choose_aco':False,\
+                'fade_flag':True,
             }
 
     def destroyAll(self, prev_sc):
@@ -290,8 +291,7 @@ class Screen(Game):
                 self.goToStage6(fade=False)
 
     def goToStage1(self,fade=True):
-        print(self.stage,fade)
-        if fade:
+        if fade and self.settings['fade_flag']:
             removeButtons(self.buttons)
             destroyWidgets(self.widgets)
             self.cur_color = BG_COLOR
@@ -313,7 +313,7 @@ class Screen(Game):
             Stage1(self.master, self, self.main_bg)
 
     def goToStage2(self,fade=True):
-        if fade:
+        if fade and self.settings['fade_flag']:
             removeButtons(self.buttons)
             destroyWidgets(self.widgets)
             self.cur_color = BG_COLOR
@@ -335,7 +335,7 @@ class Screen(Game):
             Stage2(self.master, self, self.main_bg)
 
     def goToStage3(self,fade=True):
-        if fade:
+        if fade and self.settings['fade_flag']:
             removeButtons(self.buttons)
             destroyWidgets(self.widgets)
             self.cur_color = BG_COLOR
@@ -357,7 +357,7 @@ class Screen(Game):
             Stage3(self.master, self, self.main_bg)
 
     def goToStage4(self,fade=True):
-        if fade:
+        if fade and self.settings['fade_flag']:
             removeButtons(self.buttons)
             destroyWidgets(self.widgets)
             self.cur_color = BG_COLOR
@@ -379,7 +379,7 @@ class Screen(Game):
             Stage4(self.master, self, self.main_bg)
 
     def goToStage5(self,fade=True):
-        if fade:
+        if fade and self.settings['fade_flag']:
             removeButtons(self.buttons)
             destroyWidgets(self.widgets)
             self.cur_color = BG_COLOR
@@ -401,7 +401,7 @@ class Screen(Game):
             Stage5(self.master, self, self.main_bg)
 
     def goToStage6(self,fade=True):
-        if fade:
+        if fade and self.settings['fade_flag']:
             removeButtons(self.buttons)
             destroyWidgets(self.widgets)
             self.cur_color = BG_COLOR

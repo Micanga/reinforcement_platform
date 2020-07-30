@@ -22,28 +22,28 @@ class Settings(Screen):
 
 		# b. min_blocks button
 		self.minb_label, self.minb_entry = \
-			self.create_setting_field('Minimo de Blocos por Fase:',self.sw/4,2.5*self.sh/7)
+			self.create_setting_field('Minimo de Blocos por Fase:',self.sw/4,2*self.sh/7)
 		self.minb_entry.insert(END, str(self.settings['min_blocks']))
 		self.widgets.append(self.minb_label)
 		self.buttons.append(self.minb_entry)
 
 		# c. max_blocks button
 		self.maxb_label, self.maxb_entry = \
-			self.create_setting_field('Máximo de Blocos por Fase:',self.sw/4,4*self.sh/7)
+			self.create_setting_field('Máximo de Blocos por Fase:',self.sw/4,3*self.sh/7)
 		self.maxb_entry.insert(END, str(self.settings['max_blocks']))
 		self.widgets.append(self.maxb_label)
 		self.buttons.append(self.maxb_entry)
 
 		# d. IRT_threshold button
 		self.irt_label, self.irt_entry = \
-			self.create_setting_field('Limiar IRT:',3*self.sw/4,1*self.sh/7)
+			self.create_setting_field('Limiar IRT:',self.sw/4,4*self.sh/7)
 		self.irt_entry.insert(END, str(self.settings['IRT_threshold']))
 		self.widgets.append(self.irt_label)
 		self.buttons.append(self.irt_entry)
 
 		# e. return click
 		self.check_label, self.check_button, self.check_var = \
-			self.create_setting_field('Habilitar clique de retorno:',3*self.sw/4,2.5*self.sh/7,type_='check')
+			self.create_setting_field('Deseja habilitar clique de retorno?',3*self.sw/4,self.sh/7,type_='check')
 		self.check_var.set(self.settings['return_click'])
 		self.check_button.var = self.check_var
 		self.widgets.append(self.check_label)
@@ -51,11 +51,20 @@ class Settings(Screen):
 
 		# f. enable file selection (for aco) button
 		self.aco_label, self.aco_button, self.aco_var = \
-			self.create_setting_field('Selecionar arquivo ACO:',3*self.sw/4,4*self.sh/7,type_='check')
+			self.create_setting_field('Deseja selecionar o arquivo de ACO?',3*self.sw/4,2*self.sh/7,type_='check')
 		self.aco_var.set(self.settings['choose_aco'])
 		self.aco_button.var = self.aco_var
 		self.widgets.append(self.aco_label)
 		self.buttons.append(self.aco_button)
+
+		
+		# f. enable file selection (for aco) button
+		self.fade_label, self.fade_button, self.fade_var = \
+			self.create_setting_field('Habilitar tela de início de fase?',3*self.sw/4,3*self.sh/7,type_='check')
+		self.fade_var.set(self.settings['fade_flag'])
+		self.fade_button.var = self.fade_var
+		self.widgets.append(self.fade_label)
+		self.buttons.append(self.fade_button)
 
 		#======================================================
 		# SAVE AND BACK BUTTON
@@ -155,6 +164,7 @@ class Settings(Screen):
 		self.settings['IRT_threshold'] = float(self.irt_entry.get())
 		self.settings['return_click'] = self.check_var.get()
 		self.settings['choose_aco'] = self.aco_var.get()
+		self.settings['fade_flag'] = self.fade_var.get()
 		
 		self.goToMenu()
 
