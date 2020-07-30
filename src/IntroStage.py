@@ -45,6 +45,21 @@ class IntroStage(Screen):
 
 		# b. start button
 		if (self.stage == 1):
+			if self.group != 1:
+				self.aco_file = ''
+				while(re.search("_G"+str(self.group-1)+"_F2_",self.aco_file) is None):
+					if self.settings['choose_aco']:
+						self.aco_file = tkinter.filedialog.askopenfilename(title='SELECIONE O ARQUIVO PARA ACOPLAMENTO',\
+							filetypes=[("CSV",".csv")],initialdir = "./results/")
+					else:
+						result_files = os.listdir("./results/")
+						selected_files = [filename for filename in result_files if re.search("_G"+str(self.group-1)+"_F2_",filename) is not None]
+						self.aco_file = random.choice(selected_files)
+				
+					if re.search("_G"+str(self.group-1)+"_F2_",self.aco_file) is None:
+						messagebox.showinfo("Information",\
+											'Por favor, selecione um arquivo para ACOPLAMENTO. Este deve corresponder à resultados coletados em experimentos do Grupo '+str(self.group-1)+' Fase 2.\nID: _G'+str(self.group-1)+'_F2_')
+
 			self.start_button = \
 				create_button(self.master,'AVANÇAR',self.goToStage1,\
 					self.sw/2,5*self.sh/6,size=18)
@@ -57,6 +72,21 @@ class IntroStage(Screen):
 				create_button(self.master,'AVANÇAR',self.goToStage3,\
 					self.sw/2,5*self.sh/6,size=18)
 		elif (self.stage == 4):
+			if self.group != 1:
+				self.aco_file = ''
+				while(re.search("_G"+str(self.group-1)+"_F5_",self.aco_file) is None):
+					if self.settings['choose_aco']:
+						self.aco_file = tkinter.filedialog.askopenfilename(title='SELECIONE O ARQUIVO PARA ACOPLAMENTO',\
+							filetypes=[("CSV",".csv")],initialdir = "./results/")
+					else:
+						result_files = os.listdir("./results/")
+						selected_files = [filename for filename in result_files if re.search("_G"+str(self.group-1)+"_F5_",filename) is not None]
+						self.aco_file = random.choice(selected_files)
+				
+					if re.search("_G"+str(self.group-1)+"_F5_",self.aco_file) is None:
+						messagebox.showinfo("Information",\
+											'Por favor, selecione um arquivo para ACOPLAMENTO. Este deve corresponder à resultados coletados em experimentos do Grupo '+str(self.group-1)+' Fase 5.\nID: _G'+str(self.group-1)+'_F5_')
+
 			self.start_button = \
 				create_button(self.master,'AVANÇAR',self.goToStage4,\
 					self.sw/2,5*self.sh/6,size=18)
@@ -71,3 +101,8 @@ class IntroStage(Screen):
 
 		self.widgets.append(self.start_button)
 		self.buttons.append(self.start_button)
+
+	def ableButtons(self):
+		print("| -- enabling the buttons")
+		for b in self.buttons:
+			b.configure(state="normal")

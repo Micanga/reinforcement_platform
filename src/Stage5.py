@@ -33,7 +33,6 @@ class Stage5(Screen):
 		# c. sound effects
 		self.load_sfx()
 
-		self.aco_file = None
 		self.reinforce_index = 0
 		self.setReinforcedClicks()
 		

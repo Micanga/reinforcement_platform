@@ -36,7 +36,6 @@ class Stage2(Screen):
 		# c. sound effects
 		self.load_sfx()
 
-		self.aco_file = None
 		self.reinforce_index = 0
 		self.setReinforcedClicks()
 		
@@ -104,14 +103,7 @@ class Stage2(Screen):
 
 		else:
 			# a. choosing the file to aco
-			if self.aco_file is None:
-				if self.settings['choose_aco']:
-					self.aco_file = tkinter.filedialog.askopenfilename(initialdir = "./results/")
-				else:
-					result_files = os.listdir("./results/")
-					selected_files = [filename for filename in result_files if re.search("_G"+str(self.group-1)+"_F2_",filename) is not None]
-					self.aco_file = random.choice(selected_files)
-				print('ACO FILE:',self.aco_file)
+			print('ACO FILE:',self.aco_file)
 			
 			# b. defining the reinforcement condition
 			if self.group == 2: # applying the VI(aco) scheme [G2]
