@@ -123,7 +123,33 @@ def write_round(game,nickname,group,stage,start_time):
 	for a in game[-1]['frequency']:
 		pDFRO[a] = 0 if total_reinf_actions == 0 else DFRO[a]/float(total_reinf_actions)
 	#'QMR e QMN'+\
-	QMR, QMN = '', ''
+	QMR, QMN, last_click = {}, {}, {}
+	for a in game[-1]['frequency']:
+		QMR[a] = []
+		QMN[a] = []
+		last_click[a] = -1
+
+	answer_seq = []
+	for i in stage_ids:
+		for j in range(len(game[i]['answer'])):
+			answer_seq.append((game[i]['answer'][j],(game[i]['reinforced'][j])))
+	
+	for i in range(len(answer_seq)):
+		a = answer_seq[i][0]
+		r = answer_seq[i][1]
+
+		if last_click[a] != -1:
+			if r:
+				QMR[a].append(i-last_click[a])
+			else:
+				QMN[a].append(i-last_click[a])
+		last_click[a] = i
+
+	for a in game[-1]['frequency']:
+		QMR[a] = np.mean(QMR[a])
+		QMN[a] = np.mean(QMN[a])
+	QMR = str(QMR)
+	QMN = str(QMN)
 
 	# writting
 	result_file = open('results/'+filename+".csv","a")
@@ -147,8 +173,8 @@ def write_round(game,nickname,group,stage,start_time):
 		pALTresp + ';' +\
 		str(DFRO) + ';' +\
 		str(pDFRO) + ';' +\
-		'QMR;'+\
-		'QMN'+\
+		QMR + ';' +\
+		QMN +\
 		'\n')
 
 	result_file.close()

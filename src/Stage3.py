@@ -86,7 +86,7 @@ class Stage3(Screen):
 		# checking the reinforcement for group 1 and 3 [VI (auto-aco)]
 		if self.group == 1 or self.group == 3: 
 			time2ans_cum = np.cumsum([time.total_seconds() for g in self.game if g['stage'] == self.game[-1]['stage'] for time in g['time2answer'] ] )[-1]
-			if self.reinforce_index > len(self.reinforced_clicks) - 1 or\
+			if self.reinforce_index >= len(self.reinforced_clicks) - 1 or\
 			time2ans_cum > self.reinforced_clicks[-1]:
 				self.reinforce_index = 0
 				self.setReinforcedClicks(time2ans_cum)
