@@ -15,10 +15,10 @@ def write_header(filename):
 	 	'Indice U;'+\
 		'Frequencia Absoluta;'+\
 		'Frequencia Percentual;'+\
-		'Proporção de Alternacoes;'+\
+		'Proporcao de Alternacoes;'+\
 		'Tempo para Resposta (s);'+\
 		'Tempo para Resposta Acumulado (s);'+\
-		'Taxa de Respostas;'+\
+		'Taxa de Respostas (por minuto);'+\
 		'Desvio Padrao da Taxa de Respostas;'+\
 		'ITR medio;'+\
 		'IMR;'+\
@@ -34,72 +34,101 @@ def write_header(filename):
 	'\n')
 	result_file.close()
 
+def getAllBlocks(game,group,stage):
+        blocks = []
+        for i in range(len(game)):
+            if game[i]['group'] == group and game[i]['stage'] == stage:
+                blocks.append(i)
+        return blocks
+
 def write_round(game,nickname,group,stage,start_time):
 	filename = nickname+'_G'+str(group)+'_F'+str(stage)+\
 		'_'+start_time.strftime("%d-%m-%Y_%Hh%Mm%Ss")
-	result_file = open('results/'+filename+".csv","a")
 
-	# setting the variables
-	reinforced = 'SIM' if game[-1]['reinforced'][-1] else 'NAO'
-	action = str(game[-1]['answer'][-1])
-	index_U = str(U(game[-1]['frequency']))
-	abs_freq = str(game[-1]['frequency'])
-
-	percent_freq = {}
+	# support variables
+	stage_ids = getAllBlocks(game,group,stage)
 	total_answers = sum([game[-1]['frequency'][a] for a in game[-1]['frequency']])
+	total_time_min = sum([time.total_seconds() for i in stage_ids for time in game[i]['time2answer'] ])/60.0
+	total_alts = sum([1 if game[i]['answer'][j] != game[i]['answer'][j-1] else 0 for i in stage_ids for j in range(1,len(game[i]['answer']))])
+	total_reinf_alts = sum([1 if game[i]['answer'][j] != game[i]['answer'][j-1] and game[i]['reinforced'][j] == True else 0 for i in stage_ids for j in range(1,len(game[i]['answer']))])
+
+	last_reinforce, imr_array, reinf_array = 0, [], []
+	for i in stage_ids:
+		for j in range(len(game[i]['reinforced'])):
+			if game[i]['reinforced'][j] == True:
+				reinf_array.append(True)
+				imr_array.append(sum([float(time.total_seconds()/60.0) for time in game[i]['time2answer'][last_reinforce:j+1]]))
+				last_reinforce = j+1
+			else:
+				reinf_array.append(False)
+	
+	total_reinf_actions = sum(reinf_array)
+
+	line_count,ansrate_array = 0, []	
+	with open('results/'+filename+".csv","r") as result_file:
+		for line in result_file:
+			if line_count != 0:
+				data = line.split(';')
+				ansrate_array.append(float(data[8]))
+			line_count += 1
+
+	# log variables
+	#'Reforço Positivo?;'+\
+	reinforced = 'SIM' if game[-1]['reinforced'][-1] else 'NAO'
+	#'Acao;'+\
+	action = str(game[-1]['answer'][-1])
+	#'Indice U;'+\
+	index_U = str(U(game[-1]['frequency']))
+	#'Frequencia Absoluta;'+\
+	abs_freq = str(game[-1]['frequency'])
+	#'Frequencia Percentual;'+\
+	percent_freq = {}
 	for a in game[-1]['frequency']:
 		percent_freq[a] = game[-1]['frequency'][a] / total_answers
 	percent_freq = str(percent_freq)
-
-	change_prop = str(sum([1 if game[-1]['answer'][i] != game[-1]['answer'][i-1] else 0 for i in range(1,len(game[-1]['answer']))])/(len(game[-1]['answer']) - 1))\
-		if len(game[-1]['answer']) > 1 else ''
-
-	time2ans = str(game[-1]['time2answer'][-1])
-	time2ans_cum = str(np.cumsum([time.total_seconds() for g in game if g['stage'] == game[-1]['stage'] for time in g['time2answer'] ] )[-1])
-	total_time = sum([time.total_seconds() for time in game[-1]['time2answer']])/60.0
-
-	answer_rate = str(total_answers/total_time)
-	mean_time2ans = (total_time/total_answers)
-	dev_time2ans = 0.0
-	for time in game[-1]['time2answer']:
-		dev_time2ans += ((time.total_seconds()/60.0) - mean_time2ans)**2
-	dev_time2ans =  str((dev_time2ans)/len(game[-1]['time2answer']))
-
-
-	last_reinforce, imr_array, imr = 0, [], 0
-	for i in range(len(game[-1]['reinforced'])):
-		if game[-1]['reinforced'][i] == True:
-			imr_array.append(sum([float(time.total_seconds()/60.0) for time in game[-1]['time2answer'][last_reinforce:i+1]]))
-			imr += imr_array[-1]
-			last_reinforce = i+1
-	imr = '' if game[-1]['reinforced'].count(True) == 0 else str(imr/float(game[-1]['reinforced'].count(True)))
-
+	#'Proporção de Alternacoes;'+\
+	change_prop = '' if total_answers == 0 else str(float(total_alts)/float(total_answers))
+	#'Tempo para Resposta (s);'+\
+	time2ans = str(game[-1]['time2answer'][-1].total_seconds())
+	#'Tempo para Resposta Acumulado (s);'+\
+	time2ans_cum = str(np.cumsum([time.total_seconds() for i in stage_ids for time in game[i]['time2answer'] ] )[-1])
+	#'Taxa de Respostas (por minuto);'+\
+	answer_rate = str(total_answers/float(total_time_min))
+	#'Desvio Padrao da Taxa de Respostas;'+\
+	ansrate_array.append(float(answer_rate))
+	dev_ansrate =  str(np.std(ansrate_array))
+	#'ITR medio;'+\
+	itr = str(1/float(answer_rate))
+	#'IMR;'+\
+	imr = '' if total_reinf_actions == 0 else str(sum(imr_array)/float(total_reinf_actions))
+	#'IMR (desvio padrao);'+\
 	imr_std = str(np.std(imr_array))
-
-	nrr = '' if game[-1]['reinforced'].count(True) == 0 else str(len(game[-1]['reinforced'])/float(game[-1]['reinforced'].count(True)))
-	nrr_std = str(np.std(game[-1]['reinforced']))
-
-	ALTref = [1 if game[-1]['reinforced'][i] == True and i > 0 and game[-1]['answer'][i] != game[-1]['answer'][i-1] else 0 for i in range(len(game[-1]['reinforced']))]
-	ALTref = sum(ALTref)
-	pALTref = '' if game[-1]['reinforced'].count(True) == 0 else  str(ALTref/float(game[-1]['reinforced'].count(True)))
-
-	ALT_count = [1 if i > 0 and game[-1]['answer'][i] != game[-1]['answer'][i-1] else 0 for i in range(len(game[-1]['reinforced']))]
-	ALT_count = sum(ALT_count)
-	pALTresp = '' if ALT_count == 0 else  str(ALTref/ALT_count)
-
+	#'NRR;'+\
+	nrr = '' if total_reinf_actions == 0 else str(total_answers/float(total_reinf_actions))
+	#'NRR (desvio padrao);'+\
+	nrr_std = str(np.std(reinf_array))
+	#'pALTref;'+\
+	pALTref = '' if total_reinf_actions == 0 else  str(total_reinf_alts/float(total_reinf_actions))
+	#'pALTresp;'+\
+	pALTresp = '' if total_alts == 0 else  str(total_reinf_alts/total_alts)
+	#'DFRO e DFRO Percentual;'+\
 	DFRO, pDFRO = {}, {}
 	for a in game[-1]['frequency']:
 		DFRO[a] = 0.0
 	
-	for i in range(len(game[-1]['reinforced'])):
-		DFRO[game[-1]['answer'][i]] += 1 if game[-1]['reinforced'][i] == True else 0
+	for i in stage_ids:
+		for j in range(len(game[i]['answer'])):
+			DFRO[game[i]['answer'][j]] += 1 if game[i]['reinforced'][j] == True else 0
 
 	for a in game[-1]['frequency']:
-		pDFRO[a] = 0 if game[-1]['reinforced'].count(True) == 0 else DFRO[a]/game[-1]['reinforced'].count(True)
+		pDFRO[a] = 0 if total_reinf_actions == 0 else DFRO[a]/float(total_reinf_actions)
+	#'QMR e QMN'+\
+	QMR, QMN = '', ''
 
 	# writting
+	result_file = open('results/'+filename+".csv","a")
 	result_file.write(\
-		str(reinforced) + ';' +\
+		reinforced + ';' +\
 		action + ';' +\
 		index_U + ';' +\
 		abs_freq + ';' + \
@@ -108,8 +137,8 @@ def write_round(game,nickname,group,stage,start_time):
 		time2ans + ';' +\
 		time2ans_cum + ';' +\
 		answer_rate + ';' +\
-		dev_time2ans + ';' +\
-		str(1/float(answer_rate)) + ';' +\
+		dev_ansrate + ';' +\
+		itr + ';' +\
 		imr + ';' +\
 		imr_std + ';' +\
 		nrr + ';' +\
