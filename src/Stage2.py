@@ -96,6 +96,7 @@ class Stage2(Screen):
 		return False
 
 	def setReinforcedClicks(self,offset=0):
+		print("Reinforced CLick")
 		if self.group == 1: # applying the VR scheme [G1]
 			self.reinforced_clicks = random.sample(self.VR5,5) # five numbers of list VR5 without replacement
 			self.reinforced_clicks = np.array(np.cumsum(self.reinforced_clicks)) # accumulated sum of list VR5 without replacement

@@ -135,7 +135,9 @@ class Game(object):
             self.master.after(1*1000, self.replay)
 
     def replay(self):
-        self.gif.destroy()
+        #could be that we are destroyng the gif without any reinforce hihi
+        if hasattr(self, 'gif'):
+            self.gif.destroy()
         # 1. Writting results
         # - writing results in log file
         write_round(self.game,self.nickname,self.group,self.stage,self.start_time)
