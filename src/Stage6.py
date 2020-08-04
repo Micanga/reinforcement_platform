@@ -103,8 +103,13 @@ class Stage6(Screen):
 					else: 
 						return False
 		else:
-			if len(self.game[-1]['reinforced']) + 1 > self.reinforced_clicks[-1]:
-				self.setReinforcedClicks(len(self.game[-1]['reinforced']) + 1)
-				return False
+
+
+			if(len(self.reinforced_clicks) >= 1):
+				if len(self.game[-1]['reinforced']) + 1 > self.reinforced_clicks[-1]:
+					self.setReinforcedClicks(len(self.game[-1]['reinforced']) + 1)
+					return False
+				else:
+					return any(len(self.game[-1]['reinforced']) + 1 == self.reinforced_clicks)
 			else:
-				return any(len(self.game[-1]['reinforced']) + 1 == self.reinforced_clicks)
+				return False

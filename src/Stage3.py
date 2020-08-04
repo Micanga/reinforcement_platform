@@ -105,4 +105,5 @@ class Stage3(Screen):
 				self.setReinforcedClicks(sum(self.game[-1]['frequency'].values()))
 				return False
 			else:
-				return any(sum(self.game[-1]['frequency'].values()) == self.reinforced_clicks)
+
+				return (sum(self.game[-1]['frequency'].values()) in self.reinforced_clicks)
