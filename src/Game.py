@@ -71,7 +71,7 @@ class Game(object):
 
         # b.reinforcing the action
         if self.conditionalReinforce():
-            self.gif = AnimatedGIF(self.master, './local/default/coin-flip.gif')
+            self.gif = AnimatedGIF(self.master, './local/default/coin-flip.gif',False)
             self.gif.place(x=self.sw/2,y=self.sh/2,anchor='center')
             
             print('Reinforced:',sum(self.game[-1]['frequency'].values()))

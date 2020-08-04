@@ -90,6 +90,11 @@ class Screen(Game):
                 self.main_bg.destroy()
                 update_screen(self)
 
+        if 'aco_file' in attributes:
+            self.aco_file = self.prev_sc.aco_file
+        else:
+            self.aco_file = ''
+
         if 'game' in attributes:
             self.game = self.prev_sc.game
         else:

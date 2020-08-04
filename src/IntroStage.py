@@ -46,15 +46,17 @@ class IntroStage(Screen):
 		# b. start button
 		if (self.stage == 1):
 			if self.group != 1:
-				self.aco_file = ''
 				while(re.search("_G"+str(self.group-1)+"_F2_",self.aco_file) is None):
 					if self.settings['choose_aco']:
 						self.aco_file = tkinter.filedialog.askopenfilename(title='SELECIONE O ARQUIVO PARA ACOPLAMENTO',\
 							filetypes=[("CSV",".csv")],initialdir = "./results/")
+						self.aco_file = self.aco_file.split('/')[-1]
 					else:
 						result_files = os.listdir("./results/")
 						selected_files = [filename for filename in result_files if re.search("_G"+str(self.group-1)+"_F2_",filename) is not None]
 						self.aco_file = random.choice(selected_files)
+						self.aco_file = self.aco_file.split('/')[-1]
+					print(self.aco_file)
 				
 					if re.search("_G"+str(self.group-1)+"_F2_",self.aco_file) is None:
 						messagebox.showinfo("Information",\
@@ -73,15 +75,16 @@ class IntroStage(Screen):
 					self.sw/2,5*self.sh/6,size=18)
 		elif (self.stage == 4):
 			if self.group != 1:
-				self.aco_file = ''
 				while(re.search("_G"+str(self.group-1)+"_F5_",self.aco_file) is None):
 					if self.settings['choose_aco']:
 						self.aco_file = tkinter.filedialog.askopenfilename(title='SELECIONE O ARQUIVO PARA ACOPLAMENTO',\
 							filetypes=[("CSV",".csv")],initialdir = "./results/")
+						self.aco_file = self.aco_file.split('/')[-1]
 					else:
 						result_files = os.listdir("./results/")
 						selected_files = [filename for filename in result_files if re.search("_G"+str(self.group-1)+"_F5_",filename) is not None]
 						self.aco_file = random.choice(selected_files)
+						self.aco_file = self.aco_file.split('/')[-1]
 				
 					if re.search("_G"+str(self.group-1)+"_F5_",self.aco_file) is None:
 						messagebox.showinfo("Information",\

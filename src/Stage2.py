@@ -36,6 +36,7 @@ class Stage2(Screen):
 		# c. sound effects
 		self.load_sfx()
 
+		self.reinforced_clicks = []
 		self.reinforce_index = 0
 		self.setReinforcedClicks()
 		
