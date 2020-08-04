@@ -76,6 +76,9 @@ class Stage5(Screen):
 					return False
 		# checking the reinforcement for group 3 [VR (aco)]
 		else:
+			print("Debuging")
+			print(self.game[-1]['reinforced'])
+			print("this is reinforced " + self.reinforced_clicks[-1])
 			if len(self.game[-1]['reinforced']) + 1 > self.reinforced_clicks[-1]:
 				self.setReinforcedClicks(len(self.game[-1]['reinforced']) + 1)
 				return False
@@ -94,23 +97,15 @@ class Stage5(Screen):
 		return False
 
 	def setReinforcedClicks(self,offset=0):
+		print("Reinforced CLick")
 		if self.group == 1: # applying the VR scheme [G1]
-			self.reinforced_clicks = random.sample(self.VR20,5) # five numbers of list VR20 without replacement
+			self.reinforced_clicks = random.sample(self.VR20,5) # five numbers of list VR5 without replacement
 			self.reinforced_clicks = np.array(np.cumsum(self.reinforced_clicks)) # accumulated sum of list VR5 without replacement
 			self.reinforced_clicks += offset # addition of offset clicks
-			print("Reinforced Clicks")
-			print(self.reinforced_clicks)
 
 		else:
 			# a. choosing the file to aco
-			if self.aco_file is None:
-				if self.settings['choose_aco']:
-					self.aco_file = tkinter.filedialog.askopenfilename(initialdir = "./results/")
-				else:
-					result_files = os.listdir("./results/")
-					selected_files = [filename for filename in result_files if re.search("_G"+str(self.group-1)+"_F2_",filename) is not None]
-					self.aco_file = random.choice(selected_files)
-				print(self.aco_file)
+			print('ACO FILE:',self.aco_file)
 			
 			# b. defining the reinforcement condition
 			if self.group == 2: # applying the VI(aco) scheme [G2]
@@ -131,3 +126,4 @@ class Stage5(Screen):
 						if counter != 0 and reinf_flag == 'SIM':
 							self.reinforced_clicks.append(counter + offset)
 						counter += 1
+		print(self.reinforced_clicks)

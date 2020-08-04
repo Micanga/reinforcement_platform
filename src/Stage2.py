@@ -75,9 +75,12 @@ class Stage2(Screen):
 					self.reinforce_index += 1
 					return True
 				else:
-					if time2ans_cum > self.reinforced_clicks[self.reinforce_index+1]:
-						self.reinforce_index += 1
-					return False
+					if len(self.reinforced_clicks[self.reinforce_index]) > 1:
+						if time2ans_cum > self.reinforced_clicks[self.reinforce_index+1]:
+							self.reinforce_index += 1
+						return False
+					else:
+						return False
 		# checking the reinforcement for group 3 [VR (aco)]
 		else:
 			if sum(self.game[-1]['frequency'].values()) > self.reinforced_clicks[-1]:
