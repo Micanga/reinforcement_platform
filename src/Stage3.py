@@ -9,7 +9,7 @@ import numpy as np
 class Stage3(Screen):
 
 	def __init__(self, master, prev_sc, main_bg):
-		self.AUTO = True
+		self.AUTO = False
 
 		# 1. Initializing the necessary variables
 		# a. GUI variables

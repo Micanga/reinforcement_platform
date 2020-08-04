@@ -7,7 +7,7 @@ import utils
 class Stage4(Screen):
 
 	def __init__(self, master, prev_sc, main_bg):
-		self.AUTO = True
+		self.AUTO = False
 
 		# 1. Initializing the necessary variables
 		super().__init__(master, prev_sc, main_bg, screen_name='Stage 4')
