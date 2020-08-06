@@ -222,7 +222,11 @@ class Screen(Game):
 
     def createPointCounter(self):
         self.points = tkinter.StringVar()
-        self.points.set(0)
+
+        if hasattr(self, 'prev_sc'):
+            self.points = self.prev_sc.points
+        else:
+            self.points.set(0)
 
         self.points_label = tkinter.Label(self.master, textvariable=self.points, width=3,
                                           bg='white', fg='black',
@@ -459,38 +463,34 @@ class Screen(Game):
         #blocks that have to be used to calculate mean
         firstId = len(self.game) - self.settings['min_blocks']
         lastId = len(self.game) 
+        mean = 0
 
-        time2ReinforcedAnswer = [] # array with all the time
+        time2Answer = [] # array with all the time
+        
         
         #getting all Id's with Reinforced Answer
         for i in  range (firstId,lastId):
-            #print("| --------- BLOCO")
-            #print(self.game[i])
-            idAnswerReinforced = [j for j, val in enumerate(self.game[i]['reinforced']) if (val == True)] 
+            print("| --------- BLOCO")
+            print(self.game[i])
+            idAnswer= [j for j, val in enumerate(self.game[i]['reinforced'])] 
 
             #getting all the times that we reinforced
-            for j in  idAnswerReinforced:
-                time2ReinforcedAnswer.append(self.game[i]['time2answer'][j])
             
-            #print("| ------- ID'S Reforçados ")
-            #print(idAnswerReinforced)
-
-            #print("| ------- (T) ID'S Reforçados ")
-            #print(time2ReinforcedAnswer)
-            mean = 0
-
-
+            for j in  idAnswer:
+                time2Answer.append(self.game[i]['time2answer'][j])
+            
+          
         #just calculating mean 
-        if(len(time2ReinforcedAnswer) != 0):
-            for i in time2ReinforcedAnswer:
+        if(len(time2Answer) != 0):
+            for i in time2Answer:
                 mean += i.total_seconds()
 
                 
             print("Your IRT = ")
-            print(mean/ len(time2ReinforcedAnswer))
+            print(mean/ len(time2Answer))
 
             print("IRT min = ")
             print(self.settings['IRT_threshold'])
-            return (mean/ len(time2ReinforcedAnswer))    
+            return (mean/ len(time2Answer))    
 
         return 0

@@ -162,13 +162,21 @@ class Game(object):
                     else:
                         self.cur_color = np.array([0.0,0.0,0.0])
                         self.ref_color = self.cur_color - np.array(WHITE)
-                    self.win_txt = tkinter.Label(self.master,\
-                         bg= "#%02x%02x%02x" % (int(self.cur_color[0]), int(self.cur_color[1]), int(self.cur_color[2])),\
-                         fg = "#%02x%02x%02x" % (int(self.cur_color[0]), int(self.cur_color[1]), int(self.cur_color[2])),\
-                         text='ATÉ O MOMENTO VOCÊ ACUMULOU '+str(int(self.points.get())+int(self.prev_sc.points.get()))+\
-                         ' PONTOS!', font=Font(family='Helvetica', size=16, weight='bold'))
-                    self.win_txt.place(x=self.sw/2,y=self.sh/2,anchor='center')
-                    self.master.after(20,self.fadeNextStage)
+
+                    print("this is the stage and session")
+                    print(self.group)
+                    print(self.stage)
+                    #self.master.after(20,self.fadeNextStage)
+                    self.master.after(20,self.nextStage)
+
+                    if(self.stage == 3 or self.stage == 6):
+                        self.win_txt = tkinter.Label(self.master,\
+                            bg= "#%02x%02x%02x" % (int(self.cur_color[0]), int(self.cur_color[1]), int(self.cur_color[2])),\
+                            fg = "#%02x%02x%02x" % (int(self.cur_color[0]), int(self.cur_color[1]), int(self.cur_color[2])),\
+                            text='ATÉ O MOMENTO VOCÊ ACUMULOU '+str(int(self.points.get())+int(self.prev_sc.points.get()))+\
+                            ' PONTOS!', font=Font(family='Helvetica', size=16, weight='bold'))
+                        self.win_txt.place(x=self.sw/2,y=self.sh/2,anchor='center')
+                   
                 else:
                     print("| ADD OTHER BLOCK")
                     self.add_block()
@@ -209,30 +217,13 @@ class Game(object):
                     self.return_click()
 
     def fadeNextStage(self):
-        # a. calculating the color fade (to black)
-        self.cur_color -= (0.1*self.ref_color)
-
-        # b. changing text color
-        self.win_txt.configure(fg="#%02x%02x%02x" %
-                               (int(self.cur_color[0]), int(self.cur_color[1]), int(self.cur_color[2])))
-
-        # c. checking the fade stop
-        if self.game[-1]['reinforced'][-1]:
-            if (int(self.cur_color[1]) > 0):
-                self.master.after(100, self.fadeNextStage)
-            else:
-                self.win_txt.configure(fg="#%02x%02x%02x" %
-                               (0,0,0))
-                self.points.set(int(self.points.get()) +int(self.prev_sc.points.get()))
-                self.master.after(3000,self.nextStage)
-        else:
-            if (int(self.cur_color[1]) < 255):
-                self.master.after(100, self.fadeNextStage)
-            else:
-                self.win_txt.configure(fg="#%02x%02x%02x" %
-                               (255,255,255))
-                self.points.set(int(self.points.get()) +int(self.prev_sc.points.get()))
-                self.master.after(3000,self.nextStage)
+        print("Fading")
+        if(self.stage == 3 or self.stage == 6):
+                    self.win_txt.configure(fg="#%02x%02x%02x" %
+                                (0,0,0))
+                    
+        self.points.set(int(self.points.get()) +int(self.prev_sc.points.get()))
+        self.master.after(3000,self.nextStage)
 
     def return_click(self):
         ableMouse(self)
@@ -257,7 +248,12 @@ class Game(object):
         self.game[-1]['reinforced'] = []
         self.game[-1]['frequency'] = {1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0}
 
-        self.game[-1]['points'] = 0
+      
+        if hasattr(self, 'prev_sc'):
+            self.game[-1]['points'] = int(self.prev_sc.points.get())
+        else:
+            self.game[-1]['points'] = 0
+            
         self.game[-1]['block_time'] = 0
 
         self.round_start_time = datetime.datetime.now()
