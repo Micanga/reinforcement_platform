@@ -256,13 +256,58 @@ class myFailPopUp:
 		self.pop_text.grid(row=0, column=0)
 		
 		# 3. Setting the OK button
-		self.ok_button = Button(self.cur_popup, anchor = 'center',
-									bg = "#%02x%02x%02x" % (200, 200, 200), fg = 'black', text= 'OK',
-									font = Font(family='Helvetica', size=14, weight='bold'),highlightcolor='black',
-									command = multFunc(cur_screen.goToMenu, self.cur_popup.destroy),
-									highlightthickness = 0, activebackground = "#%02x%02x%02x" % (230, 230, 230),
-									bd = 1, padx=5,pady=5,height=1,width=4)
-		self.ok_button.grid(row=1, column=0)
+		if self.stage == 1:
+			self.stage = 2
+			self.ok_button = Button(self.cur_popup, anchor = 'center',
+										bg = "#%02x%02x%02x" % (200, 200, 200), fg = 'black', text= 'OK',
+										font = Font(family='Helvetica', size=14, weight='bold'),highlightcolor='black',
+										command = multFunc(cur_screen.goToStage2, self.cur_popup.destroy),
+										highlightthickness = 0, activebackground = "#%02x%02x%02x" % (230, 230, 230),
+										bd = 1, padx=5,pady=5,height=1,width=4)
+			self.ok_button.grid(row=1, column=0)
+		elif self.stage == 2:
+			self.stage = 3
+			self.ok_button = Button(self.cur_popup, anchor = 'center',
+										bg = "#%02x%02x%02x" % (200, 200, 200), fg = 'black', text= 'OK',
+										font = Font(family='Helvetica', size=14, weight='bold'),highlightcolor='black',
+										command = multFunc(cur_screen.goToStage3, self.cur_popup.destroy),
+										highlightthickness = 0, activebackground = "#%02x%02x%02x" % (230, 230, 230),
+										bd = 1, padx=5,pady=5,height=1,width=4)
+			self.ok_button.grid(row=1, column=0)
+		elif self.stage == 3:
+			self.ok_button = Button(self.cur_popup, anchor = 'center',
+										bg = "#%02x%02x%02x" % (200, 200, 200), fg = 'black', text= 'OK',
+										font = Font(family='Helvetica', size=14, weight='bold'),highlightcolor='black',
+										command = multFunc(cur_screen.goToMenu, self.cur_popup.destroy),
+										highlightthickness = 0, activebackground = "#%02x%02x%02x" % (230, 230, 230),
+										bd = 1, padx=5,pady=5,height=1,width=4)
+			self.ok_button.grid(row=1, column=0)
+		elif self.stage == 4:
+			self.stage = 5
+			self.ok_button = Button(self.cur_popup, anchor = 'center',
+										bg = "#%02x%02x%02x" % (200, 200, 200), fg = 'black', text= 'OK',
+										font = Font(family='Helvetica', size=14, weight='bold'),highlightcolor='black',
+										command = multFunc(cur_screen.goToStage5, self.cur_popup.destroy),
+										highlightthickness = 0, activebackground = "#%02x%02x%02x" % (230, 230, 230),
+										bd = 1, padx=5,pady=5,height=1,width=4)
+			self.ok_button.grid(row=1, column=0)
+		elif self.stage == 5:
+			self.stage = 6
+			self.ok_button = Button(self.cur_popup, anchor = 'center',
+										bg = "#%02x%02x%02x" % (200, 200, 200), fg = 'black', text= 'OK',
+										font = Font(family='Helvetica', size=14, weight='bold'),highlightcolor='black',
+										command = multFunc(cur_screen.goToStage6, self.cur_popup.destroy),
+										highlightthickness = 0, activebackground = "#%02x%02x%02x" % (230, 230, 230),
+										bd = 1, padx=5,pady=5,height=1,width=4)
+			self.ok_button.grid(row=1, column=0)
+		elif self.stage == 6:
+			self.ok_button = Button(self.cur_popup, anchor = 'center',
+										bg = "#%02x%02x%02x" % (200, 200, 200), fg = 'black', text= 'OK',
+										font = Font(family='Helvetica', size=14, weight='bold'),highlightcolor='black',
+										command = multFunc(cur_screen.goToMenu, self.cur_popup.destroy),
+										highlightthickness = 0, activebackground = "#%02x%02x%02x" % (230, 230, 230),
+										bd = 1, padx=5,pady=5,height=1,width=4)
+			self.ok_button.grid(row=1, column=0)
 
 		# 4. Settig the Final Space
 		self.space = tkinter.Label(self.cur_popup, bg= "#%02x%02x%02x" % (255, 255, 255))

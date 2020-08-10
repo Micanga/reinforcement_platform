@@ -146,9 +146,8 @@ class Game(object):
         # a. maximum blocks allowed (Fail)
         if self.number_of_blocks() == self.settings['max_blocks']\
         and self.number_of_rounds() == self.settings['actions_per_block']:
-            myFailPopUp(self,'O experimento chegou ao fim!\n'+\
-                'Contacte o resposável e informe o fim.\n'+\
-                'Obrigado pela participação!')
+            myFailPopUp(self,'Fim da Fase '+str(self.stage)+'!\n'+\
+                'Você será encaminhado para a próxima fase.')
         # b. keep playing
         else:
             # - end of the block
