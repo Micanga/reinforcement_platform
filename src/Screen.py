@@ -460,16 +460,12 @@ class Screen(Game):
         print(exit_log)
 
     def averageIRT(self):
-       
         #blocks that have to be used to calculate mean
         firstId = len(self.game) - self.settings['min_blocks']
         lastId = len(self.game) 
-        mean = 0
-
+        
+        #getting all Id's for all answers
         time2Answer = [] # array with all the time
-        
-        
-        #getting all Id's with Reinforced Answer
         for i in  range (firstId,lastId):
             print("| --------- BLOCO")
             print(self.game[i])
@@ -481,17 +477,20 @@ class Screen(Game):
                 time2Answer.append(self.game[i]['time2answer'][j])
             
           
-        #just calculating mean 
+        #just calculating averageIRT 
+        averageIRT = 0
         if(len(time2Answer) != 0):
-            for i in time2Answer:
-                mean += i.total_seconds()
+            for i in range(1,len(time2Answer)):
+                averageIRT += (time2Answer[i].total_seconds() - time2Answer[i-1].total_seconds())
+            averageIRT /= (len(time2Answer)-1)
 
-                
             print("Your IRT = ")
-            print(mean/ len(time2Answer))
+            print(averageIRT)
 
             print("IRT min = ")
             print(self.settings['IRT_threshold'])
-            return (mean/ len(time2Answer))    
+            
+            return (averageIRT)    
 
-        return 0
+        else:
+            return 1.0
