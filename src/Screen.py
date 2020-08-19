@@ -312,7 +312,7 @@ class Screen(Game):
             self.stage_txt = tkinter.Label(self.master,\
                 bg= "#%02x%02x%02x" % (int(self.cur_color[0]), int(self.cur_color[1]), int(self.cur_color[2])),\
                 fg = "#%02x%02x%02x" % (int(self.text_cur_color[0]), int(self.text_cur_color[1]), int(self.text_cur_color[2])),\
-                text='FASE '+str(self.stage), font=Font(family='Helvetica', size=96, weight='bold'))
+                text='FASE 1', font=Font(family='Helvetica', size=96, weight='bold'))
             self.stage_txt.place(x=self.sw/2,y=self.sh/2,anchor='center')
 
             self.stageFade()
@@ -334,7 +334,7 @@ class Screen(Game):
             self.stage_txt = tkinter.Label(self.master,\
                 bg= "#%02x%02x%02x" % (int(self.cur_color[0]), int(self.cur_color[1]), int(self.cur_color[2])),\
                 fg = "#%02x%02x%02x" % (int(self.text_cur_color[0]), int(self.text_cur_color[1]), int(self.text_cur_color[2])),\
-                text='FASE '+str(self.stage), font=Font(family='Helvetica', size=96, weight='bold'))
+                text='FASE 2', font=Font(family='Helvetica', size=96, weight='bold'))
             self.stage_txt.place(x=self.sw/2,y=self.sh/2,anchor='center')
 
             self.stageFade()
@@ -356,7 +356,7 @@ class Screen(Game):
             self.stage_txt = tkinter.Label(self.master,\
                 bg= "#%02x%02x%02x" % (int(self.cur_color[0]), int(self.cur_color[1]), int(self.cur_color[2])),\
                 fg = "#%02x%02x%02x" % (int(self.text_cur_color[0]), int(self.text_cur_color[1]), int(self.text_cur_color[2])),\
-                text='FASE '+str(self.stage), font=Font(family='Helvetica', size=96, weight='bold'))
+                text='FASE 3', font=Font(family='Helvetica', size=96, weight='bold'))
             self.stage_txt.place(x=self.sw/2,y=self.sh/2,anchor='center')
 
             self.stageFade()
@@ -378,7 +378,7 @@ class Screen(Game):
             self.stage_txt = tkinter.Label(self.master,\
                 bg= "#%02x%02x%02x" % (int(self.cur_color[0]), int(self.cur_color[1]), int(self.cur_color[2])),\
                 fg = "#%02x%02x%02x" % (int(self.text_cur_color[0]), int(self.text_cur_color[1]), int(self.text_cur_color[2])),\
-                text='FASE '+str(self.stage), font=Font(family='Helvetica', size=96, weight='bold'))
+                text='FASE 1', font=Font(family='Helvetica', size=96, weight='bold'))
             self.stage_txt.place(x=self.sw/2,y=self.sh/2,anchor='center')
 
             self.stageFade()
@@ -400,7 +400,7 @@ class Screen(Game):
             self.stage_txt = tkinter.Label(self.master,\
                 bg= "#%02x%02x%02x" % (int(self.cur_color[0]), int(self.cur_color[1]), int(self.cur_color[2])),\
                 fg = "#%02x%02x%02x" % (int(self.text_cur_color[0]), int(self.text_cur_color[1]), int(self.text_cur_color[2])),\
-                text='FASE '+str(self.stage), font=Font(family='Helvetica', size=96, weight='bold'))
+                text='FASE 2', font=Font(family='Helvetica', size=96, weight='bold'))
             self.stage_txt.place(x=self.sw/2,y=self.sh/2,anchor='center')
 
             self.stageFade()
@@ -422,7 +422,7 @@ class Screen(Game):
             self.stage_txt = tkinter.Label(self.master,\
                 bg= "#%02x%02x%02x" % (int(self.cur_color[0]), int(self.cur_color[1]), int(self.cur_color[2])),\
                 fg = "#%02x%02x%02x" % (int(self.text_cur_color[0]), int(self.text_cur_color[1]), int(self.text_cur_color[2])),\
-                text='FASE '+str(self.stage), font=Font(family='Helvetica', size=96, weight='bold'))
+                text='FASE 3', font=Font(family='Helvetica', size=96, weight='bold'))
             self.stage_txt.place(x=self.sw/2,y=self.sh/2,anchor='center')
 
             self.stageFade()
