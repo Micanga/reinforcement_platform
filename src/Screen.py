@@ -131,7 +131,8 @@ class Screen(Game):
     """
     def createButtons(self, center_h, center_w, radius):
             # print(self.createb_txt)
-        diameter = 200
+        diameter = self.sh/5
+        
         self.button_1 = CircularButton(self.master, diameter, diameter,
                                        color=RED, bg=BG_COLOR, command=self.button1_click)
         self.button_1.place(x=center_w-radius,
