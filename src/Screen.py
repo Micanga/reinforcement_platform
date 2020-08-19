@@ -108,7 +108,7 @@ class Screen(Game):
                 'max_blocks':20,\
                 'IRT_threshold':0.1,\
                 'return_click':0,\
-                'choose_aco':False,\
+                'choose_aco':True,\
                 'fade_flag':True,
             }
 
