@@ -229,14 +229,6 @@ class Game(object):
         ableMouse(self)
         self.createReturnButton(self.center_h, self.center_w)
 
-    def averageIRT(self):
-
-        time2answerReinforced = [i for i, val in enumerate(self.game[-1]['reinforced']) if (val == True)] 
-        #time2answerReinforced = self.game[-1]['time2answer'][time2answerReinforced]
-
-        print("!time2answer")
-        print(time2answerReinforced)
-
     def init_variables(self):
         self.game.append({})
 
