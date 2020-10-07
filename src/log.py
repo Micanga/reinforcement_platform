@@ -58,7 +58,7 @@ def write_round(game,nickname,group,stage,start_time):
 	total_alts = sum([1 if actions_ts[i] != actions_ts[i-1] else 0 for i in range(1,len(actions_ts))])
 	total_reinf_alts = sum([1 if actions_ts[i] != actions_ts[i-1] and reinf_ts[i] else 0 for i in range(1,len(actions_ts))])
 
-	last_reinf, imr_array = 0, []
+	last_reinforce, imr_array = 0, []
 	for i in range(len(reinf_ts)):
 		if reinf_ts[i]:
 			imr_array.append(sum([float(time.total_seconds()/60.0) for time in time2ans_ts[last_reinforce:i+1]]))
