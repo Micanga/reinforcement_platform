@@ -148,9 +148,9 @@ def write_round(game,nickname,group,stage,start_time):
 
 		if last_click[a] != -1:
 			if r:
-				QMR[a].append(i-last_click[a])
+				QMR[a].append(i-last_click[a]-1)
 			else:
-				QMN[a].append(i-last_click[a])
+				QMN[a].append(i-last_click[a]-1)
 		last_click[a] = i
 
 	for a in game[-1]['frequency']:
