@@ -12,6 +12,7 @@ class Stage6(Screen):
 		self.AUTO = False
 
 		# 1. Initializing the necessary variables
+		# a. GUI variables
 		super().__init__(master, prev_sc, main_bg,screen_name='Stage 3')
 		self.init_variables()
 
@@ -34,9 +35,7 @@ class Stage6(Screen):
 
 		blocksS1 = self.getAllBlocks(self.group,self.stage-1) #(stage 1 for stage 3) or (stage 4 for stage 6) 
 		blocksS2 = self.getAllBlocks(self.group,self.stage-2) #(stage 2 for stage 3) or (stage 5 for stage 6) 	
-		self.blocksS3 = self.settings['max_blocks'] - (len(blocksS1) +  len(blocksS2)) # number of blocks from stage 3 or stage 6
-		
-
+		self.blocksS3 = 60 - (len(blocksS1) +  len(blocksS2)) # number of blocks from stage 3 or stage 6
 		stageForReinforce = self.stage - 1
 
 		blocksForReinforce = []

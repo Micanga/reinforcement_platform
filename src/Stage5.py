@@ -18,7 +18,7 @@ class Stage5(Screen):
 		self.init_variables()
 
 		# b. reinforce vectors
-		self.VR20 = [3, 16, 1, 9, 12, 6, 28, 21, 38, 66]
+		self.VR20_index = 0
 
 		# 2. creating the result file
 		log.create_file(self.nickname,self.group,self.stage,self.start_time)
@@ -94,7 +94,6 @@ class Stage5(Screen):
 		# and the average IRT is less then the IRT threshold, finish the stage
 		if self.number_of_blocks() >= self.settings['min_blocks']\
 		and self.averageIRT() < self.settings['IRT_threshold']:
-			print(self.game)
 			return True
 		# else keep playing
 		return False
@@ -102,9 +101,14 @@ class Stage5(Screen):
 	def setReinforcedClicks(self,offset=0):
 		print("Reinforced CLick")
 		if self.group == 1: # applying the VR scheme [G1]
-			self.reinforced_clicks = random.sample(self.VR20,5) # five numbers of list VR5 without replacement
+			if self.VR20_index == 0:
+				self.VR20 = random.sample([1,3,6,9,12,16,21,28,38,66],10)
+				self.VR20 = [self.VR20[0:5],self.VR20[5:10]]
+				
+			self.reinforced_clicks = self.VR20[self.VR20_index]# five numbers of list VR5 without replacement
 			self.reinforced_clicks = np.array(np.cumsum(self.reinforced_clicks)) # accumulated sum of list VR5 without replacement
 			self.reinforced_clicks += offset # addition of offset clicks
+			self.VR20_index = (self.VR20_index+1) % 2
 
 		else:
 			# a. choosing the file to aco

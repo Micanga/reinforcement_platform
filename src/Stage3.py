@@ -34,8 +34,8 @@ class Stage3(Screen):
 		self.reinforce_index = 0
 
 		blocksS1 = self.getAllBlocks(self.group,self.stage-1) #(stage 1 for stage 3) or (stage 4 for stage 6) 
-		blocksS2 = self.getAllBlocks(self.group,self.stage-2) #(stage 2 for stage 3) or (stage 5 for stage 6) 	
-		self.blocksS3 = self.settings['max_blocks'] - (len(blocksS1) +  len(blocksS2)) # number of blocks from stage 3 or stage 6
+		blocksS2 = self.getAllBlocks(self.group,self.stage-2) #(stage 2 for stage 3) or (stage 5 for stage 6) 
+		self.blocksS3 = 60 - (len(blocksS1) +  len(blocksS2)) # number of blocks from stage 3 or stage 6
 		self.setReinforcedClicks()
 			
 		# d. auto-play
@@ -48,7 +48,7 @@ class Stage3(Screen):
 	# THE STAGE METHODS
 	def check_stage_end_conditions(self):
 		# if the number of blocks is the numbers block remaining
-		if self.number_of_blocks() == self.blocksS3:
+		if self.number_of_blocks() == self.blocksS3 or self.number_of_blocks == self.settings['max_blocks']:
 			return True
 		# else keep playing
 		return False

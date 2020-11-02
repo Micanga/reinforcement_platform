@@ -21,7 +21,7 @@ class Stage2(Screen):
 		self.init_variables()
 
 		# b. reinforce vectors
-		self.VR5 = [5, 1, 3, 1, 2, 10, 1, 4, 7, 17]
+		self.VR5_index = 0
 		
 		# 2. creating the result file
 		log.create_file(self.nickname,self.group,self.stage,self.start_time)
@@ -104,9 +104,14 @@ class Stage2(Screen):
 	def setReinforcedClicks(self,offset=0):
 		print("Reinforced CLick")
 		if self.group == 1: # applying the VR scheme [G1]
-			self.reinforced_clicks = random.sample(self.VR5,5) # five numbers of list VR5 without replacement
+			if self.VR5_index == 0:
+				self.VR5 = random.sample([1,1,1,2,3,4,5,7,10,17],10)
+				self.VR5 = [self.VR5[0:5],self.VR5[5:10]]
+
+			self.reinforced_clicks = self.VR5[self.VR5_index]# five numbers of list VR5 without replacement
 			self.reinforced_clicks = np.array(np.cumsum(self.reinforced_clicks)) # accumulated sum of list VR5 without replacement
 			self.reinforced_clicks += offset # addition of offset clicks
+			self.VR5_index = (self.VR5_index+1) % 2
 
 		else:
 			# a. choosing the file to aco

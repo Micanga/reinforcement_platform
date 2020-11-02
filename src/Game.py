@@ -144,11 +144,16 @@ class Game(object):
 
         # 2. Checking the stop coditions
         # a. maximum blocks allowed (Fail)
-        if self.number_of_blocks() == self.settings['max_blocks']\
-        and self.number_of_rounds() == self.settings['actions_per_block']:
-            self.master.after(20,self.nextStage)
-            #myFailPopUp(self,'Fim da Fase '+str(self.stage)+'!\n'+\
-                #'Você será encaminhado para a próxima fase.')
+        if self.stage == 3 or self.stage == 6:
+            if self.number_of_blocks() == self.blocksS3\
+            and self.number_of_rounds() == self.settings['actions_per_block']:
+                self.master.after(20,self.nextStage)
+        else:
+            if self.number_of_blocks() == self.settings['max_blocks']\
+            and self.number_of_rounds() == self.settings['actions_per_block']:
+                self.master.after(20,self.nextStage)
+                #myFailPopUp(self,'Fim da Fase '+str(self.stage)+'!\n'+\
+                    #'Você será encaminhado para a próxima fase.')
         # b. keep playing
         else:
             # - end of the block
