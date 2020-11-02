@@ -472,7 +472,7 @@ class Screen(Game):
             irt_per_block.append(np.mean(self.game[i]['time2answer']))
 
         # b. calculating (for real)
-        R = (irt_per_block[0] + irt_per_block[1] + irt_per_block[2])/3 -
+        R = (irt_per_block[0] + irt_per_block[1] + irt_per_block[2])/3 - \
                 (irt_per_block[3] + irt_per_block[4]] + irt_per_block[5])/3) 
         R /= (np.sum(irt_per_block)/6)
 
