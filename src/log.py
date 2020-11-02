@@ -103,7 +103,7 @@ def write_round(game,nickname,group,stage,start_time):
 	itr = str(1/float(answer_rate))
 		
 	i, isr = -1, 0
-	while reinf_ts[i] == False:
+	while i >= -len(reinf_ts) and reinf_ts[i] == False:
 		isr += 1
 		i   -= 1
 
