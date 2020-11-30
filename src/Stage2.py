@@ -5,6 +5,7 @@ import re
 import tkinter
 from tkinter import *
 
+
 import log
 import utils
 
@@ -58,8 +59,8 @@ class Stage2(Screen):
 		if self.group == 1:
 			current_click = sum(self.game[-1]['frequency'].values())
 			if current_click > self.reinforced_clicks[-1]:
-				self.setReinforcedClicks(offset=current_click)
-				return False
+				self.setReinforcedClicks(offset=current_click-1)
+				return (current_click in self.reinforced_clicks)
 			else:
 				return (current_click in self.reinforced_clicks)
 		# checking the reinforcement for group 2 [VI (aco)]
@@ -102,16 +103,15 @@ class Stage2(Screen):
 		return False
 
 	def setReinforcedClicks(self,offset=0):
-		print("Reinforced CLick")
+		print("Reinforced CLick here asdasdasdsad")
 		if self.group == 1: # applying the VR scheme [G1]
 			if self.VR5_index == 0:
-				self.VR5 = random.sample([1,1,1,2,3,4,5,7,10,17],10)
-				self.VR5 = [self.VR5[0:5],self.VR5[5:10]]
+				self.VR5 = [[5, 1, 3, 2, 4, 1, 17, 7, 1, 10],[7, 1, 4, 1, 2, 10, 5, 3, 17, 1],[2, 1, 17, 5, 1, 7, 1, 3, 10, 4],[1, 2, 1, 4, 7, 17, 10, 3, 5, 1]]
 
-			self.reinforced_clicks = self.VR5[self.VR5_index]# five numbers of list VR5 without replacement
+			self.reinforced_clicks = self.VR5[self.VR5_index]
 			self.reinforced_clicks = np.array(np.cumsum(self.reinforced_clicks)) # accumulated sum of list VR5 without replacement
 			self.reinforced_clicks += offset # addition of offset clicks
-			self.VR5_index = (self.VR5_index+1) % 2
+			self.VR5_index = (self.VR5_index+1) % 4
 
 		else:
 			# a. choosing the file to aco
@@ -136,4 +136,3 @@ class Stage2(Screen):
 						if counter != 0 and reinf_flag == 'SIM':
 							self.reinforced_clicks.append(counter + offset)
 						counter += 1
-		print(self.reinforced_clicks)

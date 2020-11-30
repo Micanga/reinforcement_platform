@@ -54,8 +54,8 @@ class Stage5(Screen):
 		if self.group == 1:
 			current_click = sum(self.game[-1]['frequency'].values())
 			if current_click > self.reinforced_clicks[-1]:
-				self.setReinforcedClicks(offset=current_click)
-				return False
+				self.setReinforcedClicks(offset=current_click-1)
+				return (current_click in self.reinforced_clicks)
 			else:
 				return (current_click in self.reinforced_clicks)
 		# checking the reinforcement for group 2 [VI (aco)]
@@ -103,6 +103,7 @@ class Stage5(Screen):
 		if self.group == 1: # applying the VR scheme [G1]
 			if self.VR20_index == 0:
 				self.VR20 = random.sample([1,3,6,9,12,16,21,28,38,66],10)
+				print(self.VR20)
 				self.VR20 = [self.VR20[0:5],self.VR20[5:10]]
 				
 			self.reinforced_clicks = self.VR20[self.VR20_index]# five numbers of list VR5 without replacement

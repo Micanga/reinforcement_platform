@@ -193,8 +193,9 @@ class Game(object):
                     if self.settings['return_click'] == False:
                         # - creating the buttons and enabling the mouse
                         self.createButtons(self.center_h, self.center_w, self.radius)
-                        if not self.test:
-                            reset_mouse_position(self)
+                        #if not self.test:
+                        #   reset_mouse_position(self)
+
                         ableMouse(self)
                         if self.AUTO:
                             self.auto_play()
@@ -212,8 +213,8 @@ class Game(object):
                 if self.settings['return_click'] == False:
                     # - creating the buttons and enabling the mouse
                     self.createButtons(self.center_h, self.center_w, self.radius)
-                    if not self.test:
-                        reset_mouse_position(self)
+                    #if not self.test:
+                    #    reset_mouse_position(self)
                     ableMouse(self)
                     if self.AUTO:
                         self.auto_play()
