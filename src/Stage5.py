@@ -102,14 +102,12 @@ class Stage5(Screen):
 		print("Reinforced CLick")
 		if self.group == 1: # applying the VR scheme [G1]
 			if self.VR20_index == 0:
-				self.VR20 = random.sample([1,3,6,9,12,16,21,28,38,66],10)
-				print(self.VR20)
-				self.VR20 = [self.VR20[0:5],self.VR20[5:10]]
-				
-			self.reinforced_clicks = self.VR20[self.VR20_index]# five numbers of list VR5 without replacement
+				self.VR20 = [[6, 3, 66, 12, 38, 9, 28, 1, 21, 16],[6, 3, 66, 12, 38, 9, 28, 1, 21, 16]]
+
+			self.reinforced_clicks = self.VR20[self.VR20_index]
 			self.reinforced_clicks = np.array(np.cumsum(self.reinforced_clicks)) # accumulated sum of list VR5 without replacement
 			self.reinforced_clicks += offset # addition of offset clicks
-			self.VR20_index = (self.VR20_index+1) % 2
+			self.VR20_index = (self.VR20_index+1) % 4
 
 		else:
 			# a. choosing the file to aco
