@@ -106,7 +106,7 @@ class ChooseExperiment(Screen):
 		if(self.session == 2):
 			self.stage = int(4) 
 		else:
-			self.stage = int(5) 
+			self.stage = int(1) 
 		
 		self.start_time = datetime.datetime.now()
 

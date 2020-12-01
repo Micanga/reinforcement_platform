@@ -467,16 +467,26 @@ class Screen(Game):
         # calculating irt
         # a. getting the mean time per block
         irt_per_block = []
-        for i in range( len(self.game)-self.settings['min_blocks']-1, len(self.game)):
+        print("This is our Game")
+        print(self.game)
+
+
+        for i in range( len(self.game)-self.settings['min_blocks'], len(self.game)):
             print(i)
-            irt_per_block.append(np.mean(self.game[i]['time2answer']))
+            irt_per_block.append(np.sum(self.game[i]['time2answer']))
+            irt_per_block[-1] = (irt_per_block[-1].total_seconds())/10
 
         # b. calculating (for real)
+
+        print("This is our IRT per Block")
+        print(irt_per_block)
         R = (irt_per_block[0] + irt_per_block[1] + irt_per_block[2])/3 - \
                 (irt_per_block[3] + irt_per_block[4] + irt_per_block[5])/3
         
         R /= (np.sum(irt_per_block)/6)
 
+        print("This is our IRT")
+        print(R)
+
         # returning the result
         return np.abs(R)
-            
