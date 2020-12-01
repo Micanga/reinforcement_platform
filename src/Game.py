@@ -200,7 +200,11 @@ class Game(object):
                         if self.AUTO:
                             self.auto_play()
                     else:
-                        self.return_click()
+                        if not self.test:
+                           reset_mouse_position(self)
+                           self.createButtons(self.center_h, self.center_w, self.radius)
+                           ableMouse(self)
+                        #self.return_click()
             # - updating round
             else:
                 self.round_start_time = datetime.datetime.now()
@@ -219,7 +223,11 @@ class Game(object):
                     if self.AUTO:
                         self.auto_play()
                 else:
-                    self.return_click()
+                    if not self.test:
+                        reset_mouse_position(self)
+                        self.createButtons(self.center_h, self.center_w, self.radius)
+                        ableMouse(self)
+                    #self.return_click()
 
     def fadeNextStage(self):
         print("Fading")
