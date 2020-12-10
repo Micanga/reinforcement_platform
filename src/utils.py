@@ -84,21 +84,13 @@ def getPage(master, prev_sc, main_bg, pathNextPage):
 '''
 # LOAD
 def load_text(stage):
-	print("| -- loading text...")
+	
 	text = ""
-	saved_texts = [name for name in os.listdir('local/texts/stage'+str(stage)+'/')]
-	saved_texts.sort()
-	if len(saved_texts) > 0:
-		with open('local/texts/stage'+str(stage)+'/'+saved_texts[-1],encoding=ENCODE) as prev_file:
-			for line in prev_file:
-				text += line
-		print("| -- custom text loaded.")
-	else:
-		with open('local/default/stage'+str(stage)+'.txt',encoding=ENCODE) as default_text:
-			for line in default_text:
-				text += line
-		print("| -- default text loaded.")
-
+	with open('local/default/stage'+str(stage)+'.txt',encoding=ENCODE) as default_text:
+		for line in default_text:
+			text += line
+	print("| -- default text loaded.")
+	print('local/default/stage'+str(stage)+'.txt')
 	return text
 
 # MATH
