@@ -30,8 +30,11 @@ def write_header(filename):
 		'pALTresp;'+\
 		'DFRO;'+\
 		'DFRO Percentual;'+\
-		'QMR;'+\
-		'QMN'+\
+		'TR;'+\
+		'TR não Reforçados;'+\
+		'TR Reforçados;'+\
+		'MÉDIA TR não Reforçados;'+\
+		'MÉDIA TR Reforçados;'+\
 	'\n')
 	result_file.close()
 
@@ -43,6 +46,7 @@ def getAllBlocks(game,group,stage):
         return blocks
 
 def write_round(game,nickname,group,stage,start_time):
+	print("write_roundwrite_roundwrite_roundwrite_round")
 	filename = nickname+'_G'+str(group)+'_F'+str(stage)+\
 		'_'+start_time.strftime("%d-%m-%Y_%Hh%Mm%Ss")
 
@@ -131,33 +135,29 @@ def write_round(game,nickname,group,stage,start_time):
 	for a in game[-1]['frequency']:
 		pDFRO[a] = 0 if total_reinf_actions == 0 else DFRO[a]/float(total_reinf_actions)
 	#'QMR e QMN'+\
-	QMR, QMN, last_click = {}, {}, {}
-	for a in game[-1]['frequency']:
-		QMR[a] = []
-		QMN[a] = []
-		last_click[a] = -1
 
-	answer_seq = []
-	for i in stage_ids:
-		for j in range(len(game[i]['answer'])):
-			answer_seq.append((game[i]['answer'][j],(game[i]['reinforced'][j])))
+	TR = {1:-1,2:-1,3:-1,4:-1,5:-1,6:-1,7:-1,8:-1}
+	TRW = -1
+	TRMEANR = []
+	TRMEANUR = []
 	
-	for i in range(len(answer_seq)):
-		a = answer_seq[i][0]
-		r = answer_seq[i][1]
-
-		if last_click[a] != -1:
-			if r:
-				QMR[a].append(i-last_click[a]-1)
+	for i in range(len(game[-1]['answer'])):
+		if(TR[game[-1]['answer'][i]] != -1):
+			if(game[-1]['reinforced'][i] == True):
+				TRMEANR.append(TR[game[-1]['answer'][i]])
 			else:
-				QMN[a].append(i-last_click[a]-1)
-		last_click[a] = i
+				TRMEANUR.append(TR[game[-1]['answer'][i]])
 
-	for a in game[-1]['frequency']:
-		QMR[a] = np.mean(QMR[a])
-		QMN[a] = np.mean(QMN[a])
-	QMR = str(QMR)
-	QMN = str(QMN)
+			TRW = TR[game[-1]['answer'][i]]
+
+		for j in (TR):
+			if(TR[j] != -1):
+				TR[j] = TR[j] + 1
+		
+		TR[game[-1]['answer'][i]] = 0
+
+	if(TRW == -1):
+		TRW = "TR não definido"	
 
 	# writting
 	result_file = open('results/'+filename+".csv","a")
@@ -182,11 +182,17 @@ def write_round(game,nickname,group,stage,start_time):
 		pALTresp + ';' +\
 		str(DFRO) + ';' +\
 		str(pDFRO) + ';' +\
-		QMR + ';' +\
-		QMN +\
+		str(TRW) + ';' +\
+	
+		str(TRMEANUR) + ';' +\
+		str(TRMEANR) + ';' +\
+		str(np.mean(TRMEANUR)) + ';' +\
+		str(np.mean(TRMEANR)) + ';' +\
+
 		'\n')
 
 	result_file.close()
+	
 
 def calculate_total_points(game):
 	total_points = 0
