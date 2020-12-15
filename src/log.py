@@ -46,7 +46,7 @@ def getAllBlocks(game,group,stage):
         return blocks
 
 def write_round(game,nickname,group,stage,start_time):
-	print("write_roundwrite_roundwrite_roundwrite_round")
+	
 	filename = nickname+'_G'+str(group)+'_F'+str(stage)+\
 		'_'+start_time.strftime("%d-%m-%Y_%Hh%Mm%Ss")
 
@@ -140,24 +140,35 @@ def write_round(game,nickname,group,stage,start_time):
 	TRW = -1
 	TRMEANR = []
 	TRMEANUR = []
+
+	for g in (game):
+		for i in range(len(g['answer'])):
+			if(TR[g['answer'][i]] != -1):
+				if(g['reinforced'][i] == True):
+					TRMEANR.append(TR[g['answer'][i]])
+				else:
+					TRMEANUR.append(TR[g['answer'][i]])
+
+				TRW = TR[g['answer'][i]]
+
+			for j in (TR):
+				if(TR[j] != -1):
+					TR[j] = TR[j] + 1
+			
+			TR[g['answer'][i]] = 0
 	
-	for i in range(len(game[-1]['answer'])):
-		if(TR[game[-1]['answer'][i]] != -1):
-			if(game[-1]['reinforced'][i] == True):
-				TRMEANR.append(TR[game[-1]['answer'][i]])
-			else:
-				TRMEANUR.append(TR[game[-1]['answer'][i]])
-
-			TRW = TR[game[-1]['answer'][i]]
-
-		for j in (TR):
-			if(TR[j] != -1):
-				TR[j] = TR[j] + 1
-		
-		TR[game[-1]['answer'][i]] = 0
-
+	
 	if(TRW == -1):
-		TRW = "TR não definido"	
+		for g in (game):
+			TRW += len(g['answer'])	
+		TRW = TRW+1
+	print(game)
+	
+	
+	print(TR)
+	print(TRW)
+	print(TRMEANR)
+	print(TRMEANUR)
 
 	# writting
 	result_file = open('results/'+filename+".csv","a")
