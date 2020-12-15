@@ -141,28 +141,31 @@ def write_round(game,nickname,group,stage,start_time):
 	TRMEANR = []
 	TRMEANUR = []
 
-	for g in (game):
-		for i in range(len(g['answer'])):
-			if(TR[g['answer'][i]] != -1):
-				if(g['reinforced'][i] == True):
-					TRMEANR.append(TR[g['answer'][i]])
+	for i in range(len(game)):
+		for j in range(len(game[i]['answer'])):
+			if(TR[game[i]['answer'][j]] != -1):
+				if(game[i]['reinforced'][j] == True):
+					TRMEANR.append(TR[game[i]['answer'][j]])
 				else:
-					TRMEANUR.append(TR[g['answer'][i]])
+					TRMEANUR.append(TR[game[i]['answer'][j]])
 
-				TRW = TR[g['answer'][i]]
+				TRW = TR[game[i]['answer'][j]]
+			else:
+				TRW = (i) * 10 + j
 
-			for j in (TR):
-				if(TR[j] != -1):
-					TR[j] = TR[j] + 1
+				if(game[i]['reinforced'][j] == True):
+					TRMEANR.append(TRW)
+				else:
+					TRMEANUR.append(TRW)
+
+				
+
+			for k in (TR):
+				if(TR[k] != -1):
+					TR[k] = TR[k] + 1
 			
-			TR[g['answer'][i]] = 0
+			TR[game[i]['answer'][j]] = 0
 	
-	
-	if(TRW == -1):
-		for g in (game):
-			TRW += len(g['answer'])	
-		TRW = TRW+1
-	print(game)
 	
 	
 	print(TR)
