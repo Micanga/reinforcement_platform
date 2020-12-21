@@ -141,30 +141,45 @@ def write_round(game,nickname,group,stage,start_time):
 	TRMEANR = []
 	TRMEANUR = []
 
+	group = game[-1]['group']
+	stage = game[-1]['stage']
+
+	print("Our group")
+	print(group)
+	print("Stage")
+	print(stage)
+
+	gameThisStage = []
+
 	for i in range(len(game)):
-		for j in range(len(game[i]['answer'])):
-			if(TR[game[i]['answer'][j]] != -1):
-				if(game[i]['reinforced'][j] == True):
-					TRMEANR.append(TR[game[i]['answer'][j]])
+		if(game[i]['stage'] == stage and game[i]['group'] == group):
+			gameThisStage.append(game[i])
+
+	for i in range(len(gameThisStage)):
+		
+			for j in range(len(gameThisStage[i]['answer'])):
+				if(TR[gameThisStage[i]['answer'][j]] != -1):
+					if(gameThisStage[i]['reinforced'][j] == True):
+						TRMEANR.append(TR[gameThisStage[i]['answer'][j]])
+					else:
+						TRMEANUR.append(TR[gameThisStage[i]['answer'][j]])
+
+					TRW = TR[gameThisStage[i]['answer'][j]]
 				else:
-					TRMEANUR.append(TR[game[i]['answer'][j]])
+					TRW = (i) * 10 + j
 
-				TRW = TR[game[i]['answer'][j]]
-			else:
-				TRW = (i) * 10 + j
+					if(gameThisStage[i]['reinforced'][j] == True):
+						TRMEANR.append(TRW)
+					else:
+						TRMEANUR.append(TRW)
 
-				if(game[i]['reinforced'][j] == True):
-					TRMEANR.append(TRW)
-				else:
-					TRMEANUR.append(TRW)
+					
 
+				for k in (TR):
+					if(TR[k] != -1):
+						TR[k] = TR[k] + 1
 				
-
-			for k in (TR):
-				if(TR[k] != -1):
-					TR[k] = TR[k] + 1
-			
-			TR[game[i]['answer'][j]] = 0
+				TR[gameThisStage[i]['answer'][j]] = 0
 	
 	
 	
