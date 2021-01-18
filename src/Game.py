@@ -65,9 +65,11 @@ class Game(object):
         # a. updating game log
         self.game[-1]['answer'].append(clicked_button)
         
+        print("Working with round time")
+        print(self.round_start_time)
         self.game[-1]['time2answer'].append(
             datetime.datetime.now() - self.round_start_time)
-        self.game[-1]['frequency'][clicked_button] += 1
+        self.game[-1]['frequency'][clicked_button] +=1
 
         # b.reinforcing the action
         if self.conditionalReinforce():
@@ -208,6 +210,8 @@ class Game(object):
             # - updating round
             else:
                 self.round_start_time = datetime.datetime.now()
+                print("updating round time")
+                print(self.round_start_time)
 
                 # - recovering std background    
                 self.main_bg.configure(bg="#%02x%02x%02x" %\
@@ -262,6 +266,8 @@ class Game(object):
         self.game[-1]['block_time'] = 0
 
         self.round_start_time = datetime.datetime.now()
+        print("updating round time")
+        print(self.round_start_time)
         self.block_start_time = datetime.datetime.now()
 
     def add_block(self):
@@ -279,6 +285,8 @@ class Game(object):
         self.game[-1]['block_time'] = 0
 
         self.round_start_time = datetime.datetime.now()
+        print("updating round time")
+        print(self.round_start_time)
         self.block_start_time = datetime.datetime.now()
 
     #get All blocks from the group and stage specified    
