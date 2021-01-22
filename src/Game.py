@@ -7,6 +7,7 @@ from log import *
 from math import *
 from MyCommons import *
 import numpy as np
+from time import sleep
 from utils import *
 
 WHITE = [255.0, 255.0, 255.0]
@@ -20,6 +21,7 @@ class Game(object):
 
     def __init__(self):
         self.test = False
+        self.test_after = datetime.datetime.now()
         return
 
     def auto_play(self):
@@ -64,11 +66,6 @@ class Game(object):
     def check_action(self, clicked_button):
         # a. updating game log
         self.game[-1]['answer'].append(clicked_button)
-        
-        print("Working with round time")
-        print(self.round_start_time)
-        self.game[-1]['time2answer'].append(
-            datetime.datetime.now() - self.round_start_time)
         self.game[-1]['frequency'][clicked_button] +=1
 
         # b.reinforcing the action
@@ -76,7 +73,6 @@ class Game(object):
             self.gif = AnimatedGIF(self.master, './local/default/coin-flip.gif',False)
             self.gif.place(x=self.sw/2,y=self.sh/2,anchor='center')
             
-            print('Reinforced:',sum(self.game[-1]['frequency'].values()))
             removeButtons(self.buttons)
             self.game[-1]['reinforced'].append(True)
             self.cur_color = np.array(BG_COLOR)
@@ -142,6 +138,8 @@ class Game(object):
             self.gif.destroy()
         # 1. Writting results
         # - writing results in log file
+        self.game[-1]['time2answer'].append(
+            datetime.datetime.now() - self.round_start_time)
         write_round(self.game,self.nickname,self.group,self.stage,self.start_time)
 
         # 2. Checking the stop coditions
@@ -210,8 +208,6 @@ class Game(object):
             # - updating round
             else:
                 self.round_start_time = datetime.datetime.now()
-                print("updating round time")
-                print(self.round_start_time)
 
                 # - recovering std background    
                 self.main_bg.configure(bg="#%02x%02x%02x" %\
@@ -266,8 +262,6 @@ class Game(object):
         self.game[-1]['block_time'] = 0
 
         self.round_start_time = datetime.datetime.now()
-        print("updating round time")
-        print(self.round_start_time)
         self.block_start_time = datetime.datetime.now()
 
     def add_block(self):
@@ -286,7 +280,6 @@ class Game(object):
 
         self.round_start_time = datetime.datetime.now()
         print("updating round time")
-        print(self.round_start_time)
         self.block_start_time = datetime.datetime.now()
 
     #get All blocks from the group and stage specified    
