@@ -14,7 +14,7 @@ from Screen import Screen
 class Stage2(Screen):
 	
 	def __init__(self, master, prev_sc, main_bg):
-		self.AUTO = False
+		self.AUTO = True
 		
 		# 1. Initializing the necessary variables
 		# a. GUI variables
