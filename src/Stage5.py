@@ -10,9 +10,7 @@ import utils
 class Stage5(Screen):
 	
 	def __init__(self, master, prev_sc, main_bg):
-		self.AUTO = False
-		
-		# 1. Initializing the necessary variables
+    	# 1. Initializing the necessary variables
 		# a. GUI variables
 		super().__init__(master, prev_sc, main_bg,screen_name='Stage 2')
 		self.init_variables()
@@ -37,7 +35,7 @@ class Stage5(Screen):
 		self.setReinforcedClicks()
 		
 		# d. auto-play
-		if self.AUTO:
+		if self.test:
 			self.auto_play()
 
 	def nextStage(self):

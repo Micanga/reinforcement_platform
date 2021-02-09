@@ -7,6 +7,7 @@ from log import *
 from math import *
 from MyCommons import *
 import numpy as np
+import random as rd
 from time import sleep
 from utils import *
 
@@ -20,11 +21,11 @@ BG_COLOR = BABY_BLUE
 class Game(object):
 
     def __init__(self):
-        self.test = False
-        self.test_after = datetime.datetime.now()
+        self.test = True
         return
 
     def auto_play(self):
+        sleep(rd.uniform(1,2))
         coin = float(random.uniform(0,8))
         if coin <= 1:
             self.button1_click()
@@ -193,11 +194,11 @@ class Game(object):
                     if self.settings['return_click'] == False:
                         # - creating the buttons and enabling the mouse
                         self.createButtons(self.center_h, self.center_w, self.radius)
-                        #if not self.test:
-                        #   reset_mouse_position(self)
+                        if not self.test:
+                           reset_mouse_position(self)
 
                         ableMouse(self)
-                        if self.AUTO:
+                        if self.test:
                             self.auto_play()
                     else:
                         if not self.test:
@@ -217,10 +218,10 @@ class Game(object):
                 if self.settings['return_click'] == False:
                     # - creating the buttons and enabling the mouse
                     self.createButtons(self.center_h, self.center_w, self.radius)
-                    #if not self.test:
-                    #    reset_mouse_position(self)
+                    if not self.test:
+                        reset_mouse_position(self)
                     ableMouse(self)
-                    if self.AUTO:
+                    if self.test:
                         self.auto_play()
                 else:
                     if not self.test:

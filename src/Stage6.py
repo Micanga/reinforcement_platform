@@ -9,9 +9,7 @@ import numpy as np
 class Stage6(Screen):
 
 	def __init__(self, master, prev_sc, main_bg):
-		self.AUTO = False
-
-		# 1. Initializing the necessary variables
+    	# 1. Initializing the necessary variables
 		# a. GUI variables
 		super().__init__(master, prev_sc, main_bg,screen_name='Stage 3')
 		self.init_variables()
@@ -61,7 +59,7 @@ class Stage6(Screen):
 		self.setReinforcedClicks()
 			
 		# d. auto-play
-		if self.AUTO:
+		if self.test:
 			self.auto_play()
 
 	def nextStage(self):

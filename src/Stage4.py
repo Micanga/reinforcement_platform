@@ -7,9 +7,7 @@ import utils
 class Stage4(Screen):
 
 	def __init__(self, master, prev_sc, main_bg):
-		self.AUTO = False
-
-		# 1. Initializing the necessary variables
+    	# 1. Initializing the necessary variables
 		super().__init__(master, prev_sc, main_bg, screen_name='Stage 4')
 		self.init_variables()
 
@@ -28,7 +26,7 @@ class Stage4(Screen):
 		self.load_sfx()
 
 		# d. auto-play
-		if self.AUTO:
+		if self.test:
 			self.auto_play()
 
 	def nextStage(self):
