@@ -49,8 +49,14 @@ class Stage3(Screen):
 	# THE STAGE METHODS
 	def check_stage_end_conditions(self):
 		# if the number of blocks is the numbers block remaining
-		if self.number_of_blocks() == self.blocksS3 or self.number_of_blocks == self.settings['max_blocks']:
+		if self.number_of_blocks() == self.blocksS3:
 			return True
+		elif self.number_of_blocks() == self.settings['max_blocks']:
+			return True
+		# OR the player achieved the averageIRT threshold
+		elif self.number_of_blocks() >= 6 and self.averageIRT() <= self.settings['IRT_threshold']:
+			return True
+
 		# else keep playing
 		return False
 
