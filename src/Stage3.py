@@ -9,8 +9,6 @@ import numpy as np
 class Stage3(Screen):
 
 	def __init__(self, master, prev_sc, main_bg):
-		self.AUTO = False
-
 		# 1. Initializing the necessary variables
 		# a. GUI variables
 		super().__init__(master, prev_sc, main_bg,screen_name='Stage 3')
@@ -36,14 +34,13 @@ class Stage3(Screen):
 		self.reinforced_clicks2 = []
 		self.timeLastStage = 0
 
-
 		blocksS1 = self.getAllBlocks(self.group,self.stage-1) #(stage 1 for stage 3) or (stage 4 for stage 6) 
 		blocksS2 = self.getAllBlocks(self.group,self.stage-2) #(stage 2 for stage 3) or (stage 5 for stage 6) 
 		self.blocksS3 = 60 - (len(blocksS1) +  len(blocksS2)) # number of blocks from stage 3 or stage 6
 		self.setReinforcedClicks()
 			
 		# d. auto-play
-		if self.AUTO:
+		if self.test:
 			self.auto_play()
 
 	def nextStage(self):
@@ -150,52 +147,47 @@ class Stage3(Screen):
 	
 	#check this function for other blocks (frequency is acumulating )
 	def conditionalReinforce(self):
-		print("our self.reinforced_clicks")
-		print(self.reinforced_clicks)
 		# checking the reinforcement for group 1 and 3 [VI (auto-aco)]
 		if self.group == 1 or self.group == 3: 
-			time2ans_cum = np.cumsum([time.total_seconds() for g in self.game if g['stage'] == self.game[-1]['stage'] for time in g['time2answer'] ] )
+			time2ans_cum = np.cumsum([time.total_seconds() for g in self.game \
+				if g['stage'] == self.game[-1]['stage'] for time in g['time2answer'] ])
+
 			if(len(time2ans_cum)>0):
 				time2ans_cum = time2ans_cum[-1]
 			else:
 				time2ans_cum = 0
+				
+			print('----',time2ans_cum)
+			time2ans_cum +=  (datetime.datetime.now() - self.round_start_time).total_seconds()
+			print('++++',time2ans_cum)
+
 			if self.reinforce_index > len(self.reinforced_clicks) - 1 or\
 			time2ans_cum > self.reinforced_clicks[-1]:
 			
 				if(len(self.reinforced_clicks2) == 0):
 					self.setReinforcedClicks2()
 
-				print("actual time")		
-				print(time2ans_cum)
-
-				print("actual time LAST")		
-				print(self.timeLastStage)
-
 				if(time2ans_cum >= self.timeLastStage):
 					while(time2ans_cum >= self.timeLastStage):
 
-						print("actual sum")		
-						print(self.reinforced_clicks2[self.reinforce_index2 % len(self.reinforced_clicks2)])
 						self.timeLastStage += self.reinforced_clicks2[self.reinforce_index2 % len(self.reinforced_clicks2)]
 						self.reinforce_index2 += 1
-
-					print("actual time")
-					print(time2ans_cum)
-
-					print("actual time LAST")		
-					print(self.timeLastStage)
 					return True
 				else:
 					return False
 				
 			else:
-				if self.reinforced_clicks[self.reinforce_index] <= time2ans_cum <= self.reinforced_clicks[self.reinforce_index+1]:
+				if self.reinforce_index == 0 and self.reinforced_clicks[self.reinforce_index] <= time2ans_cum:
+					self.reinforce_index += 1
+					return True
+				if self.reinforced_clicks[self.reinforce_index-1] <= time2ans_cum <= self.reinforced_clicks[self.reinforce_index]:
 					self.reinforce_index += 1
 					return True
 				else:
-					if time2ans_cum > self.reinforced_clicks[self.reinforce_index+1]:
+					if time2ans_cum > self.reinforced_clicks[self.reinforce_index]:
 						self.reinforce_index += 1
 					return False
+
 		# checking the reinforcement for group 2 [VR (auto-aco)]
 		else:
 			if sum(self.game[-1]['frequency'].values()) > self.reinforced_clicks[-1]:
