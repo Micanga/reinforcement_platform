@@ -51,19 +51,12 @@ class Stage3(Screen):
 		# if the number of blocks is the numbers block remaining
 		if self.number_of_blocks() == self.blocksS3:
 			return True
-		elif self.number_of_blocks() == self.settings['max_blocks']:
-			return True
-		# OR the player achieved the averageIRT threshold
-		elif self.number_of_blocks() >= 6 and self.averageIRT() <= self.settings['IRT_threshold']:
-			return True
-
 		# else keep playing
-		return False
+		else:
+			return False
 
 	def setReinforcedClicks(self,offset=0):
 		# a. choosing the file to aco
-		print("our offset")
-		print(offset)
 		if self.aco_file is None:
 			self.aco_file = self.nickname+'_G'+str(self.group)+'_F'+str(self.stage -1)+\
 				'_'+self.start_time.strftime("%d-%m-%Y_%Hh%Mm%Ss")+'.csv'
@@ -89,110 +82,29 @@ class Stage3(Screen):
 						self.reinforced_clicks.append(counter + offset)
 					counter += 1
 		print(self.reinforced_clicks)
-
-	def setReinforcedClicks2(self):
-
-		stage = self.stage - 1
-		group = self.group
-		allBlocks = []
-
-
-		
-		#all blocks from the last stage
-		for i in range(len(self.game)):
-			if(self.game[i]['stage'] == stage and self.game[i]['group'] == group):
-				allBlocks.append(self.game[i])
-		
-		#getting the all time from last stage
-		for i in range(len(allBlocks)):
-			self.timeLastStage += np.cumsum([time.total_seconds() for time in allBlocks[i]['time2answer']])
-
-		self.timeLastStage = self.timeLastStage[len(self.timeLastStage) - 1]
-		#the last 6 blocks		
-		for i in range(len(allBlocks)-self.settings['min_blocks'], len(allBlocks)):
-			self.reinforced_clicks2.append(allBlocks[i])
-		
-		#first time	answer
-		allReinforcedDateTime = []	
-		sumDatetime = self.reinforced_clicks2[0]['time2answer'][0]
-		allReinforcedDateTime.append(sumDatetime.total_seconds())
-
-		#getting time from first block 
-		for i in range(1,len(self.reinforced_clicks2[0]['answer'])):
-			sumDatetime += self.reinforced_clicks2[0]['time2answer'][i]
-			if(self.reinforced_clicks2[0]['reinforced'][i] == True):
-				print("our i")
-				print(i)
-				allReinforcedDateTime.append(sumDatetime.total_seconds())
-
-		for i in range(1,len(self.reinforced_clicks2)):
-			for j in range(len(self.reinforced_clicks2[i]['answer'])):
-				sumDatetime += self.reinforced_clicks2[i]['time2answer'][j]
-				if(self.reinforced_clicks2[i]['reinforced'][j] == True):
-					print("our i")
-					print(i)
-					print(j)
-					allReinforcedDateTime.append(sumDatetime.total_seconds())
-
-		print("Our selected BLocks")
-		print(self.reinforced_clicks2)
-
-		print("Our selected Times reinforced")
-		print(allReinforcedDateTime)
-
-		print("getting timeto last stage")
-		print(self.timeLastStage)
-
-		self.reinforced_clicks2 = []
-
-		for i in range(1,len(allReinforcedDateTime)):
-			self.reinforced_clicks2.append(allReinforcedDateTime[i] - allReinforcedDateTime[i-1])
-
-		self.timeLastStage += self.reinforced_clicks2[0]
-		self.reinforce_index2 += 1
 	
 	#check this function for other blocks (frequency is acumulating )
 	def conditionalReinforce(self):
 		# checking the reinforcement for group 1 and 3 [VI (auto-aco)]
 		if self.group == 1 or self.group == 3: 
+			# - calculating the cum time
 			time2ans_cum = np.cumsum([time.total_seconds() for g in self.game \
 				if g['stage'] == self.game[-1]['stage'] for time in g['time2answer'] ])
 
-			if(len(time2ans_cum)>0):
-				time2ans_cum = time2ans_cum[-1]
-			else:
-				time2ans_cum = 0
-				
-			print('----',time2ans_cum)
+			time2ans_cum = time2ans_cum[-1] if len(time2ans_cum) > 0 else 0
 			time2ans_cum +=  (datetime.datetime.now() - self.round_start_time).total_seconds()
-			print('++++',time2ans_cum)
-
-			if self.reinforce_index > len(self.reinforced_clicks) - 1 or\
-			time2ans_cum > self.reinforced_clicks[-1]:
-			
-				if(len(self.reinforced_clicks2) == 0):
-					self.setReinforcedClicks2()
-
-				if(time2ans_cum >= self.timeLastStage):
-					while(time2ans_cum >= self.timeLastStage):
-
-						self.timeLastStage += self.reinforced_clicks2[self.reinforce_index2 % len(self.reinforced_clicks2)]
-						self.reinforce_index2 += 1
-					return True
-				else:
-					return False
+		
+			# - checking if the cum time skips all available time to reinforce
+			if time2ans_cum > self.reinforced_clicks[-1]:
+				self.setReinforcedClicks(offset=time2ans_cum)
 				
+			# - checking the reinforce
+			if self.reinforced_clicks[self.reinforce_index] <= time2ans_cum:
+				while self.reinforced_clicks[self.reinforce_index] <= time2ans_cum:
+					self.reinforce_index += 1
+				return True
 			else:
-				if self.reinforce_index == 0 and self.reinforced_clicks[self.reinforce_index] <= time2ans_cum:
-					self.reinforce_index += 1
-					return True
-				if self.reinforced_clicks[self.reinforce_index-1] <= time2ans_cum <= self.reinforced_clicks[self.reinforce_index]:
-					self.reinforce_index += 1
-					return True
-				else:
-					if time2ans_cum > self.reinforced_clicks[self.reinforce_index]:
-						self.reinforce_index += 1
-					return False
+				return False
 
 		# checking the reinforcement for group 2 [VR (auto-aco)]
 		else:
