@@ -30,7 +30,10 @@ class Stage3(Screen):
 
 		self.aco_file = None
 		self.reinforce_index = 0
-		self.offset_multiplyer = 1
+
+		time_vector_stage2 = np.cumsum([time.total_seconds() for g in self.game \
+			if g['stage'] == 2 for time in g['time2answer'] ])
+		self.offset_reinforce = time_vector_stage2[-1] if len(time_vector_stage2) > 0 else 0
 		
 		blocksS1 = self.getAllBlocks(self.group,self.stage-1) #(stage 1 for stage 3) or (stage 4 for stage 6) 
 		blocksS2 = self.getAllBlocks(self.group,self.stage-2) #(stage 2 for stage 3) or (stage 5 for stage 6) 
@@ -85,22 +88,18 @@ class Stage3(Screen):
 	def conditionalReinforce(self):
 		# checking the reinforcement for group 1 and 3 [VI (auto-aco)]
 		if self.group == 1 or self.group == 3: 
-			# - calculating the cum time for stage 2 and stage 3
-			time_vector_stage2 = np.cumsum([time.total_seconds() for g in self.game \
-				if g['stage'] == 2 for time in g['time2answer'] ])
-			stage2_total_time = time_vector_stage2[-1] if len(time_vector_stage2) > 0 else 0
-			
+			# - calculating the cum time for stage 3
 			time_vector_stage3 = np.cumsum([time.total_seconds() for g in self.game \
 				if g['stage'] == self.game[-1]['stage'] for time in g['time2answer'] ])
 			time2ans_cum = time_vector_stage3[-1] if len(time_vector_stage3) > 0 else 0
-			time2ans_cum +=  (datetime.datetime.now() - self.round_start_time).total_seconds() + 1
+			time2ans_cum +=  (datetime.datetime.now() - self.round_start_time).total_seconds()
 		
 			# - checking if the cum time skips all available time to reinforce and the 
 			# stage 2 answers finished
 			if self.reinforce_index == len(self.reinforced_clicks):
 				self.reinforce_index = 0
-				self.setReinforcedClicks(offset=self.offset_multiplyer*stage2_total_time)
-				self.offset_multiplyer += 1
+				self.setReinforcedClicks(offset=self.offset_reinforce)
+				self.offset_reinforce += self.reinforced_clicks[-1]
 				
 			# - checking the reinforce
 			if self.reinforce_index < len(self.reinforced_clicks):

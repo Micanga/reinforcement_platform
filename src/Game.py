@@ -68,6 +68,9 @@ class Game(object):
         # a. updating game log
         self.game[-1]['answer'].append(clicked_button)
         self.game[-1]['frequency'][clicked_button] +=1
+        self.game[-1]['time2answer'].append(
+            datetime.datetime.now() - self.round_start_time)
+        self.round_start_time = datetime.datetime.now()
 
         # b.reinforcing the action
         if self.conditionalReinforce():
@@ -139,8 +142,6 @@ class Game(object):
             self.gif.destroy()
         # 1. Writting results
         # - writing results in log file
-        self.game[-1]['time2answer'].append(
-            datetime.datetime.now() - self.round_start_time)
         write_round(self.game,self.nickname,self.group,self.stage,self.start_time)
 
         # 2. Checking the stop coditions
@@ -208,8 +209,6 @@ class Game(object):
                         #self.return_click()
             # - updating round
             else:
-                self.round_start_time = datetime.datetime.now()
-
                 # - recovering std background    
                 self.main_bg.configure(bg="#%02x%02x%02x" %\
                     (int(BG_COLOR[0]),int(BG_COLOR[1]),int(BG_COLOR[2])))
@@ -279,9 +278,8 @@ class Game(object):
         self.game[-1]['points'] = self.game[-2]['points']
         self.game[-1]['block_time'] = 0
 
-        self.round_start_time = datetime.datetime.now()
         print("updating round time")
-        self.block_start_time = datetime.datetime.now()
+        self.block_start_time = self.round_start_time
 
     #get All blocks from the group and stage specified    
 
