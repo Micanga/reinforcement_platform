@@ -99,7 +99,7 @@ class Stage3(Screen):
 			if self.reinforce_index == len(self.reinforced_clicks):
 				self.reinforce_index = 0
 				self.setReinforcedClicks(offset=self.offset_reinforce)
-				self.offset_reinforce += self.reinforced_clicks[-1]
+				self.offset_reinforce = self.reinforced_clicks[-1]
 				
 			# - checking the reinforce
 			if self.reinforce_index < len(self.reinforced_clicks):
