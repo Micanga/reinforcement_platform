@@ -192,21 +192,16 @@ class Game(object):
                         (int(BG_COLOR[0]),int(BG_COLOR[1]),int(BG_COLOR[2])))
 
                     # - replaying
-                    if self.settings['return_click'] == False:
-                        # - creating the buttons and enabling the mouse
-                        self.createButtons(self.center_h, self.center_w, self.radius)
-                        if not self.test:
-                           reset_mouse_position(self)
+                    # reseting the mouse
+                    if self.settings['return_click']:
+                        reset_mouse_position(self)
 
-                        ableMouse(self)
-                        if self.test:
-                            self.auto_play()
-                    else:
-                        if not self.test:
-                           reset_mouse_position(self)
-                           self.createButtons(self.center_h, self.center_w, self.radius)
-                           ableMouse(self)
-                        #self.return_click()
+                    # creating the components
+                    self.createButtons(self.center_h, self.center_w, self.radius)
+                    ableMouse(self)
+
+                    if self.test:
+                        self.auto_play()
             # - updating round
             else:
                 # - recovering std background    
@@ -214,20 +209,14 @@ class Game(object):
                     (int(BG_COLOR[0]),int(BG_COLOR[1]),int(BG_COLOR[2])))
 
                 # - replaying
-                if self.settings['return_click'] == False:
-                    # - creating the buttons and enabling the mouse
-                    self.createButtons(self.center_h, self.center_w, self.radius)
-                    if not self.test:
-                        reset_mouse_position(self)
-                    ableMouse(self)
-                    if self.test:
-                        self.auto_play()
-                else:
-                    if not self.test:
-                        reset_mouse_position(self)
-                        self.createButtons(self.center_h, self.center_w, self.radius)
-                        ableMouse(self)
-                    #self.return_click()
+                if self.settings['return_click']:
+                    reset_mouse_position(self)
+
+                # - creating the buttons and enabling the mouse
+                self.createButtons(self.center_h, self.center_w, self.radius)
+                ableMouse(self)
+                if self.test:
+                    self.auto_play()
 
     def fadeNextStage(self):
         print("Fading")

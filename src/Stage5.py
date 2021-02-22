@@ -34,6 +34,10 @@ class Stage5(Screen):
 		self.reinforce_index = 0
 		self.setReinforcedClicks()
 		
+		# reseting the mouse
+		if self.settings['return_click']:
+			utils.reset_mouse_position(self)
+
 		# d. auto-play
 		if self.test:
 			self.auto_play()
