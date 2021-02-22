@@ -21,7 +21,7 @@ BG_COLOR = BABY_BLUE
 class Game(object):
 
     def __init__(self):
-        self.test = True
+        self.test = False
         return
 
     def auto_play(self):
