@@ -9,6 +9,7 @@ import numpy as np
 class Stage3(Screen):
 
 	def __init__(self, master, prev_sc, main_bg):
+		self.test = True
 		# 1. Initializing the necessary variables
 		# a. GUI variables
 		super().__init__(master, prev_sc, main_bg,screen_name='Stage 3')
@@ -70,14 +71,34 @@ class Stage3(Screen):
 		# b. defining the reinforcement condition
 		if self.group == 1 or self.group == 3: # applying the VI(auto-aco) scheme [G1 and G3]
 			counter, self.reinforced_clicks = 0, []
+			reinf_flags = []
+
+			# - collecting all answers from stage 2
 			with open("./results/"+self.aco_file) as ref_file:
 				for line in ref_file:
-					reinf_flag = line.split(';')[0]
-					cum_time = line.split(';')[7]
-					if counter != 0 and reinf_flag == 'SIM':
-						self.reinforced_clicks.append(float(cum_time) + float(offset))
+					if counter != 0:
+						reinf_flags.append(line.split(';')[0])
+						cum_time = line.split(';')[7]
+						self.reinforced_clicks.append(float(cum_time))
 					counter += 1
 
+			# - splitting 6 last blocks for reinforce
+			if len(self.reinforced_clicks) > 60:
+				negative_offset = self.reinforced_clicks[-61]
+				self.reinforced_clicks = self.reinforced_clicks[-60:0]
+				reinf_flags[-60:0]
+			else:
+				negative_offset = 0
+
+			# - setting reinforcement only
+			for i in range(len(reinf_flags),0):
+				if reinf_flags[i] == 'NAO':
+					self.reinforced_clicks.pop()
+
+			# - calculating the reinforcment with offset
+			for i in range(len(self.reinforced_clicks)):
+				self.reinforced_clicks[i] += (offset - negative_offset)
+			
 		else: # applying the VR(auto-aco) scheme [G2]
 			counter, self.reinforced_clicks = 0, []
 			with open("./results/"+self.aco_file) as ref_file:
