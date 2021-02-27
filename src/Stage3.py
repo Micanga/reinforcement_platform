@@ -93,7 +93,7 @@ class Stage3(Screen):
 			# - setting reinforcement only
 			for i in range(len(reinf_flags),0):
 				if reinf_flags[i] == 'NAO':
-					self.reinforced_clicks.pop()
+					del self.reinforced_clicks[i]
 
 			# - calculating the reinforcment with offset
 			for i in range(len(self.reinforced_clicks)):
