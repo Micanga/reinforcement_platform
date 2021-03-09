@@ -9,7 +9,6 @@ import numpy as np
 class Stage3(Screen):
 
 	def __init__(self, master, prev_sc, main_bg):
-		self.test = True
 		# 1. Initializing the necessary variables
 		# a. GUI variables
 		super().__init__(master, prev_sc, main_bg,screen_name='Stage 3')
@@ -39,7 +38,7 @@ class Stage3(Screen):
 		blocksS1 = self.getAllBlocks(self.group,self.stage-1) #(stage 1 for stage 3) or (stage 4 for stage 6) 
 		blocksS2 = self.getAllBlocks(self.group,self.stage-2) #(stage 2 for stage 3) or (stage 5 for stage 6) 
 		self.blocksS3 = 60 - (len(blocksS1) +  len(blocksS2)) # number of blocks from stage 3 or stage 6
-		self.setReinforcedClicks()
+		self.setReinforcedClicks(offset=0)
 			
 		# reseting the mouse
 		if self.settings['return_click']:
@@ -91,7 +90,7 @@ class Stage3(Screen):
 				negative_offset = 0
 
 			# - setting reinforcement only
-			for i in range(len(reinf_flags),0):
+			for i in reversed(range(len(reinf_flags))):
 				if reinf_flags[i] == 'NAO':
 					del self.reinforced_clicks[i]
 
