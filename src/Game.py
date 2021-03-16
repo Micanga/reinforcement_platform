@@ -21,11 +21,11 @@ BG_COLOR = BABY_BLUE
 class Game(object):
 
     def __init__(self):
-        self.test = False
+        self.test = True
         return
 
     def auto_play(self):
-        sleep(rd.uniform(1,2))
+        sleep(rd.uniform(1,5))
         coin = float(random.uniform(0,8))
         if coin <= 1:
             self.button1_click()

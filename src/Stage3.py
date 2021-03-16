@@ -83,9 +83,9 @@ class Stage3(Screen):
 
 			# - splitting 6 last blocks for reinforce
 			if len(self.reinforced_clicks) > 60:
-				negative_offset = self.reinforced_clicks[-61]
-				self.reinforced_clicks = self.reinforced_clicks[-60:0]
-				reinf_flags[-60:0]
+				negative_offset = self.reinforced_clicks[len(self.reinforced_clicks)-61]
+				self.reinforced_clicks = self.reinforced_clicks[len(self.reinforced_clicks)-60:len(self.reinforced_clicks)]
+				reinf_flags = reinf_flags[len(self.reinforced_clicks)-60:len(self.reinforced_clicks)]
 			else:
 				negative_offset = 0
 
@@ -106,7 +106,6 @@ class Stage3(Screen):
 					if counter != 0 and reinf_flag == 'SIM':
 						self.reinforced_clicks.append(counter + offset)
 					counter += 1
-		print(self.reinforced_clicks)
 	
 	#check this function for other blocks (frequency is acumulating )
 	def conditionalReinforce(self):
