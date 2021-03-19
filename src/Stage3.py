@@ -69,8 +69,8 @@ class Stage3(Screen):
 			
 		# b. defining the reinforcement condition
 		if self.group == 1 or self.group == 3: # applying the VI(auto-aco) scheme [G1 and G3]
-			counter, self.reinforced_clicks = 0, []
-			reinf_flags = []
+			counter, negative_offset = 0, 0
+			reinf_flags, self.reinforced_clicks = [], []
 
 			# - collecting all answers from stage 2
 			with open("./results/"+self.aco_file) as ref_file:
@@ -82,12 +82,11 @@ class Stage3(Screen):
 					counter += 1
 
 			# - splitting 6 last blocks for reinforce
-			if len(self.reinforced_clicks) > 60:
+			if len(self.reinforced_clicks) > 60 and self.reinforced_clicks[-1] < \
+			 (datetime.datetime.now() - self.round_start_time).total_seconds():
 				negative_offset = self.reinforced_clicks[len(self.reinforced_clicks)-61]
 				self.reinforced_clicks = self.reinforced_clicks[len(self.reinforced_clicks)-60:len(self.reinforced_clicks)]
 				reinf_flags = reinf_flags[len(self.reinforced_clicks)-60:len(self.reinforced_clicks)]
-			else:
-				negative_offset = 0
 
 			# - setting reinforcement only
 			for i in reversed(range(len(reinf_flags))):
