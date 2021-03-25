@@ -31,10 +31,24 @@ class Stage3(Screen):
 		self.aco_file = None
 		self.reinforce_index = 0
 
-		time_vector_stage2 = np.cumsum([time.total_seconds() for g in self.game \
-			if g['stage'] == 2 for time in g['time2answer'] ])
-		self.offset_reinforce = time_vector_stage2[-1] if len(time_vector_stage2) > 0 else 0
+		#####
+		# OFFSET
+		#####
+		self.aco_file = '22MARCOteste1_G1_F2_22-03-2021_13h04m25s.csv'#self.nickname+'_G'+str(self.group)+'_F'+str(self.stage -1)+\
+				#'_'+self.start_time.strftime("%d-%m-%Y_%Hh%Mm%Ss")+'.csv'
+				# - collecting all answers from stage 2
+		with open("./results/"+self.aco_file) as ref_file:
+			counter , reinf_vector_stage2, time_vector_stage2 = 0, [], []
+			for line in ref_file:
+				if counter != 0:
+					reinf_vector_stage2.append(line.split(';')[0])
+					time_vector_stage2.append(float(line.split(';')[7]))
+				counter += 1
+
+		self.start_static_rounds = float(time_vector_stage2[-1]) 
+		self.offset_reinforce = float(time_vector_stage2[-1]) 
 		
+		#################
 		blocksS1 = self.getAllBlocks(self.group,self.stage-1) #(stage 1 for stage 3) or (stage 4 for stage 6) 
 		blocksS2 = self.getAllBlocks(self.group,self.stage-2) #(stage 2 for stage 3) or (stage 5 for stage 6) 
 		self.blocksS3 = 60 - (len(blocksS1) +  len(blocksS2)) # number of blocks from stage 3 or stage 6
@@ -63,8 +77,8 @@ class Stage3(Screen):
 	def setReinforcedClicks(self,offset=0):
 		# a. choosing the file to aco
 		if self.aco_file is None:
-			self.aco_file = self.nickname+'_G'+str(self.group)+'_F'+str(self.stage -1)+\
-				'_'+self.start_time.strftime("%d-%m-%Y_%Hh%Mm%Ss")+'.csv'
+			self.aco_file = '22MARCOteste1_G1_F2_22-03-2021_13h04m25s.csv'#self.nickname+'_G'+str(self.group)+'_F'+str(self.stage -1)+\
+				#'_'+self.start_time.strftime("%d-%m-%Y_%Hh%Mm%Ss")+'.csv'
 			print('ACO FILE:',self.aco_file)
 			
 		# b. defining the reinforcement condition
@@ -82,20 +96,33 @@ class Stage3(Screen):
 					counter += 1
 
 			# - splitting 6 last blocks for reinforce
-			if len(self.reinforced_clicks) > 60 and self.reinforced_clicks[-1] < \
-			 (datetime.datetime.now() - self.round_start_time).total_seconds():
+			time_vector_stage3 = np.cumsum([time.total_seconds() for g in self.game \
+				if g['stage'] == self.game[-1]['stage'] for time in g['time2answer'] ])
+			time2ans_cum = time_vector_stage3[-1] if len(time_vector_stage3) > 0 else 0
+			time2ans_cum +=  (datetime.datetime.now() - self.round_start_time).total_seconds()
+
+			if len(self.reinforced_clicks) > 60 and self.start_static_rounds < time2ans_cum:
+				print('estabilidade ativada')
 				negative_offset = self.reinforced_clicks[len(self.reinforced_clicks)-61]
 				self.reinforced_clicks = self.reinforced_clicks[len(self.reinforced_clicks)-60:len(self.reinforced_clicks)]
-				reinf_flags = reinf_flags[len(self.reinforced_clicks)-60:len(self.reinforced_clicks)]
+				reinf_flags = reinf_flags[len(reinf_flags)-60:len(reinf_flags)]
+			else:
+				print('estabilidade desativada')
+
+			print('NEG:',negative_offset,'LEN',len(self.reinforced_clicks))
 
 			# - setting reinforcement only
-			for i in reversed(range(len(reinf_flags))):
+			for i in range(len(reinf_flags)-1,-1,-1):
 				if reinf_flags[i] == 'NAO':
 					del self.reinforced_clicks[i]
+
+			print('>',self.reinforced_clicks)
 
 			# - calculating the reinforcment with offset
 			for i in range(len(self.reinforced_clicks)):
 				self.reinforced_clicks[i] += (offset - negative_offset)
+
+			print('>>',self.reinforced_clicks)
 			
 		else: # applying the VR(auto-aco) scheme [G2]
 			counter, self.reinforced_clicks = 0, []
@@ -118,14 +145,15 @@ class Stage3(Screen):
 		
 			# - checking if the cum time skips all available time to reinforce and the 
 			# stage 2 answers finished
-			if self.reinforce_index == len(self.reinforced_clicks):
+			print('|||',self.offset_reinforce,time2ans_cum)
+			if self.reinforce_index == len(self.reinforced_clicks) and \
+			 self.start_static_rounds < time2ans_cum:
 				self.reinforce_index = 0
 				self.setReinforcedClicks(offset=self.offset_reinforce)
 				self.offset_reinforce = self.reinforced_clicks[-1]
 				
 			# - checking the reinforce
 			if self.reinforce_index < len(self.reinforced_clicks):
-					
 				if self.reinforced_clicks[self.reinforce_index] <= time2ans_cum:
 					while self.reinforce_index < len(self.reinforced_clicks) and \
 					 self.reinforced_clicks[self.reinforce_index] <= time2ans_cum:
