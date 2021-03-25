@@ -473,16 +473,10 @@ class Screen(Game):
             irt_per_block[-1] = (irt_per_block[-1].total_seconds())/10
 
         # b. calculating (for real)
-
-        print("This is our IRT per Block")
-        print(irt_per_block)
         R = (irt_per_block[0] + irt_per_block[1] + irt_per_block[2])/3 - \
                 (irt_per_block[3] + irt_per_block[4] + irt_per_block[5])/3
         
         R /= (np.sum(irt_per_block)/6)
-
-        print("This is our IRT")
-        print(R)
 
         # returning the result
         return np.abs(R)
