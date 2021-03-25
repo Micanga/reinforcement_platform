@@ -144,11 +144,6 @@ def write_round(game,nickname,group,stage,start_time):
 	group = game[-1]['group']
 	stage = game[-1]['stage']
 
-	print("Our group")
-	print(group)
-	print("Stage")
-	print(stage)
-
 	gameThisStage = []
 
 	for i in range(len(game)):
@@ -181,13 +176,6 @@ def write_round(game,nickname,group,stage,start_time):
 				
 				TR[gameThisStage[i]['answer'][j]] = 0
 	
-	
-	
-	print(TR)
-	print(TRW)
-	print(TRMEANR)
-	print(TRMEANUR)
-
 	# writting
 	result_file = open('results/'+filename+".csv","a")
 	result_file.write(\
