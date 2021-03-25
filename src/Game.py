@@ -22,10 +22,30 @@ class Game(object):
 
     def __init__(self):
         self.test = False
+        #if self.test:
+        #    self.sleep_time = []
+        #    self.sleep_index = 0
+        #    self.click_time_file = '22MARCOteste1_G1_F3_22-03-2021_13h04m25s.csv'
+        #    with open("./results/"+click_time_file) as ref_file:
+        #        counter = 0
+        #        for line in ref_file:
+        #            if counter != 0:
+        #                self.sleep_time.append(float(line.split(';')[6])) 
+        #                if counter != 1:
+        #                    self.sleep_time[-1] -= 1.59
+        #            counter += 1
         return
 
     def auto_play(self):
-        sleep(rd.uniform(1,5))
+        ####
+        # FOR TEST
+        ####
+        # - collecting the cum time to answers
+        print(self.sleep_time[self.sleep_index])
+        sleep(self.sleep_time[self.sleep_index])
+        self.sleep_index += 1
+        #sleep(rd.uniform(1,5))
+
         coin = float(random.uniform(0,8))
         if coin <= 1:
             self.button1_click()
@@ -169,10 +189,6 @@ class Game(object):
                         self.cur_color = np.array([0.0,0.0,0.0])
                         self.ref_color = self.cur_color - np.array(WHITE)
 
-                    print("this is the stage and session")
-                    print(self.group)
-                    print(self.stage)
-                    #self.master.after(20,self.fadeNextStage)
                     self.master.after(20,self.nextStage)
 
                     if(self.stage == 3 or self.stage == 6):
@@ -184,7 +200,6 @@ class Game(object):
                         self.win_txt.place(x=self.sw/2,y=self.sh/2,anchor='center')
                    
                 else:
-                    print("| ADD OTHER BLOCK")
                     self.add_block()
 
                     # - recovering std background    
@@ -267,7 +282,6 @@ class Game(object):
         self.game[-1]['points'] = self.game[-2]['points']
         self.game[-1]['block_time'] = 0
 
-        print("updating round time")
         self.block_start_time = self.round_start_time
 
     #get All blocks from the group and stage specified    
