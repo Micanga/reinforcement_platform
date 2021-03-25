@@ -104,7 +104,8 @@ class Stage5(Screen):
 		print("Reinforced CLick")
 		if self.group == 1: # applying the VR scheme [G1]
 			if self.VR20_index == 0:
-				self.VR20 = [[6, 3, 66, 12, 38, 9, 28, 1, 21, 16],[6, 3, 66, 12, 38, 9, 28, 1, 21, 16]]
+				self.VR20 = [[6, 3, 66, 12, 38, 9, 28, 1, 21, 16],[3, 12, 6, 66, 38, 28, 9, 1, 16, 21],\
+					[1, 3, 6, 66, 21, 12, 38, 9, 16, 28],[3, 6, 66, 12, 9, 38, 28, 1, 21, 16]]
 
 			self.reinforced_clicks = self.VR20[self.VR20_index]
 			self.reinforced_clicks = np.array(np.cumsum(self.reinforced_clicks)) # accumulated sum of list VR5 without replacement
@@ -134,4 +135,3 @@ class Stage5(Screen):
 						if counter != 0 and reinf_flag == 'SIM':
 							self.reinforced_clicks.append(counter + offset)
 						counter += 1
-		print(self.reinforced_clicks)
