@@ -34,9 +34,10 @@ class Stage3(Screen):
 		#####
 		# OFFSET
 		#####
-		self.aco_file = '22MARCOteste1_G1_F2_22-03-2021_13h04m25s.csv'#self.nickname+'_G'+str(self.group)+'_F'+str(self.stage -1)+\
-				#'_'+self.start_time.strftime("%d-%m-%Y_%Hh%Mm%Ss")+'.csv'
-				# - collecting all answers from stage 2
+		self.aco_file = self.nickname+'_G'+str(self.group)+'_F'+str(self.stage -1)+\
+				'_'+self.start_time.strftime("%d-%m-%Y_%Hh%Mm%Ss")+'.csv'
+				
+		# - collecting all answers from stage 2
 		with open("./results/"+self.aco_file) as ref_file:
 			counter , reinf_vector_stage2, time_vector_stage2 = 0, [], []
 			for line in ref_file:
@@ -77,8 +78,8 @@ class Stage3(Screen):
 	def setReinforcedClicks(self,offset=0):
 		# a. choosing the file to aco
 		if self.aco_file is None:
-			self.aco_file = '22MARCOteste1_G1_F2_22-03-2021_13h04m25s.csv'#self.nickname+'_G'+str(self.group)+'_F'+str(self.stage -1)+\
-				#'_'+self.start_time.strftime("%d-%m-%Y_%Hh%Mm%Ss")+'.csv'
+			self.aco_file = self.nickname+'_G'+str(self.group)+'_F'+str(self.stage -1)+\
+				'_'+self.start_time.strftime("%d-%m-%Y_%Hh%Mm%Ss")+'.csv'
 			print('ACO FILE:',self.aco_file)
 			
 		# b. defining the reinforcement condition
