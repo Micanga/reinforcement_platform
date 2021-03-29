@@ -34,8 +34,11 @@ class Stage3(Screen):
 		#####
 		# OFFSET
 		#####
-		self.aco_file = self.nickname+'_G'+str(self.group)+'_F'+str(self.stage -1)+\
-				'_'+self.start_time.strftime("%d-%m-%Y_%Hh%Mm%Ss")+'.csv'
+		if self.test:
+			self.aco_file = '28MARCOteste1_G1_F2_28-03-2021_13h22m19s.csv'
+		else:
+			self.aco_file = self.nickname+'_G'+str(self.group)+'_F'+str(self.stage -1)+\
+					'_'+self.start_time.strftime("%d-%m-%Y_%Hh%Mm%Ss")+'.csv'
 				
 		# - collecting all answers from stage 2
 		with open("./results/"+self.aco_file) as ref_file:
@@ -102,7 +105,7 @@ class Stage3(Screen):
 			time2ans_cum = time_vector_stage3[-1] if len(time_vector_stage3) > 0 else 0
 			time2ans_cum +=  (datetime.datetime.now() - self.round_start_time).total_seconds()
 
-			if len(self.reinforced_clicks) > 60 and self.start_static_rounds < time2ans_cum:
+			if len(self.reinforced_clicks) > 60 and self.start_static_rounds == np.inf:
 				print('estabilidade ativada')
 				negative_offset = self.reinforced_clicks[len(self.reinforced_clicks)-61]
 				self.reinforced_clicks = self.reinforced_clicks[len(self.reinforced_clicks)-60:len(self.reinforced_clicks)]
@@ -143,28 +146,37 @@ class Stage3(Screen):
 				if g['stage'] == self.game[-1]['stage'] for time in g['time2answer'] ])
 			time2ans_cum = time_vector_stage3[-1] if len(time_vector_stage3) > 0 else 0
 			time2ans_cum +=  (datetime.datetime.now() - self.round_start_time).total_seconds()
-		
-			# - checking if the cum time skips all available time to reinforce and the 
-			# stage 2 answers finished
-			print('|||',self.offset_reinforce,time2ans_cum)
-			if self.reinforce_index == len(self.reinforced_clicks) and \
-			 self.start_static_rounds < time2ans_cum:
+			
+			# - verifying the start of the static rounds
+			if self.start_static_rounds < time2ans_cum:
+				self.start_static_rounds = np.inf
+
 				self.reinforce_index = 0
 				self.setReinforcedClicks(offset=self.offset_reinforce)
 				self.offset_reinforce = self.reinforced_clicks[-1]
-				
+
 			# - checking the reinforce
+			positive_reinforce = False
 			if self.reinforce_index < len(self.reinforced_clicks):
 				if self.reinforced_clicks[self.reinforce_index] <= time2ans_cum:
 					while self.reinforce_index < len(self.reinforced_clicks) and \
 					 self.reinforced_clicks[self.reinforce_index] <= time2ans_cum:
 						self.reinforce_index += 1
-					return True
-				else:
-					return False
-	
-			else:
-				return False
+					positive_reinforce = True
+
+			# - checking the reinforce overlap
+			while self.reinforce_index == len(self.reinforced_clicks):
+				self.start_static_rounds = np.inf
+
+				self.reinforce_index = 0
+				self.setReinforcedClicks(offset=self.offset_reinforce)
+				self.offset_reinforce = self.reinforced_clicks[-1]
+
+				while self.reinforce_index < len(self.reinforced_clicks) and \
+				self.reinforced_clicks[self.reinforce_index] <= time2ans_cum:
+					self.reinforce_index += 1	
+
+			return positive_reinforce
 
 		# checking the reinforcement for group 2 [VR (auto-aco)]
 		else:
