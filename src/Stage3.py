@@ -42,15 +42,23 @@ class Stage3(Screen):
 				
 		# - collecting all answers from stage 2
 		with open("./results/"+self.aco_file) as ref_file:
-			counter , reinf_vector_stage2, time_vector_stage2 = 0, [], []
+			counter , reinf_flags, time_vector_stage2 = 0, [], []
 			for line in ref_file:
 				if counter != 0:
-					reinf_vector_stage2.append(line.split(';')[0])
+					reinf_flags.append(line.split(';')[0])
 					time_vector_stage2.append(float(line.split(';')[7]))
 				counter += 1
-
-		self.start_static_rounds = float(time_vector_stage2[-1]) 
+				
 		self.offset_reinforce = float(time_vector_stage2[-1]) 
+		if len(time_vector_stage2) > 60:
+			i1 = len(reinf_flags[0:len(reinf_flags)-60]) +\
+			 reinf_flags[len(reinf_flags)-60:len(reinf_flags)].index('SIM')
+			self.start_static_rounds = float(time_vector_stage2[-1])  +\
+			 float(time_vector_stage2[i1]) - float(time_vector_stage2[-61])
+		else:
+			self.start_static_rounds = float(time_vector_stage2[-1])  +\
+			 float(time_vector_stage2[reinf_flags.index('SIM')])
+		print('STATIC STARTS AT',self.start_static_rounds)
 		
 		#################
 		blocksS1 = self.getAllBlocks(self.group,self.stage-1) #(stage 1 for stage 3) or (stage 4 for stage 6) 
@@ -105,21 +113,19 @@ class Stage3(Screen):
 			time2ans_cum = time_vector_stage3[-1] if len(time_vector_stage3) > 0 else 0
 			time2ans_cum +=  (datetime.datetime.now() - self.round_start_time).total_seconds()
 
-			if len(self.reinforced_clicks) > 60 and self.start_static_rounds == np.inf:
-				print('estabilidade ativada')
-				negative_offset = self.reinforced_clicks[len(self.reinforced_clicks)-61]
-				self.reinforced_clicks = self.reinforced_clicks[len(self.reinforced_clicks)-60:len(self.reinforced_clicks)]
-				reinf_flags = reinf_flags[len(reinf_flags)-60:len(reinf_flags)]
-			else:
-				print('estabilidade desativada')
-
-			print('NEG:',negative_offset,'LEN',len(self.reinforced_clicks))
+			if self.start_static_rounds == np.inf:
+				print('||| estabilidade ativada |||')
+				if len(self.reinforced_clicks) > 60:
+					negative_offset = self.reinforced_clicks[len(self.reinforced_clicks)-61]
+					self.reinforced_clicks = self.reinforced_clicks[len(self.reinforced_clicks)-60:len(self.reinforced_clicks)]
+					reinf_flags = reinf_flags[len(reinf_flags)-60:len(reinf_flags)]
 
 			# - setting reinforcement only
 			for i in range(len(reinf_flags)-1,-1,-1):
 				if reinf_flags[i] == 'NAO':
 					del self.reinforced_clicks[i]
 
+			print('NEG:',negative_offset,'LEN',len(self.reinforced_clicks))
 			print('>',self.reinforced_clicks)
 
 			# - calculating the reinforcment with offset
