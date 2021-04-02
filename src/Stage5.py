@@ -12,12 +12,12 @@ class Stage5(Screen):
 	def __init__(self, master, prev_sc, main_bg):
     	# 1. Initializing the necessary variables
 		# a. GUI variables
-		super().__init__(master, prev_sc, main_bg,screen_name='Stage 2')
+		super().__init__(master, prev_sc, main_bg,screen_name='Stage 5')
 		self.init_variables()
 
 		# b. reinforce vectors
 		self.VR20_index = 0
-
+		
 		# 2. creating the result file
 		log.create_file(self.nickname,self.group,self.stage,self.start_time)
 
@@ -31,9 +31,10 @@ class Stage5(Screen):
 		# c. sound effects
 		self.load_sfx()
 
+		self.reinforced_clicks = []
 		self.reinforce_index = 0
-		self.setReinforcedClicks()
-		
+		self.setReinforcedClicks()	
+
 		# reseting the mouse
 		if self.settings['return_click']:
 			utils.reset_mouse_position(self)
@@ -41,6 +42,8 @@ class Stage5(Screen):
 		# d. auto-play
 		if self.test:
 			self.auto_play()
+		else:
+			print("Amigo estou aqui")
 
 	def nextStage(self):
 		txt = "| Going to Stage 6 Screen"
@@ -81,14 +84,13 @@ class Stage5(Screen):
 						return False
 		# checking the reinforcement for group 3 [VR (aco)]
 		else:
-			if(len(self.reinforced_clicks)>=1):
-				if len(self.game[-1]['reinforced']) + 1 > self.reinforced_clicks[-1]:
-					self.setReinforcedClicks(len(self.game[-1]['reinforced']) + 1)
-					return False
-				else:
-					return any(len(self.game[-1]['reinforced']) + 1 == self.reinforced_clicks)
-			else:
+			if sum(self.game[-1]['frequency'].values()) > self.reinforced_clicks[-1]:
+				self.setReinforcedClicks(sum(self.game[-1]['frequency'].values()))
 				return False
+			else:
+				return (sum(self.game[-1]['frequency'].values()) in self.reinforced_clicks)
+				#return any(sum(self.game[-1]['frequency'].values()) == self.reinforced_clicks)
+
 
 	# THE STAGE METHODS
 	def check_stage_end_conditions(self): 
@@ -101,7 +103,7 @@ class Stage5(Screen):
 		return False
 
 	def setReinforcedClicks(self,offset=0):
-		print("Reinforced CLick")
+		print("Here")
 		if self.group == 1: # applying the VR scheme [G1]
 			if self.VR20_index == 0:
 				self.VR20 = [[6, 3, 66, 12, 38, 9, 28, 1, 21, 16],[3, 12, 6, 66, 38, 28, 9, 1, 16, 21],\

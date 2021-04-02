@@ -21,7 +21,7 @@ BG_COLOR = BABY_BLUE
 class Game(object):
 
     def __init__(self):
-        self.test = False
+        self.test = True
         #if self.test:
         #    self.sleep_time = []
         #    self.sleep_index = 0

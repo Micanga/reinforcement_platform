@@ -9,9 +9,9 @@ import numpy as np
 class Stage3(Screen):
 
 	def __init__(self, master, prev_sc, main_bg):
-		# 1. Initializing the necessary variables
+    	# 1. Initializing the necessary variables
 		# a. GUI variables
-		super().__init__(master, prev_sc, main_bg,screen_name='Stage 3')
+		super().__init__(master, prev_sc, main_bg,screen_name='Stage 6')
 		self.init_variables()
 
 		# 2. creating the result file
@@ -31,33 +31,37 @@ class Stage3(Screen):
 		self.aco_file = None
 		self.reinforce_index = 0
 
-		#####
-		# OFFSET
-		#####
-		self.aco_file = '22MARCOteste1_G1_F2_22-03-2021_13h04m25s.csv'#self.nickname+'_G'+str(self.group)+'_F'+str(self.stage -1)+\
-				#'_'+self.start_time.strftime("%d-%m-%Y_%Hh%Mm%Ss")+'.csv'
-				# - collecting all answers from stage 2
-		with open("./results/"+self.aco_file) as ref_file:
-			counter , reinf_vector_stage2, time_vector_stage2 = 0, [], []
-			for line in ref_file:
-				if counter != 0:
-					reinf_vector_stage2.append(line.split(';')[0])
-					time_vector_stage2.append(float(line.split(';')[7]))
-				counter += 1
-
-		self.start_static_rounds = float(time_vector_stage2[-1]) 
-		self.offset_reinforce = float(time_vector_stage2[-1]) 
-		
-		#################
 		blocksS1 = self.getAllBlocks(self.group,self.stage-1) #(stage 1 for stage 3) or (stage 4 for stage 6) 
-		blocksS2 = self.getAllBlocks(self.group,self.stage-2) #(stage 2 for stage 3) or (stage 5 for stage 6) 
+		blocksS2 = self.getAllBlocks(self.group,self.stage-2) #(stage 2 for stage 3) or (stage 5 for stage 6) 	
 		self.blocksS3 = 60 - (len(blocksS1) +  len(blocksS2)) # number of blocks from stage 3 or stage 6
-		self.setReinforcedClicks(offset=0)
+		stageForReinforce = self.stage - 1
+
+		blocksForReinforce = []
+		self.dateTimeReinforce = []
+		self.isFirstReinforce = True
+		
+		#get all the blocks from the stage 2 or 5
+		for block in self.game:
+			if block['group'] == self.group and block['stage'] == stageForReinforce:
+				blocksForReinforce.append(block)
+
+		self.allClicks = []
+		sumClicks = 0
+		for block in blocksForReinforce:
+			#get the index for the clicks that have been reinforced
+			res = [i for i, val in enumerate(block['reinforced']) if val]
+			#select the datetimes
+			for i in res:
+				self.dateTimeReinforce.append(block['time2answer'][i])
+				sumClicks += i
+				self.allClicks.append(sumClicks)
+
+		self.setReinforcedClicks()
 			
 		# reseting the mouse
 		if self.settings['return_click']:
 			utils.reset_mouse_position(self)
-			
+
 		# d. auto-play
 		if self.test:
 			self.auto_play()
@@ -71,14 +75,13 @@ class Stage3(Screen):
 		if self.number_of_blocks() == self.blocksS3:
 			return True
 		# else keep playing
-		else:
-			return False
+		return False
 
 	def setReinforcedClicks(self,offset=0):
 		# a. choosing the file to aco
 		if self.aco_file is None:
-			self.aco_file = '22MARCOteste1_G1_F2_22-03-2021_13h04m25s.csv'#self.nickname+'_G'+str(self.group)+'_F'+str(self.stage -1)+\
-				#'_'+self.start_time.strftime("%d-%m-%Y_%Hh%Mm%Ss")+'.csv'
+			self.aco_file = self.nickname+'_G'+str(self.group)+'_F'+str(self.stage -1)+\
+				'_'+self.start_time.strftime("%d-%m-%Y_%Hh%Mm%Ss")+'.csv'
 			print('ACO FILE:',self.aco_file)
 			
 		# b. defining the reinforcement condition
@@ -86,7 +89,7 @@ class Stage3(Screen):
 			counter, negative_offset = 0, 0
 			reinf_flags, self.reinforced_clicks = [], []
 
-			# - collecting all answers from stage 2
+			# - collecting all answers from stage 5
 			with open("./results/"+self.aco_file) as ref_file:
 				for line in ref_file:
 					if counter != 0:
@@ -96,9 +99,9 @@ class Stage3(Screen):
 					counter += 1
 
 			# - splitting 6 last blocks for reinforce
-			time_vector_stage3 = np.cumsum([time.total_seconds() for g in self.game \
+			time_vector_stage6 = np.cumsum([time.total_seconds() for g in self.game \
 				if g['stage'] == self.game[-1]['stage'] for time in g['time2answer'] ])
-			time2ans_cum = time_vector_stage3[-1] if len(time_vector_stage3) > 0 else 0
+			time2ans_cum = time_vector_stage6[-1] if len(time_vector_stage6) > 0 else 0
 			time2ans_cum +=  (datetime.datetime.now() - self.round_start_time).total_seconds()
 
 			if len(self.reinforced_clicks) > 60 and self.start_static_rounds < time2ans_cum:
@@ -132,15 +135,14 @@ class Stage3(Screen):
 					if counter != 0 and reinf_flag == 'SIM':
 						self.reinforced_clicks.append(counter + offset)
 					counter += 1
-	
-	#check this function for other blocks (frequency is acumulating )
+		
 	def conditionalReinforce(self):
 		# checking the reinforcement for group 1 and 3 [VI (auto-aco)]
 		if self.group == 1 or self.group == 3: 
 			# - calculating the cum time for stage 3
-			time_vector_stage3 = np.cumsum([time.total_seconds() for g in self.game \
+			time_vector_stage6 = np.cumsum([time.total_seconds() for g in self.game \
 				if g['stage'] == self.game[-1]['stage'] for time in g['time2answer'] ])
-			time2ans_cum = time_vector_stage3[-1] if len(time_vector_stage3) > 0 else 0
+			time2ans_cum = time_vector_stage6[-1] if len(time_vector_stage6) > 0 else 0
 			time2ans_cum +=  (datetime.datetime.now() - self.round_start_time).total_seconds()
 		
 			# - checking if the cum time skips all available time to reinforce and the 
