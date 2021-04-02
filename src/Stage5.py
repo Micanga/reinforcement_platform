@@ -65,23 +65,30 @@ class Stage5(Screen):
 				return (current_click in self.reinforced_clicks)
 		# checking the reinforcement for group 2 [VI (aco)]
 		elif self.group == 2:
-			time2ans_cum = np.cumsum([time.total_seconds() for time in self.game[-1]['time2answer']])[-1]
-			if self.reinforce_index >= len(self.reinforced_clicks) - 1 or\
-			time2ans_cum > self.reinforced_clicks[-1]:
-				self.reinforce_index = 0
-				self.setReinforcedClicks(time2ans_cum)
-				return False
-			else:
-				if len(self.reinforced_clicks) > self.reinforce_index+1:
-					if self.reinforced_clicks[self.reinforce_index] <= time2ans_cum <= self.reinforced_clicks[self.reinforce_index+1]:
+			time_vector_stage3 = np.cumsum([time.total_seconds() for g in self.game \
+				if g['stage'] == self.game[-1]['stage'] for time in g['time2answer'] ])
+			time2ans_cum = time_vector_stage3[-1] if len(time_vector_stage3) > 0 else 0
+			time2ans_cum +=  (datetime.datetime.now() - self.round_start_time).total_seconds()
+
+			# - checking the reinforce
+			positive_reinforce = False
+			if self.reinforce_index < len(self.reinforced_clicks):
+				if self.reinforced_clicks[self.reinforce_index] <= time2ans_cum:
+					while self.reinforce_index < len(self.reinforced_clicks) and \
+					 self.reinforced_clicks[self.reinforce_index] <= time2ans_cum:
 						self.reinforce_index += 1
-						return True
-					else:
-						if time2ans_cum > self.reinforced_clicks[self.reinforce_index+1]:
-							self.reinforce_index += 1
-						return False
-				else:
-						return False
+					positive_reinforce = True
+
+			# - checking the reinforce overlap
+			while self.reinforce_index == len(self.reinforced_clicks):
+				self.reinforce_index = 0
+				self.setReinforcedClicks(offset=self.reinforce_clicks[-1])
+				
+				while self.reinforce_index < len(self.reinforced_clicks) and \
+				self.reinforced_clicks[self.reinforce_index] <= time2ans_cum:
+					self.reinforce_index += 1	
+
+			return positive_reinforce
 		# checking the reinforcement for group 3 [VR (aco)]
 		else:
 			if sum(self.game[-1]['frequency'].values()) > self.reinforced_clicks[-1]:
@@ -89,8 +96,6 @@ class Stage5(Screen):
 				return False
 			else:
 				return (sum(self.game[-1]['frequency'].values()) in self.reinforced_clicks)
-				#return any(sum(self.game[-1]['frequency'].values()) == self.reinforced_clicks)
-
 
 	# THE STAGE METHODS
 	def check_stage_end_conditions(self): 
