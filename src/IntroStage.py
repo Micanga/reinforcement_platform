@@ -70,17 +70,11 @@ class IntroStage(Screen):
 			self.buttons.append(self.start_button)
 
 		elif (self.stage == 2):
-			#self.start_button = \
-				#create_button(self.master,'AVANÇAR',self.goToStage2,\
-					#self.sw/2,5*self.sh/6,size=18)
-
 			self.goToStage2()
-		elif (self.stage == 3):
-			#self.start_button = \
-				#create_button(self.master,'AVANÇAR',self.goToStage3,\
-					#self.sw/2,5*self.sh/6,size=18)
 
+		elif (self.stage == 3):
 			self.goToStage3()
+
 		elif (self.stage == 4):
 			if self.group != 1:
 				while(re.search("_G"+str(self.group-1)+"_F5_",self.aco_file) is None):
@@ -103,16 +97,11 @@ class IntroStage(Screen):
 					self.sw/2,5*self.sh/6,size=18)
 			self.widgets.append(self.start_button)
 			self.buttons.append(self.start_button)
+
 		elif (self.stage == 5):
-			#self.start_button = \
-				#create_button(self.master,'AVANÇAR',self.goToStage5,\
-					#self.sw/2,5*self.sh/6,size=18)
-			
 			self.goToStage5()
+			
 		elif (self.stage == 6):
-			#self.start_button = \
-				#create_button(self.master,'AVANÇAR',self.goToStage6,\
-					#self.sw/2,5*self.sh/6,size=18)
 			self.goToStage6()
 
 		

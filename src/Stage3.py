@@ -27,40 +27,19 @@ class Stage3(Screen):
 
 		# c. sound effects
 		self.load_sfx()
-
-		self.aco_file = None
 		self.reinforce_index = 0
 
-		#####
-		# OFFSET
-		#####
+		# d. set the offset
+		# - verifying the aco file
 		if self.test:
 			self.aco_file = '28MARCOteste1_G1_F2_28-03-2021_13h22m19s.csv'
 		else:
 			self.aco_file = self.nickname+'_G'+str(self.group)+'_F'+str(self.stage -1)+\
 					'_'+self.start_time.strftime("%d-%m-%Y_%Hh%Mm%Ss")+'.csv'
-				
-		# - collecting all answers from stage 2
-		with open("./results/"+self.aco_file) as ref_file:
-			counter , reinf_flags, time_vector_stage2 = 0, [], []
-			for line in ref_file:
-				if counter != 0:
-					reinf_flags.append(line.split(';')[0])
-					time_vector_stage2.append(float(line.split(';')[7]))
-				counter += 1
-				
-		self.offset_reinforce = float(time_vector_stage2[-1]) 
-		if len(time_vector_stage2) > 60:
-			i1 = len(reinf_flags[0:len(reinf_flags)-60]) +\
-			 reinf_flags[len(reinf_flags)-60:len(reinf_flags)].index('SIM')
-			self.start_static_rounds = float(time_vector_stage2[-1])  +\
-			 float(time_vector_stage2[i1]) - float(time_vector_stage2[-61])
-		else:
-			self.start_static_rounds = float(time_vector_stage2[-1])  +\
-			 float(time_vector_stage2[reinf_flags.index('SIM')])
-		print('STATIC STARTS AT',self.start_static_rounds)
-		
-		#################
+
+		self.set_offset()
+
+		# e. calculating the blocks
 		blocksS1 = self.getAllBlocks(self.group,self.stage-1) #(stage 1 for stage 3) or (stage 4 for stage 6) 
 		blocksS2 = self.getAllBlocks(self.group,self.stage-2) #(stage 2 for stage 3) or (stage 5 for stage 6) 
 		self.blocksS3 = 60 - (len(blocksS1) +  len(blocksS2)) # number of blocks from stage 3 or stage 6
@@ -70,9 +49,51 @@ class Stage3(Screen):
 		if self.settings['return_click']:
 			utils.reset_mouse_position(self)
 			
-		# d. auto-play
+		# f. auto-play
 		if self.test:
 			self.auto_play()
+
+	def set_offset(self):
+		# - collecting all answers from stage 2
+		if self.group == 1:
+			with open("./results/"+self.aco_file) as ref_file:
+				counter , reinf_flags, time_vector_stage2 = 0, [], []
+				for line in ref_file:
+					if counter != 0:
+						reinf_flags.append(line.split(';')[0])
+						time_vector_stage2.append(float(line.split(';')[7]))
+					counter += 1
+					
+			self.offset_reinforce = float(time_vector_stage2[-1]) 
+			if len(time_vector_stage2) > 60:
+				i1 = len(reinf_flags[0:len(reinf_flags)-60]) +\
+				reinf_flags[len(reinf_flags)-60:len(reinf_flags)].index('SIM')
+				self.start_static_rounds = float(time_vector_stage2[-1])  +\
+				float(time_vector_stage2[i1]) - float(time_vector_stage2[-61])
+			else:
+				self.start_static_rounds = float(time_vector_stage2[-1])  +\
+				float(time_vector_stage2[reinf_flags.index('SIM')])
+			print('STATIC STARTS AT',self.start_static_rounds)
+
+		elif self.group == 2:
+			counter = 0
+			with open("./results/"+self.aco_file) as ref_file:
+				for line in ref_file:
+					counter += 1
+
+			self.offset_reinforce = counter -1
+			self.start_static_rounds = np.inf
+		else:
+			with open("./results/"+self.aco_file) as ref_file:
+				counter , reinf_flags, time_vector_stage2 = 0, [], []
+				for line in ref_file:
+					if counter != 0:
+						reinf_flags.append(line.split(';')[0])
+						time_vector_stage2.append(float(line.split(';')[7]))
+					counter += 1
+					
+			self.offset_reinforce = float(time_vector_stage2[-1]) 
+			self.start_static_rounds = np.inf
 
 	def nextStage(self):
 		myReturnMenuPopUp(self,'Parabéns! Você terminou o experimento!\nPor favor, contacte o aplicador para\nreceber futuras instruções. :)')
@@ -190,5 +211,4 @@ class Stage3(Screen):
 				self.setReinforcedClicks(sum(self.game[-1]['frequency'].values()))
 				return False
 			else:
-
 				return (sum(self.game[-1]['frequency'].values()) in self.reinforced_clicks)

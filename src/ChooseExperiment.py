@@ -104,9 +104,9 @@ class ChooseExperiment(Screen):
 
 		#always start from the first phase (phase 4 is the first phase of second session)
 		if(self.session == 2):
-			self.stage = int(5) 
+			self.stage = int(4) 
 		else:
-			self.stage = int(2) 
+			self.stage = int(1) 
 		
 		self.start_time = datetime.datetime.now()
 
