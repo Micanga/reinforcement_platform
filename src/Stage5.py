@@ -111,7 +111,7 @@ class Stage5(Screen):
 		print("Here")
 		if self.group == 1: # applying the VR scheme [G1]
 			if self.VR20_index == 0:
-				self.VR20 = [[6, 3, 66, 12, 38, 9, 28, 1, 21, 16],[3, 12, 6, 66, 38, 28, 9, 1, 16, 21],\
+				self.VR20 = [[6, 3, 38, 12, 9, 28, 1, 21, 16, 66],[3, 12, 6, 66, 38, 28, 9, 1, 16, 21],\
 					[1, 3, 6, 66, 21, 12, 38, 9, 16, 28],[3, 6, 66, 12, 9, 38, 28, 1, 21, 16]]
 
 			self.reinforced_clicks = self.VR20[self.VR20_index]

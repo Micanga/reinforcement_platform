@@ -31,12 +31,13 @@ class Stage6(Screen):
 
 		# d. set the offset
 		# - verifying the aco file
-		if self.test:
+		if self.test and self.fixed_file:
 			self.aco_file = '28MARCOteste1_G1_F2_28-03-2021_13h22m19s.csv'
 		else:
 			self.aco_file = self.nickname+'_G'+str(self.group)+'_F'+str(self.stage -1)+\
 					'_'+self.start_time.strftime("%d-%m-%Y_%Hh%Mm%Ss")+'.csv'
-
+		
+		
 		self.set_offset()
 
 		# e. calculating the blocks
