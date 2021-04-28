@@ -45,7 +45,7 @@ class Game(object):
             sleep(self.sleep_time[self.sleep_index])
             self.sleep_index += 1
         else:
-            sleep(rd.uniform(1,5))
+            sleep(rd.randrange(1,5))
 
         coin = float(random.uniform(0,8))
         if coin <= 1:

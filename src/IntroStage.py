@@ -28,6 +28,7 @@ class IntroStage(Screen):
 
 		# 2. Buttons Functions
 		# a. intro text
+		#self.stage = 4
 		if(self.stage == 1 or self.stage == 4):
 			if(self.settings['return_click'] == True):
 				text = utils.load_text(prev_sc.stage)
@@ -97,6 +98,8 @@ class IntroStage(Screen):
 					self.sw/2,5*self.sh/6,size=18)
 			self.widgets.append(self.start_button)
 			self.buttons.append(self.start_button)
+			#self.stage = 5
+			#self.goToStage5()
 
 		elif (self.stage == 5):
 			self.goToStage5()

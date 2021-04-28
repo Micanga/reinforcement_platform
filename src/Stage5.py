@@ -78,11 +78,11 @@ class Stage5(Screen):
 					 self.reinforced_clicks[self.reinforce_index] <= time2ans_cum:
 						self.reinforce_index += 1
 					positive_reinforce = True
-
+			
 			# - checking the reinforce overlap
 			while self.reinforce_index == len(self.reinforced_clicks):
 				self.reinforce_index = 0
-				self.setReinforcedClicks(offset=self.reinforce_clicks[-1])
+				self.setReinforcedClicks(offset=self.reinforced_clicks[-1])
 				
 				while self.reinforce_index < len(self.reinforced_clicks) and \
 				self.reinforced_clicks[self.reinforce_index] <= time2ans_cum:
