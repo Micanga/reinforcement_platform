@@ -78,7 +78,7 @@ class Stage6(Screen):
 
 	def set_offset(self):
 		# - collecting all answers from stage 2
-		if self.group == 1:
+		if self.group == 1 or self.group == 3:
 			with open("./results/"+self.aco_file) as ref_file:
 				counter , reinf_flags, time_vector_stage2 = 0, [], []
 				for line in ref_file:
@@ -98,24 +98,13 @@ class Stage6(Screen):
 				float(time_vector_stage2[reinf_flags.index('SIM')])
 			print('STATIC STARTS AT',self.start_static_rounds)
 
-		elif self.group == 2:
+				else:
 			counter = 0
 			with open("./results/"+self.aco_file) as ref_file:
 				for line in ref_file:
 					counter += 1
 
 			self.offset_reinforce = counter -1
-			self.start_static_rounds = np.inf
-		else:
-			with open("./results/"+self.aco_file) as ref_file:
-				counter , reinf_flags, time_vector_stage2 = 0, [], []
-				for line in ref_file:
-					if counter != 0:
-						reinf_flags.append(line.split(';')[0])
-						time_vector_stage2.append(float(line.split(';')[7]))
-					counter += 1
-					
-			self.offset_reinforce = float(time_vector_stage2[-1]) 
 			self.start_static_rounds = np.inf
 
 	def nextStage(self):
@@ -179,12 +168,23 @@ class Stage6(Screen):
 			
 		else: # applying the VR(auto-aco) scheme [G2]
 			counter, self.reinforced_clicks = 0, []
-			with open("./results/"+self.aco_file) as ref_file:
-				for line in ref_file:
-					reinf_flag = line.split(';')[0]
-					if counter != 0 and reinf_flag == 'SIM':
-						self.reinforced_clicks.append(counter + offset)
-					counter += 1
+			print(self.offset_reinforce, sum(self.game[-1]['frequency'].values()),self.aco_file)
+			if self.offset_reinforce > 60 and sum(self.game[-1]['frequency'].values()) > 60:
+				with open("./results/"+self.aco_file) as ref_file:
+					for line in ref_file:
+						reinf_flag = line.split(';')[0]
+						if counter > (self.offset_reinforce-60) and reinf_flag == 'SIM':
+							self.reinforced_clicks.append(counter - (self.offset_reinforce-59) + offset)
+						counter += 1
+			else:
+				with open("./results/"+self.aco_file) as ref_file:
+					for line in ref_file:
+						reinf_flag = line.split(';')[0]
+						print(reinf_flag)
+						if counter != 0 and reinf_flag == 'SIM':
+							self.reinforced_clicks.append(counter + offset)
+						counter += 1
+			print(self.reinforced_clicks)
 		
 	def conditionalReinforce(self):
 		# checking the reinforcement for group 1 and 3 [VI (auto-aco)]
@@ -230,6 +230,4 @@ class Stage6(Screen):
 		else:
 			if sum(self.game[-1]['frequency'].values()) > self.reinforced_clicks[-1]:
 				self.setReinforcedClicks(sum(self.game[-1]['frequency'].values()))
-				return False
-			else:
-				return (sum(self.game[-1]['frequency'].values()) in self.reinforced_clicks)
+			return (sum(self.game[-1]['frequency'].values()) in self.reinforced_clicks)
