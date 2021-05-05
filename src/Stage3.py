@@ -11,7 +11,7 @@ class Stage3(Screen):
 	def __init__(self, master, prev_sc, main_bg):
     	# 1. Initializing the necessary variables
 		# a. GUI variables
-		super().__init__(master, prev_sc, main_bg,screen_name='Stage 6')
+		super().__init__(master, prev_sc, main_bg,screen_name='Stage 3')
 		self.init_variables()
 
 		# 2. creating the result file
@@ -32,7 +32,7 @@ class Stage3(Screen):
 		# d. set the offset
 		# - verifying the aco file
 		if self.test and self.fixed_file:
-			self.aco_file = 'testevr.csv'
+			self.aco_file = 'G1S1teste15do5_G1_F2_05-05-2021_15h04m06s.csv'
 		else:
 			self.aco_file = self.nickname+'_G'+str(self.group)+'_F'+str(self.stage -1)+\
 					'_'+self.start_time.strftime("%d-%m-%Y_%Hh%Mm%Ss")+'.csv'
@@ -141,7 +141,7 @@ class Stage3(Screen):
 			# - splitting 6 last blocks for reinforce
 			time_vector_stage3 = np.cumsum([time.total_seconds() for g in self.game \
 				if g['stage'] == self.game[-1]['stage'] for time in g['time2answer'] ])
-			time2ans_cum = time_vector_stage6[-1] if len(time_vector_stage6) > 0 else 0
+			time2ans_cum = time_vector_stage3[-1] if len(time_vector_stage3) > 0 else 0
 			time2ans_cum +=  (datetime.datetime.now() - self.round_start_time).total_seconds()
 
 			if self.start_static_rounds == np.inf:
@@ -189,9 +189,9 @@ class Stage3(Screen):
 		# checking the reinforcement for group 1 and 3 [VI (auto-aco)]
 		if self.group == 1 or self.group == 3: 
 			# - calculating the cum time for stage 3
-			time_vector_stage6 = np.cumsum([time.total_seconds() for g in self.game \
+			time_vector_stage3 = np.cumsum([time.total_seconds() for g in self.game \
 				if g['stage'] == self.game[-1]['stage'] for time in g['time2answer'] ])
-			time2ans_cum = time_vector_stage6[-1] if len(time_vector_stage6) > 0 else 0
+			time2ans_cum = time_vector_stage3[-1] if len(time_vector_stage3) > 0 else 0
 			time2ans_cum +=  (datetime.datetime.now() - self.round_start_time).total_seconds()
 			
 			# - verifying the start of the static rounds

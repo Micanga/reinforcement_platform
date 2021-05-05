@@ -23,7 +23,7 @@ class Game(object):
     def __init__(self):
         self.test = False
         self.fixed_file = False
-        if self.test and self.fixed_file:
+        """if self.test and self.fixed_file:
             self.sleep_time = []
             self.sleep_index = 0
             self.click_time_file = '28MARCOteste1_G1_F3_28-03-2021_13h22m19s.csv'
@@ -34,18 +34,18 @@ class Game(object):
                         self.sleep_time.append(float(line.split(';')[6])) 
                         if counter != 1:
                             self.sleep_time[-1] -= 1.59
-                    counter += 1
+                    counter += 1"""
 
     def auto_play(self):
         ####
         # FOR TEST
         ####
-        if self.test and self.fixed_file:
+        """if self.test and self.fixed_file:
             print(self.sleep_time[self.sleep_index])
             sleep(self.sleep_time[self.sleep_index])
             self.sleep_index += 1
-        else:
-            sleep(rd.randrange(1,5))
+        else:"""
+        sleep(rd.randrange(1,5))
 
         coin = float(random.uniform(0,8))
         if coin <= 1:
