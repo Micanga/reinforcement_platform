@@ -192,12 +192,9 @@ class Screen(Game):
                                 anchor='center')
             self.buttons.append(self.button_8)
         else:
-            tkimage = tkinter.PhotoImage(file='local/default/radialbutton.png')
-            self.general_button = tkinter.Button(self.master, image=tkimage,
-                width=self.sh, bg="#%02x%02x%02x" % (int(BG_COLOR[0]),int(BG_COLOR[1]), int(BG_COLOR[2])),
-                command=self.general_click, bd=0, relief='flat', overrelief='flat', 
-                activebackground="#%02x%02x%02x" % (int(BG_COLOR[0]),int(BG_COLOR[1]), int(BG_COLOR[2])))
-            self.general_button.image = tkimage 
+            diameter = self.sh
+            self.general_button = CircularButton(self.master, diameter, diameter,
+                                        color=RED, bg=BG_COLOR, command=self.general_click)
             self.general_button.place(x= self.sw/2,
                                 y= self.sh/2,
                                 anchor='center')
@@ -271,11 +268,11 @@ class Screen(Game):
             self.points_label.place(
                 x=self.center_w, y=self.center_h, anchor='center')
         else:
-            self.points_label = tkinter.Label(self.master, textvariable=self.points, width=3,
+            self.points_label = tkinter.Label(self.master, textvariable=self.points, width=2,
                                           bg='white', fg='black',
                                           font=Font(family='Helvetica',
-                                                    size=30, weight='bold'),
-                                          padx=20, pady=20, bd=0, highlightbackground='black',
+                                                    size=18, weight='bold'),
+                                          padx=20, pady=20, bd=4, highlightbackground='black',
                                           highlightthickness=2, relief="solid")
             self.points_label.place(
                 x=self.sw/2, y=self.sh/2, anchor='center')
