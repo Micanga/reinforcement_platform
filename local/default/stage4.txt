@@ -1,1 +1,0 @@
-Sua tarefa consiste em sentar-se nesta cadeira e, manipulando o mouse, clicar sobre qualquer um dos círculos vermelhos que estão a sua frente no monitor. Ao clicar sobre qualquer um dos círculos, você poderá ou não produzir pontos.  É tarefa sua acumular o maior número possível de pontos. Seus pontos serão mostrados no campo abaixo dos círculos (na cor branca).

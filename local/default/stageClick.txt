@@ -1,1 +1,0 @@
-A cada clique efetuado sobre qualquer um dos círculos, um novo clique deverá ser efetuado sobre o mostrador de pontos para reabilitar os círculos vermelhos.
