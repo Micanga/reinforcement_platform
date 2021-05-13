@@ -192,9 +192,12 @@ class Screen(Game):
                                 anchor='center')
             self.buttons.append(self.button_8)
         else:
-            diameter = self.sh
-            self.general_button = CircularButton(self.master, diameter, diameter,
-                                        color=RED, bg=BG_COLOR, command=self.general_click)
+            tkimage = tkinter.PhotoImage(file='local/default/radialbutton.png')
+            self.general_button = tkinter.Button(self.master, image=tkimage,
+                width=self.sh, bg="#%02x%02x%02x" % (int(BG_COLOR[0]),int(BG_COLOR[1]), int(BG_COLOR[2])),
+                command=self.general_click, bd=0, relief='flat', overrelief='flat', 
+                activebackground="#%02x%02x%02x" % (int(BG_COLOR[0]),int(BG_COLOR[1]), int(BG_COLOR[2])))
+            self.general_button.image = tkimage 
             self.general_button.place(x= self.sw/2,
                                 y= self.sh/2,
                                 anchor='center')
@@ -207,7 +210,7 @@ class Screen(Game):
         mouse_y = (self.master.winfo_pointery() - (self.sh/2))/(self.sh/2)
         if mouse_x**2 + mouse_y**2 <= 1:
             for i in range(8):
-                if -np.pi + i*np.pi/4 <= np.arctan2(mouse_y,mouse_x) < -3*np.pi/4 + i*np.pi/4:
+                if -np.pi + i*np.pi/4 <= np.arctan2(mouse_y,mouse_x) <= -3*np.pi/4 + i*np.pi/4:
                     self.check_action(i+1)
                     break
 
@@ -256,20 +259,27 @@ class Screen(Game):
         else:
             self.points.set(0)
 
-        self.points_label = tkinter.Label(self.master, textvariable=self.points, width=3,
+        # points label
+        if self.settings['game_mode'] == 'Múltipla Escolha':
+            self.points_label = tkinter.Label(self.master, textvariable=self.points, width=3,
                                           bg='white', fg='black',
                                           font=Font(family='Helvetica',
                                                     size=30, weight='bold'),
                                           padx=20, pady=20, bd=4, highlightbackground='black',
                                           highlightthickness=2, relief="solid")
 
-        # points label
-        if self.settings['game_mode'] == 'Múltipla Escolha':
             self.points_label.place(
                 x=self.center_w, y=self.center_h, anchor='center')
         else:
+            self.points_label = tkinter.Label(self.master, textvariable=self.points, width=3,
+                                          bg='white', fg='black',
+                                          font=Font(family='Helvetica',
+                                                    size=30, weight='bold'),
+                                          padx=20, pady=20, bd=0, highlightbackground='black',
+                                          highlightthickness=2, relief="solid")
             self.points_label.place(
                 x=self.sw/2, y=self.sh/2, anchor='center')
+
         self.widgets.append(self.points_label)
 
     def createReturnButton(self, center_h, center_w):
