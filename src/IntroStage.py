@@ -30,16 +30,18 @@ class IntroStage(Screen):
 		# a. intro text
 		#self.stage = 4
 		if(self.stage == 1 or self.stage == 4):
-			if(self.settings['return_click'] == True):
-				text = utils.load_text(prev_sc.stage)
-				text +=  utils.load_text("Click")
+			if self.settings['game_mode'] == 'Múltipla Escolha':
+				text = utils.load_text('multchoice')
 			else:
-				text = utils.load_text(prev_sc.stage)
-			
-			self.text_display = scrolledtext.ScrolledText(self.master, fg = 'black', font = Font(family='Helvetica', size=18),\
+				text = utils.load_text('locchoice')
+
+			my_font = Font(family='Helvetica', size=int(self.sw/45))
+			my_font_m = my_font.measure("A")
+			print(my_font_m)
+			self.text_display = scrolledtext.ScrolledText(self.master, fg = 'black', font = my_font,\
 										bg = "#%02x%02x%02x" % (255, 255, 255), insertbackground = 'black',\
 										highlightcolor = "#%02x%02x%02x" % (180,180,180), highlightbackground= "#%02x%02x%02x" % (50,50,50),\
-										bd=0, width =47, height=10, padx=10, pady=10, wrap='word',undo=True)
+										bd=0, width =int((self.sw)/(my_font_m)), height=int((self.sh)/(2*my_font_m)), padx=10, pady=10, wrap='word',undo=True)
 			self.text_display.insert('insert',text)
 			self.text_display.configure(state='disabled')
 			self.text_display.place(x=self.sw/2,y=self.sh/2,anchor='center')
@@ -65,7 +67,7 @@ class IntroStage(Screen):
 											'Por favor, selecione um arquivo para ACOPLAMENTO. Este deve corresponder à resultados coletados em experimentos do Grupo '+str(self.group-1)+' Fase 2.\nID: _G'+str(self.group-1)+'_F2_')
 
 			self.start_button = \
-				create_button(self.master,'AVANÇAR',self.goToStage1,\
+				create_button(self.master,'INICIAR',self.goToStage1,\
 					self.sw/2,5*self.sh/6,size=18)
 			self.widgets.append(self.start_button)
 			self.buttons.append(self.start_button)
@@ -94,12 +96,10 @@ class IntroStage(Screen):
 											'Por favor, selecione um arquivo para ACOPLAMENTO. Este deve corresponder à resultados coletados em experimentos do Grupo '+str(self.group-1)+' Fase 5.\nID: _G'+str(self.group-1)+'_F5_')
 
 			self.start_button = \
-				create_button(self.master,'AVANÇAR',self.goToStage4,\
+				create_button(self.master,'INICIAR',self.goToStage4,\
 					self.sw/2,5*self.sh/6,size=18)
 			self.widgets.append(self.start_button)
 			self.buttons.append(self.start_button)
-			#self.stage = 5
-			#self.goToStage5()
 
 		elif (self.stage == 5):
 			self.goToStage5()
