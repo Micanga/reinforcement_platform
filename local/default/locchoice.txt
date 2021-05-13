@@ -1,0 +1,5 @@
+LEIA ATENTAMENTE:
+
+Um círculo vermelho será exibido no monitor. Sua tarefa consiste em clicar, com o botão ESQUERDO do mouse, sobre a área vermelha dentro do círculo. Ao clicar sobre a área vermelha, você poderá ou não produzir pontos. Cliques fora da área vermelha não produzirão pontos Seu objetivo é acumular o maior número possível de pontos. Seus pontos serão mostrados no campo que ocupa o centro do círculo.
+
+Clique em INICIAR para começar a jogar.

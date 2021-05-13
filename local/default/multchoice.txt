@@ -1,0 +1,5 @@
+LEIA ATENTAMENTE:
+
+Oito círculos vermelhos serão exibidos no monitor. Sua tarefa consiste em clicar, com o botão ESQUERDO do mouse, sobre qualquer um deles. Ao clicar sobre qualquer um dos círculos, você poderá ou não produzir pontos. Cliques fora dos 8 círculos não produzirão pontos. Seu objetivo é acumular o maior número possível de pontos. Seus pontos serão mostrados no campo abaixo dos círculos vermelhos.
+
+Clique em INICIAR para começar a jogar.
