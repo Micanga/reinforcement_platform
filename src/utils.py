@@ -63,8 +63,12 @@ def disableButtonsAndMouse(cur_sc):
 	cur_sc.master.configure(cursor='none')
 
 def reset_mouse_position(cur_sc):
-	cur_sc.master.event_generate('<Motion>', warp=True,\
-	 x=cur_sc.center_w, y=cur_sc.center_h)
+	if cur_sc.settings['game_mode'] == 'Múltipla Escolha':
+		cur_sc.master.event_generate('<Motion>', warp=True,\
+		x=cur_sc.center_w, y=cur_sc.center_h)
+	else:
+		cur_sc.master.event_generate('<Motion>', warp=True,\
+		x=cur_sc.sw/2, y=cur_sc.sh/2)
 
 def removeButtons(buttons):
 	#print("| -- destroying  the buttons")
@@ -83,14 +87,13 @@ def getPage(master, prev_sc, main_bg, pathNextPage):
 	from 
 '''
 # LOAD
-def load_text(stage):
+def load_text(fname):
 	
 	text = ""
-	with open('local/default/stage'+str(stage)+'.txt',encoding=ENCODE) as default_text:
+	with open('local/default/'+str(fname)+'.txt',encoding=ENCODE) as default_text:
 		for line in default_text:
 			text += line
-	print("| -- default text loaded.")
-	print('local/default/stage'+str(stage)+'.txt')
+	print("| -- default text loaded."+fname)
 	return text
 
 # MATH
