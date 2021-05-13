@@ -8,6 +8,7 @@ class Settings(Screen):
 	def __init__(self, master, prev_sc, main_bg):
 		# 1. Initializing the necessary variables
 		super().__init__(master, prev_sc, main_bg,'bg/settings.png','Settings')
+		print(self.settings)
 
 		# 2. Setting the screen buttons and widgets
 		#======================================================
@@ -66,6 +67,15 @@ class Settings(Screen):
 		self.widgets.append(self.fade_label)
 		self.buttons.append(self.fade_button)
 
+		# g. game mode selection
+		self.game_mode_label, self.game_mode_buttons, self.game_mode_var = \
+			self.create_setting_field('Qual modo de jogo deseja iniciar?',3*self.sw/4,4*self.sh/7,type_='switch',
+										opt_args=['Múltipla Escolha','Posição Radial'])
+		self.game_mode_var.set(self.settings['game_mode'])
+		self.widgets.append(self.game_mode_label)
+		for button in self.game_mode_buttons:
+			self.buttons.append(button)
+
 		#======================================================
 		# SAVE AND BACK BUTTON
 		#======================================================
@@ -79,7 +89,7 @@ class Settings(Screen):
 				2*self.sw/10,5*self.sh/6,size=18)
 		self.buttons.append(self.back_button)
 
-	def create_setting_field(self,text,x,y,type_='entry'):
+	def create_setting_field(self,text,x,y,type_='entry',opt_args=None):
 		# 1. Creating Entry Label
 		print("| -- creating labels nickname	|")
 		label = tkinter.Label(self.master, bg="#%02x%02x%02x" % (255, 255, 255),justify='left',\
@@ -109,6 +119,18 @@ class Settings(Screen):
 			entry.place(x = x, y = y+60,anchor='center')
 
 			return label,entry, check_var
+
+		elif type_ == 'switch':
+			switch_variable = tkinter.StringVar(value=opt_args[0])
+			buttons = []
+			for option in opt_args:
+				buttons.append(tkinter.Radiobutton(self.master, text=option, variable=switch_variable, selectcolor="#%02x%02x%02x" % (0, 180, 0),
+					indicatoron=False, value=option, width=18, fg = 'black', font = Font(family='Helvetica', size=20), borderwidth = 8,\
+					bg = "#%02x%02x%02x" % (180, 180, 180), relief='raised'))
+			for i in range(len(buttons)):
+				buttons[i].place(x = x, y = y+((i+1)*60),anchor='center')
+
+			return label, buttons, switch_variable
 		else:
 			exit(1)
 
@@ -165,6 +187,7 @@ class Settings(Screen):
 		self.settings['return_click'] = self.check_var.get()
 		self.settings['choose_aco'] = self.aco_var.get()
 		self.settings['fade_flag'] = self.fade_var.get()
+		self.settings['game_mode'] = self.game_mode_var.get()
 		
 		self.goToMenu()
 

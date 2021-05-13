@@ -11,6 +11,8 @@ from MyCommons import *
 
 from Screen import Screen
 
+import inspect
+
 class Menu(Screen):
 
 	def __init__(self, master, prev_sc, main_bg):
@@ -18,6 +20,12 @@ class Menu(Screen):
 		# a. initializing the screen
 		super().__init__(master, prev_sc, main_bg,'bg/main.png','Menu')
 		print(self.settings)
+		
+		attributes = [i for i in dir(self.prev_sc) if not inspect.ismethod(i)]
+		if 'aco_file' in attributes:
+			self.aco_file = ''
+		else:
+			self.aco_file = ''
 
 		# 2. Setting the screen buttons and widgets
 		print('| - creating buttons')
