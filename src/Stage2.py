@@ -37,8 +37,8 @@ class Stage2(Screen):
 
 		# d. set the offset
 		# - verifying the aco file
-		if self.test and self.fixed_file:
-			self.aco_file = 'G1S1teste15do5_G1_F2_05-05-2021_15h04m06s.csv'
+		if self.test:
+			self.aco_file = 'G1S1aco13_G1_F2_13-05-2021_21h03m47s.csv'
 
 		self.set_offset()
 
@@ -116,6 +116,14 @@ class Stage2(Screen):
 			time2ans_cum = time_vector_stage2[-1] if len(time_vector_stage2) > 0 else 0
 			time2ans_cum +=  (datetime.datetime.now() - self.round_start_time).total_seconds()
 
+			# - verifying the start of the static rounds
+			if self.start_static_rounds < time2ans_cum:
+				self.start_static_rounds = np.inf
+
+				self.reinforce_index = 0
+				self.setReinforcedClicks(offset=self.offset_reinforce)
+				self.offset_reinforce = self.reinforced_clicks[-1]
+
 			# - checking the reinforce
 			positive_reinforce = False
 			if self.reinforce_index < len(self.reinforced_clicks):
@@ -127,9 +135,12 @@ class Stage2(Screen):
 
 			# - checking the reinforce overlap
 			while self.reinforce_index == len(self.reinforced_clicks):
+				self.start_static_rounds = np.inf
+
 				self.reinforce_index = 0
-				self.setReinforcedClicks(offset=self.reinforced_clicks[-1])
-				
+				self.setReinforcedClicks(offset=self.offset_reinforce)
+				self.offset_reinforce = self.reinforced_clicks[-1]
+
 				while self.reinforce_index < len(self.reinforced_clicks) and \
 				self.reinforced_clicks[self.reinforce_index] <= time2ans_cum:
 					self.reinforce_index += 1	
