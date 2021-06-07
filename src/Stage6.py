@@ -98,7 +98,7 @@ class Stage6(Screen):
 				float(time_vector_stage2[reinf_flags.index('SIM')])
 			print('STATIC STARTS AT',self.start_static_rounds)
 
-				else:
+		else:
 			counter = 0
 			with open("./results/"+self.aco_file) as ref_file:
 				for line in ref_file:
@@ -177,6 +177,9 @@ class Stage6(Screen):
 							self.reinforced_clicks.append(counter - (self.offset_reinforce-59) + offset)
 						counter += 1
 			else:
+				if offset > 0:
+					offset -= 1
+
 				with open("./results/"+self.aco_file) as ref_file:
 					for line in ref_file:
 						reinf_flag = line.split(';')[0]

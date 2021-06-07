@@ -176,6 +176,9 @@ class Stage3(Screen):
 							self.reinforced_clicks.append(counter - (self.offset_reinforce-59) + offset)
 						counter += 1
 			else:
+				if offset > 0:
+					offset -= 1
+
 				with open("./results/"+self.aco_file) as ref_file:
 					for line in ref_file:
 						reinf_flag = line.split(';')[0]

@@ -147,9 +147,7 @@ class Stage5(Screen):
 		else:
 			if sum(self.game[-1]['frequency'].values()) > self.reinforced_clicks[-1]:
 				self.setReinforcedClicks(sum(self.game[-1]['frequency'].values()))
-				return False
-			else:
-				return (sum(self.game[-1]['frequency'].values()) in self.reinforced_clicks)
+			return (sum(self.game[-1]['frequency'].values()) in self.reinforced_clicks)
 
 	# THE STAGE METHODS
 	def check_stage_end_conditions(self): 
@@ -230,6 +228,9 @@ class Stage5(Screen):
 								self.reinforced_clicks.append(counter - (self.offset_reinforce-59) + offset)
 							counter += 1
 				else:
+					if offset > 0:
+						offset -= 1
+
 					with open("./results/"+self.aco_file) as ref_file:
 						for line in ref_file:
 							reinf_flag = line.split(';')[0]
